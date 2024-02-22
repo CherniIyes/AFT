@@ -18,6 +18,22 @@ CREATE SCHEMA IF NOT EXISTS `aft` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_
 USE `aft` ;
 
 -- -----------------------------------------------------
+-- Table `aft`.`expenses`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aft`.`expenses` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `handwork` INT NULL DEFAULT NULL,
+  `fodder` INT NULL DEFAULT NULL,
+  `bills` INT NULL DEFAULT NULL,
+  `medicalexpenses` INT NULL DEFAULT NULL,
+  `hay` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `aft`.`milk`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`milk` (
