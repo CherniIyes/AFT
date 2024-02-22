@@ -58,11 +58,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`milk` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `date` DATE NOT NULL,
-  `price` INT NOT NULL,
-  `quantity` DECIMAL(10,0) NOT NULL,
+  `day` DATE NULL DEFAULT NULL,
+  `quantity` DECIMAL(10,2) NULL DEFAULT NULL,
+  `price` DECIMAL(10,2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
