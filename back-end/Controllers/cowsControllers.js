@@ -1,6 +1,6 @@
 const db = require('../db'); // Import your database connection
 
-// Get all cows
+
 exports.getAllCows = async (req, res) => {
   try {
     const cows = await db.query('SELECT * FROM cows');
@@ -11,7 +11,7 @@ exports.getAllCows = async (req, res) => {
   }
 };
 
-// Create a new cow
+
 exports.createCow = async (req, res) => {
   const { cow_number, cow_race, artificial_insemination_date } = req.body;
   try {
@@ -23,7 +23,7 @@ exports.createCow = async (req, res) => {
   }
 };
 
-// Get cow by ID
+
 exports.getCowById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -38,7 +38,7 @@ exports.getCowById = async (req, res) => {
   }
 };
 
-// Update cow
+
 exports.updateCow = async (req, res) => {
   const { id } = req.params;
   const { cow_number, cow_race, artificial_insemination_date } = req.body;
@@ -51,7 +51,7 @@ exports.updateCow = async (req, res) => {
   }
 };
 
-// Delete cow
+
 exports.deleteCow = async (req, res) => {
   const { id } = req.params;
   try {
