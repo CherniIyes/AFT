@@ -1,16 +1,14 @@
 const express = require('express');
 const app = express();
 const cors = require("cors");
-const PORT = 6464;
+const milkRoutes = require ('../Routes/milkRoutes.js')
 
 
 
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => {
-      res.send('Server Listening');
-})
+
 app.listen(PORT, () => {
       console.log(`listen on http://localhost:${PORT}`);
-}); W
+});
