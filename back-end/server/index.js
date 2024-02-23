@@ -22,7 +22,7 @@ app.use('/milk', milkRoutes);
 app.use("/exp",expensesRoutes)
 
 app.use('/cows', cowsRouter);
-
+app.use('/articles', articleRoutes);  
 app.get('/', (req, res) => {
       res.send('Server Listening');
 })
