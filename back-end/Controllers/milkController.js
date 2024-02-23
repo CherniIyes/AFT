@@ -1,7 +1,4 @@
-const moment = require('moment');
-
 const milkModel = require('../Models/milkModel.js');
-
 
 // Get all milk entries
 exports.getAllMilk = (req, res) => {
@@ -32,20 +29,31 @@ exports.getMilkById = (req, res) => {
 
 // Add a new milk entry
 exports.addMilk = async (req, res) => {
-    const { day, quantity, price } = req.body;
-  
-    // Convert the date format using Moment.js
-    const formattedDay = moment(day).format('YYYY-MM-DD');
-  
     try {
-      const result = await db.query('INSERT INTO milk SET ?', { day: formattedDay, quantity, price });
-      res.status(201).json({ message: 'Milk entry created successfully', id: result.insertId });
+        // Extract milk data from request body
+        const { day, quantity, price } = req.body;
+
+        // Create an object with the milk data
+        const milkData = {
+            day,
+            quantity,
+            price
+        };
+
+        // Call the addMilk function from the milk model
+        milkModel.addMilk(milkData, (err, result) => {
+            if (err) {
+                console.error('Error adding milk:', err);
+                res.status(500).json({ error: 'Failed to add milk' });
+            } else {
+                res.status(201).json({ message: 'Milk added successfully', id: result.insertId });
+            }
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error('Error adding milk:', error);
+        res.status(500).json({ error: 'Failed to add milk' });
     }
-  };
-  
+};
 
 // Update a milk entry
 exports.updateMilk = (req, res) => {
