@@ -9,14 +9,9 @@ const PORT = 6464;
 
 app.use(cors())
 app.use(express.json())
-<<<<<<< HEAD
+app.use("/sell", SellsRoutes)
 app.use('/milk', milkRoutes);
 app.use("/exp",expensesRoutes)
-
-=======
-app.use(expensesRoutes)
-app.use(SellsRoutes)
->>>>>>> 5ad5c1bf033ef3058744ba136e08ea8881bf098a
 
 
 
