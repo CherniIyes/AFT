@@ -1,17 +1,19 @@
 const express = require('express');
 const app = express();
 const cors = require("cors");
+const milkRoutes = require('../Routes/milkRoutes.js')
+const expensesRoutes = require('../Routes/expensesRoutes.js')
+const SellsRoutes = require('../Routes/SellsRoutes.js')
 const PORT = 6464;
-const cowsRouter = require ('../Routes/cowsRoutes')
 
-app.use(cors());
-app.use(express.json());
 
-app.use('/cows', cowsRouter);
+app.use(cors())
+app.use(express.json())
+
+
 app.get('/', (req, res) => {
-  res.send('Server Listening');
-});
-
+      res.send('Server Listening');
+})
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });

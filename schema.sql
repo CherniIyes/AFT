@@ -68,6 +68,21 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
+-- -----------------------------------------------------
+-- Table `aft`.`sells`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aft`.`sells` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product` VARCHAR(45) NOT NULL,
+  `price` INT NOT NULL,
+  `image` VARCHAR(4000) NOT NULL,
+  `product details` VARCHAR(4000) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
