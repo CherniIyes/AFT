@@ -1,8 +1,8 @@
-const model = require("../Models/SellsModels");
+const model = require("../Models/SalesModels");
 
 module.exports = {
       getAll: (req, res) => {
-            model.getall((err, results) => {
+            model.getAll((err, results) => {
                   if (err) {
                         res.status(500).send(err);
                   } else {
@@ -20,7 +20,7 @@ module.exports = {
             });
       },
       Add: (req, res) => {
-            model.add(req.body, (err, results) => {
+            model.Add(req.body, (err, results) => {
                   if (err) {
                         res.status(500).send(err);
                   } else {
@@ -32,7 +32,7 @@ module.exports = {
             const id = req.params.id;
             const newData = req.body;
 
-            model.update(newData, id, (err, results) => {
+            model.Update(newData, id, (err, results) => {
                   if (err) {
                         res.status(500).send(err);
                   } else {
