@@ -1,54 +1,52 @@
 const model = require("../Models/SellsModels");
 
 module.exports = {
-    DELETE: (req, res) => {
-        model.remove(req.params.id, (err, results) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(results);
-          }
-        });
+      getAll: (req, res) => {
+            model.getall((err, results) => {
+                  if (err) {
+                        res.status(500).send(err);
+                  } else {
+                        res.json(results);
+                  }
+            });
       },
-      getAllsells: (req, res) => {
-        model.getAll((err, sells) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(sells);
-          }
-        });
+      getOne: (req, res) => {
+            model.getOne(req.params.id, (err, results) => {
+                  if (err) {
+                        res.status(500).send(err);
+                  } else {
+                        res.json(results);
+                  }
+            });
       },
-      addOnesells: (req, res) => {
-        const sells = req.body;
-        model.addOne(sells, (err, results) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(results);
-          }
-        });
+      Add: (req, res) => {
+            model.add(req.body, (err, results) => {
+                  if (err) {
+                        res.status(500).send(err);
+                  } else {
+                        res.json(results);
+                  }
+            });
       },
-      updatesells: (req, res) => {
-        const id = req.params.id;
-        const updatedsells = req.body;
-        model.update(id, updatedsells, (err, results) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(results);
-          }
-        });
-      },
-      getById: (req, res) => {
-        const sellsid = req.params.id;
-        model.getOne(sellsid, (err, result) => {
-          if (err) {
-            res.status(500).send(err);
-          }  else {
-              res.status(200).json(result);
-            }
-          })
-      }
+      Update: (req, res) => {
+            const id = req.params.id;
+            const newData = req.body;
 
-}
+            model.update(newData, id, (err, results) => {
+                  if (err) {
+                        res.status(500).send(err);
+                  } else {
+                        res.json(results);
+                  }
+            });
+      },
+      DELETE: (req, res) => {
+            model.DELETE(req.params.id, (err, results) => {
+                  if (err) {
+                        res.status(500).send(err);
+                  } else {
+                        res.json(results);
+                  }
+            });
+      },
+};
