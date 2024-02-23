@@ -69,9 +69,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `aft`.`sells`
+-- Table `aft`.`sales`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`sells` (
+CREATE TABLE IF NOT EXISTS `aft`.`sales` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(45) NOT NULL,
   `price` INT NOT NULL,
@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `aft`.`sells` (
   `product details` VARCHAR(4000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 

@@ -3,14 +3,14 @@ const app = express();
 const cors = require("cors");
 const milkRoutes = require('../Routes/milkRoutes.js')
 const expensesRoutes = require('../Routes/expensesRoutes.js')
-const SellsRoutes = require('../Routes/SellsRoutes.js')
+const SellsRoutes = require('../Routes/SalesRoutes.js')
 const PORT = 6464;
 
 
 app.use(cors())
 app.use(express.json())
 app.use(expensesRoutes)
-app.use("/sells", SellsRoutes)
+app.use("/sales", SellsRoutes)
 
 
 

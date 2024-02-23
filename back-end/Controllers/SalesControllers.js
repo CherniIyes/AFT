@@ -1,4 +1,4 @@
-const model = require("../Models/SellsModels");
+const model = require("../Models/SalesModels");
 
 module.exports = {
       getAll: (req, res) => {
