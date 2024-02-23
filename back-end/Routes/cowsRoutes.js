@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const cowController = require('../controllers/cowController');
+const cowController = require('../Controllers/cowsControllers');
 
 // Routes for CRUD operations on cows
 router.get('/', cowController.getAllCows);
