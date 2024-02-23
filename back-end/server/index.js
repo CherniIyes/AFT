@@ -10,7 +10,7 @@ const PORT = 6464;
 app.use(cors())
 app.use(express.json())
 app.use(expensesRoutes)
-app.use(SellsRoutes)
+app.use("/sells", SellsRoutes)
 
 
 
