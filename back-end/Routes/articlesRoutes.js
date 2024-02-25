@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const articleController = require('../controllers/articleController');
+const articleController = require('../Controllers/articlesControllers');
 
 router.get('/', articleController.getAllArticles);
 router.get('/:id', articleController.getArticleById);

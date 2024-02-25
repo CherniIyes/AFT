@@ -6,7 +6,8 @@ const milkRoutes = require('../Routes/milkRoutes.js')
 const expensesRoutes = require('../Routes/expensesRoutes.js')
 const SalesRoutes = require('../Routes/SalesRoutes.js')
 const cowsRouter = require ('../Routes/cowsRoutes')
-
+const articlesRoutes=require('../Routes/articlesRoutes.js')
+const article2Routes=require ('../Routes/article2Routes.js')
 app.use(cors());
 app.use(express.json());
 
@@ -20,9 +21,11 @@ app.use(express.json())
 app.use("/sales", SalesRoutes)
 app.use('/milk', milkRoutes);
 app.use("/exp",expensesRoutes)
+app.use('/articles', articlesRoutes);
+app.use('/article2', article2Routes);
 
 app.use('/cows', cowsRouter);
-app.use('/articles', articleRoutes);  
+  
 app.get('/', (req, res) => {
       res.send('Server Listening');
 })

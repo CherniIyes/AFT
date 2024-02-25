@@ -1,6 +1,6 @@
 // articleController.js
 
-const Article = require('../Models/articlesModels');
+const Article2 = require('../Models/article2Models');
 
 exports.getAllArticles = (req, res) => {
   Article.getAllArticles((err, articles) => {
