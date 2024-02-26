@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
-const AndroidSmall1 = () => {
+const AndroidSmall1 = ({ navigation }) => {
   return (
     <View style={styles.androidSmall1}>
       <Image

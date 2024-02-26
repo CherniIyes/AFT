@@ -1,10 +1,10 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Property1Default from "../components/Property1Default";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
-const AndroidSmall4 = () => {
+const AndroidSmall4 = ({ navigation }) => {
   return (
     <View style={styles.androidSmall8}>
       <View style={[styles.androidSmall8Child, styles.androidLayout]} />
@@ -32,31 +32,38 @@ const AndroidSmall4 = () => {
         streamlining your life for greater ease and efficiency.
       </Text>
       <View style={styles.instanceGroup}>
-        <Property1Default
-          buttonText="Skip"
-          property1DefaultPosition="absolute"
-          property1DefaultBorderColor="#107c2e"
-          property1DefaultTop={48}
-          property1DefaultLeft={46}
-          property1DefaultWidth={106}
-          property1DefaultHeight={31}
-          property1DefaultBorderStyle="solid"
-          property1DefaultBorderWidth={1}
-          property1DefaultBackgroundColor="unset"
-          skipColor="#107c2e"
-        />
-        <Property1Default
-          buttonText="Next"
-          property1DefaultPosition="absolute"
-          property1DefaultBorderColor="unset"
-          property1DefaultTop={48}
-          property1DefaultLeft={182}
-          property1DefaultWidth={111}
-          property1DefaultHeight={32}
-          property1DefaultBorderStyle="unset"
-          property1DefaultBackgroundColor="#092f03"
-          skipColor="#f7b304"
-        />
+      <TouchableOpacity
+      onPress={() => navigation.navigate('Boarding1')}
+      style={{
+        position: 'absolute',
+        top: 48,
+        left: 46,
+        width: 106,
+        height: 31,
+        borderWidth: 1,
+        borderColor: '#107c2e',
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Text style={{ color: '#107c2e' }}>Back</Text>
+    </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CreatAcc')}
+          style={{
+            position: 'absolute',
+            backgroundColor: '#092f03',
+            top: 48,
+            left: 182,
+            width: 111,
+            height: 32,
+            borderColor: 'unset', // You can include this line if borderColor is relevant
+            borderWidth: 0,       // You can include this line if borderColor is relevant
+          }}
+        >
+          <Text style={{ color: '#f7b304' }}>Next</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

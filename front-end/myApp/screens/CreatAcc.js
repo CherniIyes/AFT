@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Image } from "expo-image";
-import { TextInput, StyleSheet, View, Text, Button } from "react-native";
+
+import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
-const AndroidSmall3 = () => {
+const AndroidSmall3 = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -1,10 +1,10 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import Property1Variant from "../components/Property1Variant";
 import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
 
-const AndroidSmall = () => {
+const AndroidSmall = ({ navigation }) => {
   return (
     <View style={styles.androidSmall7}>
       <View style={[styles.androidSmall7Child, styles.androidLayout]} />
@@ -30,16 +30,19 @@ AFT`}</Text>
       >{`Welcome To AFT
 Elevate Your Farming And Master Your Management`}</Text>
       <View style={[styles.frameView, styles.frameViewPosition]}>
-        <Property1Variant
-          buttonText="Get started"
-          property1Variant2Position="absolute"
-          property1Variant2BackgroundColor="#092f03"
-          property1Variant2Top={35}
-          property1Variant2Left={167}
-          property1Variant2Width={129}
-          property1Variant2Height={40}
-          skipColor="#f7b304"
-        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Boarding2')}
+          style={{
+            position: 'absolute',
+            backgroundColor: '#092f03',
+            top: 35,
+            left: 167,
+            width: 129,
+            height: 40,
+          }}
+        >
+          <Text style={{ color: '#f7b304' }}>Get started</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

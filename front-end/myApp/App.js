@@ -9,7 +9,7 @@ import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Property1Default from "./components/Property1Default";
 import Property1Variant from "./components/Property1Variant";
-
+import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 
@@ -34,7 +34,7 @@ const App = () => {
       <NavigationContainer>
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/* <Stack.Screen
+            <Stack.Screen
               name="Boarding1"
               component={Boarding1}
               options={{ headerShown: false }}
@@ -48,17 +48,17 @@ const App = () => {
               name="logOrSign"
               component={loginOrSign}
               options={{ headerShown: false }}
-            /> */}
+            />
             <Stack.Screen
               name="CreatAcc"
               component={CreatAcc}
               options={{ headerShown: false }}
             />
-            {/* <Stack.Screen
+            <Stack.Screen
               name="Boarding2"
               component={Boarding2}
               options={{ headerShown: false }}
-            /> */}
+            />
           </Stack.Navigator>
         ) : null}
       </NavigationContainer>
