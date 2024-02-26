@@ -6,6 +6,9 @@ export const FontFamily = {
   interBold: "Inter-Bold",
   interMedium: "Inter-Medium",
   interRegular: "Inter-Regular",
+  destriptionItems14Medium: "Roboto-Medium",
+  robotoRegular: "Roboto-Regular",
+  montserratBold: "Montserrat-Bold",
 };
 /* font sizes */
 export const FontSize = {
@@ -16,6 +19,10 @@ export const FontSize = {
   size_base: 16,
   size_5xs: 8,
   size_mini: 15,
+  size_xs: 12,
+  size_3xs: 10,
+  destriptionItems14Medium_size: 14,
+  size_base: 16,
 };
 /* Colors */
 export const Color = {
@@ -33,6 +40,16 @@ export const Color = {
   colorLightgray: "#dbd7cb",
   colorMediumseagreen_100: "#4fad55",
   colorPrimary: "#0080ff",
+  colorWhite: "#fff",
+  color: "#485167",
+  colorDimgray_100: "rgba(112, 112, 112, 0.22)",
+  green2: "#27ae60",
+  color1: "#626a7d",
+  colorBlack: "#000",
+  colorGainsboro: "#dedede",
+  field: "#f8f8f8",
+  colorWhitesmoke_100: "#f5f6f8",
+  colorDarkslategray: "#1d3133",
 };
 /* Paddings */
 export const Padding = {
@@ -46,4 +63,12 @@ export const Border = {
   br_5xl: 24,
   br_12xs: 1,
   br_7xs: 6,
+  br_9xs: 4,
+  br_5xs: 8,
+  br_sm_5: 14,
+  br_9980xl: 9999,
+  br_5xl: 24,
 };
+
+
+

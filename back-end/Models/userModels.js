@@ -1,5 +1,5 @@
 const connection = require('../database/index')
-const { FIREBASE_APP, FIREBASE_AUTH } = require('./firebaseconfig');
+
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
