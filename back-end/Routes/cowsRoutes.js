@@ -10,3 +10,5 @@ router.put('/update/:id', cowController.updateCow);
 router.delete('/delete/:id', cowController.deleteCow);
 
 module.exports = router;
+// id, cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date
+
