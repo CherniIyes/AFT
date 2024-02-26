@@ -3,7 +3,7 @@
 const Article2 = require('../Models/article2Models');
 
 exports.getAllArticles = (req, res) => {
-  Article.getAllArticles((err, articles) => {
+  Article2.getAllArticles((err, articles) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
@@ -14,7 +14,7 @@ exports.getAllArticles = (req, res) => {
 
 exports.getArticleById = (req, res) => {
   const { id } = req.params;
-  Article.getArticleById(id, (err, article) => {
+  Article2.getArticleById(id, (err, article) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
@@ -28,7 +28,7 @@ exports.getArticleById = (req, res) => {
 
 exports.createArticle = (req, res) => {
   const articleData = req.body;
-  Article.createArticle(articleData, (err, result) => {
+  Article2.createArticle(articleData, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
@@ -40,7 +40,7 @@ exports.createArticle = (req, res) => {
 exports.updateArticle = (req, res) => {
   const { id } = req.params;
   const articleData = req.body;
-  Article.updateArticle(id, articleData, (err) => {
+  Article2.updateArticle(id, articleData, (err) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
@@ -51,7 +51,7 @@ exports.updateArticle = (req, res) => {
 
 exports.deleteArticle = (req, res) => {
   const { id } = req.params;
-  Article.deleteArticle(id, (err) => {
+  Article2.deleteArticle(id, (err) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
