@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `aft`.`cows` (
   `calving_and_delivery_date` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `aft`.`expenses` (
   `hay` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -58,25 +59,38 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`milk` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `day` DATE NULL DEFAULT NULL,
-  `quantity` DECIMAL(10,2) NULL DEFAULT NULL,
-  `price` DECIMAL(10,2) NULL DEFAULT NULL,
+  `date` DATE NOT NULL,
+  `price` INT NOT NULL,
+  `quantity` DECIMAL(10,0) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `aft`.`sales`
+-- Table `aft`.`sells`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`sales` (
+CREATE TABLE IF NOT EXISTS `aft`.`sells` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(45) NOT NULL,
   `price` INT NOT NULL,
   `image` VARCHAR(4000) NOT NULL,
   `product details` VARCHAR(4000) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aft`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aft`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(450) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
