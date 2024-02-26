@@ -1,17 +1,74 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Image } from "expo-image";
-
 import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
+// import { GoogleProvider } from '../firebase/config'
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
+
+
+
 const AndroidSmall3 = ({ navigation }) => {
-  const [name, setName] = useState('');
+  const [username, setusername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [signInWithGoogle] = useSignInWithGoogle(FIREBASE_AUTH);
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(FIREBASE_AUTH);
+
+
+  const handleSignUp = async () => {
+    try {
+      // Password validation
+      // setTimeout(() => { router.push('/'); }, 1500)
+
+
+      // const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
+      const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])/;
+      if (!passwordRegex.test(password)) {
+        alert("Password must contain at least one capital letter, one number, and one symbol (!@#$%^&*)");
+        return;
+      }
+
+      // Create user with email and password
+      const res = await createUserWithEmailAndPassword(email, password);
+      console.log('User creation response:', res);
+
+      if (!res || !res.user) {
+        alert("User creation failed. Please try again.");
+        return;
+      }
+
+      // Make API call to register the user
+      const registerResponse = await axios.post('http://192.168.100.43:6464/users/register', {
+        username,
+        email,
+        password
+      });
+      router.push('/');
+
+      console.log('Registration API response:', registerResponse);
+
+      // Store the user's email in session storage
+      sessionStorage.setItem('userEmail', email);
+
+      setEmail('');
+      setPassword('');
+      setusername('');
+      router.push('/');
+      alert("Sign up successful");
+    } catch (e) {
+      console.error(e);
+      // alert("Sign up failed. Please try again.");
+    }
+  };
+
+
 
   const handleNameChange = (text) => {
-    setName(text);
+    setusername(text);
   };
 
   const handleEmailChange = (text) => {
@@ -26,16 +83,10 @@ const AndroidSmall3 = ({ navigation }) => {
     setConfirmPassword(text);
   };
 
-  const handleInputChange = (text) => {
-    // Handle changes for the "Name" input
-    // You can perform any additional logic here if needed
-    // For now, let's just log the input value
-    console.log('Name input value:', text);
-  };
 
   const handleButtonPress = () => {
     // Do something with the input values
-    console.log('Name:', name);
+    console.log('Name:', username);
     console.log('Email:', email);
     console.log('Password:', password);
     console.log('Confirm Password:', confirmPassword);
@@ -112,16 +163,16 @@ const AndroidSmall3 = ({ navigation }) => {
         source={require("../assets/eleyeclose.png")}
       />
       <Text style={[styles.signUp, styles.signUpTypo]}>
-        <Text style={styles.sign}>SIGN</Text>
-        <Text style={styles.text}>{` `}</Text>
-        <Text style={styles.sign}>UP</Text>
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text style={styles.sign}>SIGN UP</Text>
+        </TouchableOpacity>
+
       </Text>
       <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
         <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
         <Text style={[styles.loginUp, styles.signUpTypo]}>
           <Text style={styles.login}>Login</Text>
           <Text style={styles.text1}>{` `}</Text>
-          <Text style={styles.login}>Up</Text>
         </Text>
       </Text>
       <View style={[styles.frameView, styles.vectorFlexBox]}>
@@ -134,7 +185,7 @@ const AndroidSmall3 = ({ navigation }) => {
           style={styles.nameInput}
           placeholder="Name"
           onChangeText={handleNameChange}
-          value={name}
+          value={username}
         />
       </View>
     </View>
