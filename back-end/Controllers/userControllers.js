@@ -1,6 +1,6 @@
 const User = require('../Models/userModels.js');
 const bcrypt = require('bcrypt');
-const { FIREBASE_APP, FIREBASE_AUTH } = require('../firebaseconfig');
+
 
 const getUsers = (req, res) => {
     User.getAll((err, result) => {
@@ -29,25 +29,20 @@ const getUserByEmail = (req, res) => {
 
 const addUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const {username, email,password } = req.body;
 
         // Hash the password before storing it
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user in Firebase Authentication
-        const authUser = await FIREBASE_AUTH.createUserWithEmailAndPassword(email, password);
-
-        // Create a new user document in your MySQL database
+        // Create a new user
         const newUser = {
-            username: username,
-            email: email,
+            username:username,
+            email:email,
             password: hashedPassword,
         };
 
         await User.register(newUser, (err, result) => {
             if (err) {
-                // If there's an error creating the user document in MySQL, delete the user from Firebase Authentication
-                FIREBASE_AUTH.currentUser.delete();
                 res.status(500).json({ error: 'Internal server error' });
             } else {
                 res.status(201).json({ message: 'User registered successfully' });
@@ -62,11 +57,6 @@ const addUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Sign in with Firebase Authentication
-        await FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
-
-        // Get user details from your MySQL database
         User.login(email, password, (err, result) => {
             if (err) {
                 res.status(401).json({ message: 'Invalid credentials' });

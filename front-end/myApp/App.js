@@ -7,7 +7,7 @@ import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
-import Home from "./screens/HomePagee.js";
+import HHH from "./screens/AndroidSmall.js";
 import Property1Default from "./components/Property1Default";
 import Property1Variant from "./components/Property1Variant";
 import { createStackNavigator } from '@react-navigation/stack';
