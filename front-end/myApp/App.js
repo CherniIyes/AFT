@@ -7,6 +7,7 @@ import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
+import HomePage from "./screens/HomePage.js"
 import HHH from "./screens/AndroidSmall.js";
 import Property1Default from "./components/Property1Default";
 import Property1Variant from "./components/Property1Variant";
@@ -36,8 +37,18 @@ const App = () => {
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
+              name="HomePage"
+              component={HomePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="Boarding1"
               component={Boarding1}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="Boarding2"
+              component={Boarding2}
               options={{ headerShown: false }}
             />
             <Stack.Screen
