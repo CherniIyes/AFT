@@ -68,22 +68,24 @@ const register = async (user, callback) => {
             const connectionPromise = require('../database/index');
 
             await connectionPromise.promise().query(
-                  'INSERT INTO `user` set username=?, email=?,password=?',
-                  [username, email, hashedPassword], (err) => {
-                        if (err) { throw err; }
-                        else {
+                  'INSERT INTO `user` SET username=?, email=?, password=?',
+                  [username, email, hashedPassword],
+                  (err, results) => {
+                        if (err) {
+                              throw err;
+                        } else {
                               console.log("User registered successfully");
                               callback(null, 'Registration successful');
                         }
                   }
             );
 
-
       } catch (error) {
             console.error(error);
             callback(error, null);
       }
 };
+
 
 
 
