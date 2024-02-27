@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import axios from 'axios';
 
 const ProfitCalculatorScreen = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -17,9 +19,8 @@ const ProfitCalculatorScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:6464/milk');
-      const data = await response.json();
-      setTableData(data);
+      const response = await axios.get('http://192.168.100.66:6464/milk');
+      setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -38,19 +39,13 @@ const ProfitCalculatorScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:6464/milk/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          date: date,
-          price: price,
-          quantity: quantity
-        }),
+      const response = await axios.post('http://192.168.100.66:6464/milk/add', {
+        day: date,
+        price: price,
+        quantity: quantity
       });
-      if (response.ok) {
-        fetchData();
+      if (response.status === 200) {
+        fetchData(); // Fetch updated data after successful addition
         setPrice('');
         setQuantity('');
       } else {
@@ -70,46 +65,54 @@ const ProfitCalculatorScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text>Date:</Text>
-      <TextInput
-        style={styles.input}
-        value={date}
-        onChangeText={setDate}
-        keyboardType="datetime"
-      />
-      <Text>Price per Litre:</Text>
-      <TextInput
-        style={styles.input}
-        value={price}
-        onChangeText={setPrice}
-        keyboardType="decimal-pad"
-      />
-      <Text>Quantity (Litres):</Text>
-      <TextInput
-        style={styles.input}
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text>Date:</Text>
+        <TextInput
+          style={styles.input}
+          value={date}
+          onChangeText={setDate}
+          keyboardType="datetime"
+        />
+        <Text>Price per Litre:</Text>
+        <TextInput
+          style={styles.input}
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="decimal-pad"
+        />
+        <Text>Quantity (Litres):</Text>
+        <TextInput
+          style={styles.input}
+          value={quantity}
+          onChangeText={setQuantity}
+          keyboardType="numeric"
+        />
 
-      <Button title="Calculate Profit" onPress={calculateProfit} />
+        <TouchableOpacity style={styles.button} onPress={calculateProfit}>
+          <Text style={styles.buttonText}>Calculate Profit</Text>
+        </TouchableOpacity>
 
-      <Text>Daily Profit: {dailyProfit.toFixed(2)}</Text>
-      <Text>Monthly Profit: {monthlyProfit.toFixed(2)}</Text>
-      <Text>Yearly Profit: {yearlyProfit.toFixed(2)}</Text>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
 
-      {tableData.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableHeader}>Table Data</Text>
-          <FlatList
-            data={tableData}
-            renderItem={renderItem}
-            keyExtractor={item => item.id.toString()} // Assuming each item has an 'id' property
-          />
-        </View>
-      )}
-    </View>
+        <Text style={styles.profitText}>Daily Profit: {dailyProfit.toFixed(2)}</Text>
+        <Text style={styles.profitText}>Monthly Profit: {monthlyProfit.toFixed(2)}</Text>
+        <Text style={styles.profitText}>Yearly Profit: {yearlyProfit.toFixed(2)}</Text>
+
+        {tableData.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Table Data</Text>
+            <FlatList
+              data={tableData}
+              renderItem={renderItem}
+              keyExtractor={item => item.id.toString()} // Assuming each item has an 'id' property
+            />
+          </View>
+        )}
+      </View>
+    </GestureHandlerRootView>
   );
 };
 
@@ -117,6 +120,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#FFFFFF', // Color.colorWhite
   },
   input: {
     height: 40,
@@ -125,6 +129,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 5,
   },
+  button: {
+    backgroundColor: '#107c2e', // Adjust button style to match Property1Default
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+    marginTop: 10, // Adjust spacing as needed
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  profitText: {
+    // Style your profit text here to match the startYourJourney text
+    // Example: color: '#000000'
+  },
   // Table styles
   tableContainer: {
     marginTop: 20,
@@ -132,6 +151,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+    // Additional styles to match the startYourJourney text
   },
   tableRow: {
     flexDirection: 'row',
