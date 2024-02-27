@@ -3,7 +3,7 @@ import axios from "axios";
 import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
-import {Color , FontSize , FontFamily , Border } from '../GlobalStyles'
+import { Color, FontSize, FontFamily, Border } from '../GlobalStyles'
 const AndroidSmall3 = ({ navigation }) => {
   const [username, setusername] = useState('');
   const [email, setEmail] = useState('');
@@ -19,14 +19,10 @@ const AndroidSmall3 = ({ navigation }) => {
         return;
       }
 
-      const res = await createUserWithEmailAndPassword(email, password);
+      // Proceed to server registration
+      console.log('Data being sent to server:', { username, email, password });
 
-      if (!res || !res.user) {
-        alert("User creation failed. Please try again.");
-        return;
-      }
-
-      const registerResponse = await axios.post('http://localhost:6464/users/register', {
+      const registerResponse = await axios.post('http://192.168.1.4:6464/user/register', {
         username,
         email,
         password
@@ -34,21 +30,23 @@ const AndroidSmall3 = ({ navigation }) => {
 
       console.log('Registration API response:', registerResponse);
 
-      // sessionStorage.setItem('userEmail', email); // Note: sessionStorage is not available in React Native
-
-      setEmail('');
-      setPassword('');
-      setusername('');
-      alert("Sign up successful");
-    } catch (error) {
-      console.error("Error creating user:", error);
-      console.log(error.code, error.message);
-
-      if (error.code === 'auth/email-already-in-use') {
-        alert('Email is already in use. Please choose a different email.');
+      // Check the response from the server and handle accordingly
+      if (registerResponse.status === 201) {
+        // Clear form fields and show success message
+        alert("Sign up successful");
+        setEmail('');
+        setPassword('');
+        setusername('');
+        navigation.navigate('Login');
       } else {
+        // Handle registration failure
+        console.error("User registration failed:", registerResponse.data);
         alert("User creation failed. Please try again.");
       }
+    } catch (error) {
+      // Handle errors
+      console.error("Error during user creation:", error);
+      alert("User creation failed. Please try again.");
     }
   };
 
