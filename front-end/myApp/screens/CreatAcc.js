@@ -1,71 +1,56 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Image } from "expo-image";
-import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
-import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
-// import { GoogleProvider } from '../firebase/config'
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
-
-
-
+import {Color , FontSize , FontFamily , Border } from '../GlobalStyles'
 const AndroidSmall3 = ({ navigation }) => {
   const [username, setusername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [signInWithGoogle] = useSignInWithGoogle(FIREBASE_AUTH);
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(FIREBASE_AUTH);
-
+  const [createUserWithEmailAndPassword, user, error] = useCreateUserWithEmailAndPassword(FIREBASE_AUTH);
 
   const handleSignUp = async () => {
     try {
-      // Password validation
-      // setTimeout(() => { router.push('/'); }, 1500)
-
-
-      // const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
       const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])/;
       if (!passwordRegex.test(password)) {
-        alert("Password must contain at least one capital letter, one number, and one symbol (!@#$%^&*)");
+        alert("Password must contain at least one capital letter and one number");
         return;
       }
 
-      // Create user with email and password
       const res = await createUserWithEmailAndPassword(email, password);
-      console.log('User creation response:', res);
 
       if (!res || !res.user) {
         alert("User creation failed. Please try again.");
         return;
       }
 
-      // Make API call to register the user
-      const registerResponse = await axios.post('http://192.168.100.43:6464/users/register', {
+      const registerResponse = await axios.post('http://localhost:6464/users/register', {
         username,
         email,
         password
       });
-      router.push('/');
 
       console.log('Registration API response:', registerResponse);
 
-      // Store the user's email in session storage
-      sessionStorage.setItem('userEmail', email);
+      // sessionStorage.setItem('userEmail', email); // Note: sessionStorage is not available in React Native
 
       setEmail('');
       setPassword('');
       setusername('');
-      router.push('/');
       alert("Sign up successful");
-    } catch (e) {
-      console.error(e);
-      // alert("Sign up failed. Please try again.");
+    } catch (error) {
+      console.error("Error creating user:", error);
+      console.log(error.code, error.message);
+
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Email is already in use. Please choose a different email.');
+      } else {
+        alert("User creation failed. Please try again.");
+      }
     }
   };
-
-
 
   const handleNameChange = (text) => {
     setusername(text);
@@ -83,14 +68,6 @@ const AndroidSmall3 = ({ navigation }) => {
     setConfirmPassword(text);
   };
 
-
-  const handleButtonPress = () => {
-    // Do something with the input values
-    console.log('Name:', username);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
-  };
 
 
   return (
@@ -171,7 +148,12 @@ const AndroidSmall3 = ({ navigation }) => {
       <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
         <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
         <Text style={[styles.loginUp, styles.signUpTypo]}>
-          <Text style={styles.login}>Login</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Text style={styles.login}>Login</Text>
+          </TouchableOpacity>
+
           <Text style={styles.text1}>{` `}</Text>
         </Text>
       </Text>
@@ -188,14 +170,14 @@ const AndroidSmall3 = ({ navigation }) => {
           value={username}
         />
       </View>
-    </View>
+    </View >
   );
 };
 
 const styles = StyleSheet.create({
 
   androidLayout: {
-    borderRadius: Border.br_5xl,
+    // borderRadius: Border.br_5xl,
     position: "absolute",
   },
   signUpFlexBox: {

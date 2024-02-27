@@ -1,9 +1,53 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
+import axios from 'axios';
 
 const AndroidSmall1 = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
+
+  const handleSignIn = async () => {
+    try {
+      // Validate email and password
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      const loginResponse = await axios.post('http://192.168.100.43:6464/users/login', {
+        email,
+        password,
+      });
+
+      console.log('Login API response:', loginResponse);
+
+      if (!loginResponse || !loginResponse.data || loginResponse.data.error) {
+        alert("Invalid email or password. Please try again.");
+        return;
+      }
+
+      sessionStorage.setItem('user', true);
+      setUser(loginResponse.data);
+      console.log('user:', loginResponse);
+      setEmail('');
+      setPassword('');
+
+      alert("Sign in successful");
+    } catch (e) {
+      console.error(e);
+      alert("Sign in failed. Please try again.");
+    }
+  };
   return (
     <View style={styles.androidSmall1}>
       <Image
@@ -21,7 +65,12 @@ const AndroidSmall1 = ({ navigation }) => {
           contentFit="cover"
           source={require("../assets/vector1.png")}
         />
-        <Text style={styles.email}>Email</Text>
+        <TextInput
+          style={styles.email}
+          placeholder="Email"
+          onChangeText={handleEmailChange}
+          value={email}
+        />
       </View>
       <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
         <Image
@@ -29,7 +78,14 @@ const AndroidSmall1 = ({ navigation }) => {
           contentFit="cover"
           source={require("../assets/vector2.png")}
         />
-        <Text style={styles.email}>Password</Text>
+        <TextInput
+          style={styles.email}
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={handlePasswordChange}
+          value={password}
+        />
+
       </View>
       <View style={styles.rectangleView} />
       <View style={styles.androidSmall1Child2} />
@@ -44,13 +100,19 @@ const AndroidSmall1 = ({ navigation }) => {
         contentFit="cover"
         source={require("../assets/eleyeclose.png")}
       />
-      <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
+      <TouchableOpacity onPress={handleSignIn}>
+        <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
+      </TouchableOpacity>
+
       <Text style={styles.dontHaveAnContainer}>
         <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
         <Text style={[styles.signUp, styles.loginTypo]}>
-          <Text style={styles.sign}>Sign</Text>
-          <Text style={styles.text}>{` `}</Text>
-          <Text style={styles.sign}>Up</Text>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CreatAcc')}
+          >
+            <Text style={styles.sign}>Sign Up</Text>
+          </TouchableOpacity>
         </Text>
       </Text>
       <Text style={styles.logIn}>{`Log In `}</Text>
