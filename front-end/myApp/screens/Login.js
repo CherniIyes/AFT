@@ -9,6 +9,7 @@ import axios from 'axios';
 const AndroidSmall1 = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState('');
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -18,13 +19,14 @@ const AndroidSmall1 = ({ navigation }) => {
 
   const handleSignIn = async () => {
     try {
-      // Validate email and password
       if (!email || !password) {
         alert("Please enter both email and password.");
         return;
       }
 
-      const loginResponse = await axios.post('http://192.168.100.43:6464/users/login', {
+      console.log('Password being sent:', password);
+
+      const loginResponse = await axios.post('http://192.168.1.4:6464/user/login', {
         email,
         password,
       });
@@ -32,22 +34,29 @@ const AndroidSmall1 = ({ navigation }) => {
       console.log('Login API response:', loginResponse);
 
       if (!loginResponse || !loginResponse.data || loginResponse.data.error) {
+        console.error("Login error:", loginResponse.data?.error);
         alert("Invalid email or password. Please try again.");
         return;
       }
 
       sessionStorage.setItem('user', true);
       setUser(loginResponse.data);
-      console.log('user:', loginResponse);
+      console.log('user:', loginResponse.data);
       setEmail('');
       setPassword('');
 
       alert("Sign in successful");
-    } catch (e) {
-      console.error(e);
-      alert("Sign in failed. Please try again.");
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+
+      if (error.response && error.response.status === 404) {
+        alert("Login endpoint not found. Please check the server configuration.");
+      } else {
+        alert("Sign in failed. Please try again.");
+      }
     }
   };
+
   return (
     <View style={styles.androidSmall1}>
       <Image

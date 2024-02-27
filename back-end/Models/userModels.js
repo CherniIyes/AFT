@@ -1,94 +1,79 @@
-const connection = require('../database/index')
-
+const connection = require('../database/index');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const getAll = (callback) => {
-      const query = 'SELECT * FROM user ';
+      const query = 'SELECT * FROM user';
       connection.query(query, (err, result) => {
             if (err) {
-                  callback(err, null);
-            } else {
-                  callback(null, result);
+                  return callback(err, null);
             }
+            return callback(null, result);
       });
 };
-
 
 const getUser = (emailTerm, callback) => {
       const query = 'SELECT * FROM user WHERE email = ?';
       connection.query(query, [emailTerm], (err, result) => {
             if (err) {
-                  callback(err, null);
-            } else {
-                  callback(null, result);
+                  return callback(err, null);
             }
+            return callback(null, result);
       });
 };
-
-
-const login = async (email, password, callback) => {
-      const query = 'SELECT * FROM user WHERE email = ?';
-      connection.query(query, [email], async (err, result) => {
-            if (err) {
-                  callback(err, null);
-            } else {
-                  console.log('User found:', result);
-
-                  if (result.length === 0) {
-                        console.log('User not found');
-                        callback('User not found', null);
-                  } else {
-                        const storedHashedPassword = result[0].password;
-                        console.log('Stored hashed password:', storedHashedPassword);
-
-                        const passwordMatch = await bcrypt.compare(password, storedHashedPassword);
-                        const hashedPassword = await bcrypt.hash(password, saltRounds);
-                        console.log(hashedPassword)
-                        if (passwordMatch) {
-                              console.log('Password matched');
-                              callback(null, result[0]);
-                        } else {
-                              console.log('Incorrect password');
-                              callback('Incorrect password', null);
-                        }
-                  }
-            }
-      });
-};
-
 
 const register = async (user, callback) => {
       try {
-            const { username, email, password } = user;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            // Hash the password before storing it in the database
+            const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
-            console.log("Attempting to register user:", user);
-
-            const connectionPromise = require('../database/index');
-
-            await connectionPromise.promise().query(
-                  'INSERT INTO `user` SET username=?, email=?, password=?',
-                  [username, email, hashedPassword],
-                  (err, results) => {
-                        if (err) {
-                              throw err;
-                        } else {
-                              console.log("User registered successfully");
-                              callback(null, 'Registration successful');
-                        }
+            // Save the user with the hashed password in the database
+            const query = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
+            connection.query(query, [user.username, user.email, hashedPassword], (err) => {
+                  if (err) {
+                        return callback(err, false);
                   }
-            );
 
+                  // Registration successful
+                  return callback(null, true);
+            });
       } catch (error) {
-            console.error(error);
-            callback(error, null);
+            return callback(error, false);
       }
 };
 
-
-
-
+const login = async (email, password, callback) => {
+      try {
+          getUser(email, (err, user) => {
+              if (err) {
+                  return callback(err, false);
+              }
+  
+              if (!user || user.length === 0) {
+                  // User not found
+                  return callback(null, false);
+              }
+  
+              // Compare the entered password with the hashed password from the database
+              bcrypt.compare(password, user[0].password, (compareErr, passwordMatch) => {
+                  if (compareErr) {
+                      return callback(compareErr, false);
+                  }
+  
+                  if (passwordMatch) {
+                      // Passwords match, login successful
+                      return callback(null, true);
+                  } else {
+                      // Passwords do not match
+                      return callback(null, false);
+                  }
+              });
+          });
+      } catch (error) {
+          return callback(error, false);
+      }
+  };
+  
 
 
 module.exports = { getUser, getAll, login, register };
