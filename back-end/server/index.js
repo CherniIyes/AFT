@@ -8,7 +8,7 @@ const admin = require('firebase-admin');
 app.use(cors());
 app.use(express.json());
 
-app.use(express.json())
+
 
 const milkRoutes = require('../Routes/milkRoutes.js')
 const expensesRoutes = require('../Routes/expensesRoutes.js')
