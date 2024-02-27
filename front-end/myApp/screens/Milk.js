@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
+import { Card } from 'react-native-paper'; // Import Card component from react-native-paper
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons for icons
 
 const ProfitCalculatorScreen = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -19,7 +21,7 @@ const ProfitCalculatorScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.100.66:6464/milk');
+      const response = await axios.get('http://192.168.1.9:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -39,7 +41,7 @@ const ProfitCalculatorScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.100.66:6464/milk/add', {
+      const response = await axios.post('http://192.168.1.9/milk/add', {
         day: date,
         price: price,
         quantity: quantity
@@ -56,78 +58,115 @@ const ProfitCalculatorScreen = () => {
     }
   };
 
+  const renderProfitCards = () => {
+    return [
+      { title: 'Daily Profit', value: dailyProfit.toFixed(2) },
+      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2) },
+      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2) }
+    ].map((item, index) => (
+      <Card key={index} style={styles.card}>
+        <Card.Content>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+          <Text style={styles.cardText}>{item.value}</Text>
+        </Card.Content>
+      </Card>
+    ));
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.tableRow}>
-      <Text style={styles.tableText}>{item.date}</Text>
-      <Text style={styles.tableText}>{item.price}</Text>
-      <Text style={styles.tableText}>{item.quantity}</Text>
+      <Text style={styles.tableText}>{item.day}</Text>
+      <Text style={styles.tableText}>{item.price} Dt</Text>
+      <Text style={styles.tableText}>{item.quantity} L</Text>
     </View>
   );
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text>Date:</Text>
-        <TextInput
-          style={styles.input}
-          value={date}
-          onChangeText={setDate}
-          keyboardType="datetime"
-        />
-        <Text>Price per Litre:</Text>
-        <TextInput
-          style={styles.input}
-          value={price}
-          onChangeText={setPrice}
-          keyboardType="decimal-pad"
-        />
-        <Text>Quantity (Litres):</Text>
-        <TextInput
-          style={styles.input}
-          value={quantity}
-          onChangeText={setQuantity}
-          keyboardType="numeric"
-        />
-
-        <TouchableOpacity style={styles.button} onPress={calculateProfit}>
-          <Text style={styles.buttonText}>Calculate Profit</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.profitText}>Daily Profit: {dailyProfit.toFixed(2)}</Text>
-        <Text style={styles.profitText}>Monthly Profit: {monthlyProfit.toFixed(2)}</Text>
-        <Text style={styles.profitText}>Yearly Profit: {yearlyProfit.toFixed(2)}</Text>
-
-        {tableData.length > 0 && (
-          <View style={styles.tableContainer}>
-            <Text style={styles.tableHeader}>Table Data</Text>
-            <FlatList
-              data={tableData}
-              renderItem={renderItem}
-              keyExtractor={item => item.id.toString()} // Assuming each item has an 'id' property
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <GestureHandlerRootView>
+        <View style={styles.container}>
+          <Text>Date:</Text>
+          <View style={styles.inputContainer}>
+            <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              value={date}
+              onChangeText={setDate}
+              keyboardType="datetime"
             />
           </View>
-        )}
-      </View>
-    </GestureHandlerRootView>
+          <Text>Price per Litre:</Text>
+          <View style={styles.inputContainer}>
+            <Ionicons name="cash-outline" size={24} color="black" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              value={price}
+              onChangeText={setPrice}
+              keyboardType="decimal-pad"
+            />
+          </View>
+          <Text>Quantity (Litres):</Text>
+          <View style={styles.inputContainer}>
+            <Ionicons name="cube-outline" size={24} color="black" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              value={quantity}
+              onChangeText={setQuantity}
+              keyboardType="numeric"
+            />
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={calculateProfit}>
+            <Text style={styles.buttonText}>Calculate Profit</Text>
+          </TouchableOpacity>
+
+          
+
+          <View style={styles.profitContainer}>
+            {renderProfitCards()}
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+          {tableData.length > 0 && (
+            <View style={styles.tableContainer}>
+
+              <Text style={styles.tableHeader}>Table Data</Text>
+              <FlatList
+                data={tableData}
+                renderItem={renderItem}
+                keyExtractor={item => item.id.toString()} // Assuming each item has an 'id' property
+              />
+            </View>
+          )}
+        </View>
+      </GestureHandlerRootView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
-    flex: 1,
     padding: 20,
     backgroundColor: '#FFFFFF', // Color.colorWhite
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 10,
+  },
   input: {
+    flex: 1,
     height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
-    padding: 5,
+    padding: 10,
   },
   button: {
     backgroundColor: '#107c2e', // Adjust button style to match Property1Default
@@ -137,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 10, // Adjust spacing as needed
   },
   buttonText: {
-    color: 'white',
+    color: '#f7b304',
     fontWeight: 'bold',
   },
   profitText: {
@@ -164,6 +203,25 @@ const styles = StyleSheet.create({
   tableText: {
     flex: 1,
     textAlign: 'center',
+  },
+  // Card styles
+  profitContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  card: {
+    flex: 1,
+    marginHorizontal: 5,
+    elevation: 4, // Add elevation for shadow on Android
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardText: {
+    fontSize: 16,
   },
 });
 
