@@ -14,6 +14,8 @@ import Property1Variant from "./components/Property1Variant";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
+// import Article1 from "./screens/Article1.js"
+// import Article2 from "./screens/Article2.js"
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -36,11 +38,22 @@ const App = () => {
       <NavigationContainer>
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+             {/* <Stack.Screen
+              name="Article1"
+              component={Article1}
+              options={{ headerShown: false }}
+            /> */}
             <Stack.Screen
               name="HomePage"
               component={HomePage}
               options={{ headerShown: false }}
             />
+            
+            {/* <Stack.Screen
+              name="Article2"
+              component={Article2}
+              options={{ headerShown: false }}
+            /> */}
             <Stack.Screen
               name="Boarding1"
               component={Boarding1}
