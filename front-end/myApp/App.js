@@ -54,8 +54,6 @@ const App = () => {
             component={Expenses}
           // options={{ headerShown: false }}
           />
-
-
           <Stack.Screen
             name="Article1"
             component={Article1} />
@@ -77,6 +75,7 @@ const App = () => {
           <Stack.Screen
             name="CreatAcc"
             component={CreatAcc} />
+
         </Stack.Navigator>
       ) : (
         <View />
