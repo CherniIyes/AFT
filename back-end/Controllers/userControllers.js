@@ -27,48 +27,48 @@ const getUserByEmail = (req, res) => {
     });
 };
 
-const addUser = async (req, res) => {
-    try {
-        const {username, email,password } = req.body;
+const register = async (req, res) => {
+    const { username, email, password } = req.body;
 
-        // Hash the password before storing it
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a new user
-        const newUser = {
-            username:username,
-            email:email,
-            password: hashedPassword,
-        };
-
-        await User.register(newUser, (err, result) => {
-            if (err) {
-                res.status(500).json({ error: 'Internal server error' });
-            } else {
-                res.status(201).json({ message: 'User registered successfully' });
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+    if (!username || !email || !password) {
+        return res.status(400).send("Username, email, and password are required");
     }
+
+    const user = { username, email, password };
+
+    User.register(user, (err, success) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        if (success) {
+            return res.status(201).send("User registered successfully");
+        } else {
+            return res.status(400).send("Registration failed");
+        }
+    });
 };
 
-const loginUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        User.login(email, password, (err, result) => {
-            if (err) {
-                res.status(401).json({ message: 'Invalid credentials' });
-            } else {
-                // Here you can generate a token, set a session, or handle login success as needed
-                res.status(200).json({ message: 'Login successful', user: result });
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).send("Email and password are required");
     }
+
+    User.login(email, password, (err, success) => {
+        if (err) {
+            console.error("Login error:", err);
+            return res.status(500).send(err);
+        }
+
+        if (success) {
+            return res.status(200).send("Login successful");
+        } else {
+            return res.status(401).send("Login failed. Check your email and password.");
+        }
+    });
 };
 
-module.exports = { getUsers, getUserByEmail, addUser, loginUser };
+
+module.exports = { getUsers, getUserByEmail, register, login };
