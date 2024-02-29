@@ -14,20 +14,24 @@ const ProfitCalculatorScreen = () => {
   const [monthlyProfit, setMonthlyProfit] = useState(0);
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchData();
   }, []);
+
   const fetchData = async () => {
     try {
       const response = await axios.get('http://192.168.50.79:6464/milk');
       setTableData(response.data);
+      calculateTotalPrice();
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post('http://192.168.50.79:6464/milk/add', {
@@ -39,20 +43,20 @@ const ProfitCalculatorScreen = () => {
         // Update frontend state with the new entry
         const newEntry = { id: response.data.id, day: date, price: price, quantity: quantity };
         setTableData(prevData => [...prevData, newEntry]);
-  
+
         // Reset input fields
+        setDate('');
         setPrice('');
         setQuantity('');
-  
-        // Fetch updated data
-        fetchData();
+
+        // Calculate total price
+        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+        setTotalPrice(totalPrice);
       } 
     } catch (error) {
       console.error('Error posting data:', error);
     }
   };
-
-
 
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
@@ -63,6 +67,14 @@ const ProfitCalculatorScreen = () => {
 
     const yearlyProfit = dailyProfit * 365; // Assuming 365 days in a year
     setYearlyProfit(yearlyProfit);
+  };
+
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    tableData.forEach(item => {
+      totalPrice += parseFloat(item.price);
+    });
+    setTotalPrice(totalPrice);
   };
 
   const renderProfitCards = () => {
@@ -156,6 +168,7 @@ const ProfitCalculatorScreen = () => {
               renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
             />
+            <Text style={styles.tableText}>Total Price: {totalPrice.toFixed(2)}</Text>
           </View>
         )}
       </ScrollView>
