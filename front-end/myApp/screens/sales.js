@@ -1,683 +1,328 @@
-import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Image } from "expo-image";
-import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  Modal,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import axios from 'axios';
 
-const AndroidSmall = () => {
+const SalesList = () => {
+  const [allAftData, setAllAftData] = useState([]);
+  const [filteredAftData, setFilteredAftData] = useState([]);
+  const [error, setError] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
+  const [updatedProduct, setUpdatedProduct] = useState('');
+  const [updatedPrice, setUpdatedPrice] = useState('');
+  const [updatedDate, setUpdatedDate] = useState('');
+  const [updatedProductDetails, setUpdatedProductDetails] = useState('');
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [years, setYears] = useState([]);
+
+  const [isAddModalVisible, setAddModalVisible] = useState(false);
+  const [newProduct, setNewProduct] = useState('');
+  const [newPrice, setNewPrice] = useState('');
+  const [newDate, setNewDate] = useState('');
+  const [newProductDetails, setNewProductDetails] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://192.168.50.59:5464/sales/getAll');
+        setAllAftData(response.data);
+        setFilteredAftData(response.data);
+      } catch (error) {
+        console.error('Error fetching sales data:', error);
+        setError('Network error. Please check your connection and try again.');
+      }
+    };
+
+    fetchData();
+  }, []);
+  const onViewDetails = (item) => {
+    console.log('Item details:', item);
+  };
+
+  const onOpenUpdateModal = (item) => {
+    setSelectedItem(item);
+    setUpdatedProduct(item.product);
+    setUpdatedPrice(item.price.toString());
+    setUpdatedDate(item.date);
+    setUpdatedProductDetails(item.productdetails);
+    setUpdateModalVisible(true);
+  };
+
+  const onUpdate = () => {
+    const updatedItem = {
+      product: updatedProduct,
+      price: parseFloat(updatedPrice),
+      date: updatedDate,
+      productdetails: updatedProductDetails,
+    };
+
+    const updatedData = filteredAftData.map((item) =>
+      item.id === selectedItem.id ? { ...item, ...updatedItem } : item
+    );
+
+    setFilteredAftData(updatedData);
+    setUpdateModalVisible(false);
+  };
+
+  const onDelete = (item) => {
+    const updatedData = filteredAftData.filter((i) => i.id !== item.id);
+    setFilteredAftData(updatedData);
+  };
+
+  const onOpenAddModal = () => {
+    setAddModalVisible(true);
+  };
+
+  const onAdd = () => {
+    const newProductItem = {
+      product: newProduct,
+      price: parseFloat(newPrice),
+      date: newDate,
+      productdetails: newProductDetails,
+    };
+
+    setFilteredAftData([...filteredAftData, newProductItem]);
+    setAddModalVisible(false);
+  };
+
+  const calculateTotal = () => {
+    const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
+    return totalPrice.toFixed(2);
+  };
+
+  if (error) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.androidSmall9}>
-      <View style={[styles.androidSmall9Child, styles.androidLayout]} />
-      <View style={[styles.androidSmall9Item, styles.androidLayout]} />
-      <Text style={styles.findYourSuitable}>{`Find your suitable
-Cow now.`}</Text>
-      <View style={[styles.galaxyWatch, styles.watchLayout]}>
-        <View style={[styles.unsplashj4dnkxz3sa, styles.aeIconLayout]} />
-        <View style={styles.frameParent}>
-          <View style={styles.gucciBlackParent}>
-            <Text style={styles.gucciBlack}>Gucci Black</Text>
-            <Text style={[styles.series4, styles.series4Typo]}>Series 4</Text>
-          </View>
-          <Text style={styles.text}>$599</Text>
-        </View>
-      </View>
-      <Image
-        style={[styles.menuIcon, styles.menuIconLayout]}
-        contentFit="cover"
-        source={require("../assets/menu.png")}
+    <View style={styles.container}>
+      <Text style={styles.salesListTitle}>Sales List</Text>
+
+      {/* Dropdown for selecting the year */}
+      <DropDownPicker
+        items={years.map((year) => ({ label: year, value: year }))}
+        defaultValue={selectedYear}
+        containerStyle={{ height: 40, margin: 10 }}
+        onChangeItem={(item) => setSelectedYear(item.value)}
       />
-      <View style={[styles.productCard, styles.watchLayout]}>
-        <View style={styles.amazfitBipU}>
-          <View style={styles.frameParent}>
-            <View style={styles.gucciBlackParent}>
-              <Text style={styles.gucciBlack}>Kate Spade</Text>
-              <Text style={[styles.series4, styles.series4Typo]}>
-                Pro Series
-              </Text>
-            </View>
-            <Text style={styles.text}>$199</Text>
-          </View>
-        </View>
-        <View style={[styles.miWatch, styles.parentPosition1]}>
-          <View style={styles.frameParent}>
-            <View style={styles.gucciBlackParent}>
-              <Text style={styles.gucciBlack}>Van Heusen</Text>
-              <Text style={[styles.series4, styles.series4Typo]}>
-                All Series
-              </Text>
-            </View>
-            <Text style={styles.text}>$299</Text>
-          </View>
-          <Image
-            style={[styles.aeIcon, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/ae.png")}
-          />
-        </View>
-      </View>
-      <View style={[styles.groupParent, styles.parentLayout]}>
-        <View style={[styles.handBagsParent, styles.parentLayout]}>
-          <Text style={styles.handBags}>Hand Bags</Text>
-          <Text style={[styles.watch, styles.watchTypo]}>Watch</Text>
-          <Text style={[styles.books, styles.watchTypo]}>Books</Text>
-          <Text style={[styles.glasses, styles.watchTypo]}>Glasses</Text>
-        </View>
-        <View style={[styles.groupChild, styles.groupChildBorder]} />
-      </View>
-      <View style={[styles.androidSmall9Inner, styles.groupChildBorder]}>
-        <View style={styles.iconlybrokensearchParent}>
-          <Image
-            style={[styles.iconlybrokensearch, styles.parentPosition1]}
-            contentFit="cover"
-            source={require("../assets/iconlybrokensearch.png")}
-          />
-          <Text style={[styles.searchProduct, styles.series4Typo]}>
-            Search Product
-          </Text>
-        </View>
-      </View>
-      <View style={[styles.frameView, styles.frameParentShadowBox]}>
-        <View>
-          <View style={styles.frameChild} />
-          <View style={styles.frameWrapper}>
-            <View style={[styles.homeParent, styles.parentPosition1]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/home.png")}
-              />
-              <Text style={[styles.home, styles.homeTypo]}>Home</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.categoriesParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/categories.png")}
-            />
-            <Text
-              style={[styles.categories, styles.homeTypo]}
-            >{`Categories `}</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.cartParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/cart.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>My Cart</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.quillhamburgerParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/quillhamburger.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>more</Text>
-          </View>
-        </View>
-      </View>
-      <View style={[styles.frameParent1, styles.frameParentShadowBox]}>
-        <View>
-          <View style={styles.frameChild} />
-          <View style={styles.frameWrapper}>
-            <View style={[styles.homeParent, styles.parentPosition1]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/home.png")}
-              />
-              <Text style={[styles.home, styles.homeTypo]}>Home</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.categoriesParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/categories.png")}
-            />
-            <Text
-              style={[styles.categories, styles.homeTypo]}
-            >{`Categories `}</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.cartParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/cart.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>My Cart</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.quillhamburgerParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/quillhamburger.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>more</Text>
-          </View>
-        </View>
-      </View>
-      <View style={[styles.frameParent2, styles.frameParentShadowBox]}>
-        <View>
-          <View style={styles.frameChild} />
-          <View style={styles.frameWrapper}>
-            <View style={[styles.homeParent, styles.parentPosition1]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/home1.png")}
-              />
-              <Text style={[styles.home2, styles.homeTypo]}>Home</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.categoriesParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/categories.png")}
-            />
-            <Text
-              style={[styles.categories, styles.homeTypo]}
-            >{`Categories `}</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.cartParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/cart.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>My Cart</Text>
-          </View>
-        </View>
-        <View style={styles.rectangleGroup}>
-          <View style={styles.frameChild} />
-          <View style={[styles.quillhamburgerParent, styles.parentPosition]}>
-            <Image
-              style={styles.homeIcon}
-              contentFit="cover"
-              source={require("../assets/quillhamburger.png")}
-            />
-            <Text style={[styles.categories, styles.homeTypo]}>more</Text>
-          </View>
-        </View>
-        <View style={[styles.frameParent3, styles.frameParentShadowBox]}>
-          <View>
-            <View style={styles.frameChild} />
-            <View style={styles.frameWrapper}>
-              <View style={[styles.homeParent, styles.parentPosition1]}>
-                <Image
-                  style={styles.homeIcon}
-                  contentFit="cover"
-                  source={require("../assets/home.png")}
-                />
-                <Text style={[styles.home, styles.homeTypo]}>Home</Text>
+
+      <FlatList
+        data={filteredAftData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.itemContainer}>
+            <Pressable onPress={() => onViewDetails(item)}>
+              <View>
+              <Text>{item.product}</Text>
+                <Text style={styles.dateText}>{item.date}</Text>
+               
+                <Text>Price: {item.price.toFixed(2)}DT</Text>
+                <Text>{item.productdetails}</Text>
               </View>
+            </Pressable>
+            <View style={styles.buttonContainer}>
+              <Pressable style={styles.updateButton} onPress={() => onOpenUpdateModal(item)}>
+                <Text style={styles.buttonText}>Update</Text>
+              </Pressable>
+              <Pressable style={styles.deleteButton} onPress={() => onDelete(item)}>
+                <Text style={styles.buttonText}>Delete</Text>
+              </Pressable>
             </View>
           </View>
-          <View style={styles.rectangleGroup}>
-            <View style={styles.frameChild} />
-            <View style={[styles.categoriesParent, styles.parentPosition]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/categories.png")}
-              />
-              <Text
-                style={[styles.categories, styles.homeTypo]}
-              >{`Categories `}</Text>
-            </View>
-          </View>
-          <View style={styles.rectangleGroup}>
-            <View style={styles.frameChild} />
-            <View style={[styles.cartParent, styles.parentPosition]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/cart.png")}
-              />
-              <Text style={[styles.categories, styles.homeTypo]}>My Cart</Text>
-            </View>
-          </View>
-          <View style={styles.rectangleGroup}>
-            <View style={styles.frameChild} />
-            <View style={[styles.quillhamburgerParent, styles.parentPosition]}>
-              <Image
-                style={styles.homeIcon}
-                contentFit="cover"
-                source={require("../assets/quillhamburger.png")}
-              />
-              <Text style={[styles.categories, styles.homeTypo]}>more</Text>
-            </View>
+        )}
+      />
+
+      {/* Add Button */}
+      <Pressable style={styles.addButton} onPress={onOpenAddModal}>
+        <Text style={styles.buttonText}>+</Text>
+      </Pressable>
+
+      {/* Add Modal */}
+      <Modal visible={isAddModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              style={styles.input}
+              placeholder="Product"
+              value={newProduct}
+              onChangeText={(text) => setNewProduct(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Price"
+              value={newPrice}
+              onChangeText={(text) => setNewPrice(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Date"
+              value={newDate}
+              onChangeText={(text) => setNewDate(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Product Details"
+              value={newProductDetails}
+              onChangeText={(text) => setNewProductDetails(text)}
+            />
+            <Pressable style={styles.rectangleView} onPress={onAdd}>
+              <Text style={styles.login}>Add Product</Text>
+            </Pressable>
+            <Pressable style={styles.rectangleView} onPress={() => setAddModalVisible(false)}>
+              <Text style={styles.login}>Cancel</Text>
+            </Pressable>
           </View>
         </View>
+      </Modal>
+
+      {/* Update Modal */}
+      <Modal visible={isUpdateModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              style={styles.input}
+              placeholder="Product"
+              value={updatedProduct}
+              onChangeText={(text) => setUpdatedProduct(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Price"
+              value={updatedPrice}
+              onChangeText={(text) => setUpdatedPrice(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Date"
+              value={updatedDate}
+              onChangeText={(text) => setUpdatedDate(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Product Details"
+              value={updatedProductDetails}
+              onChangeText={(text) => setUpdatedProductDetails(text)}
+            />
+            <Pressable style={styles.rectangleView} onPress={onUpdate}>
+              <Text style={styles.login}>Update</Text>
+            </Pressable>
+            <Pressable style={styles.rectangleView} onPress={() => setUpdateModalVisible(false)}>
+              <Text style={styles.login}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Display Total */}
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
       </View>
-      <Image
-        style={[styles.aqIcon, styles.iconLayout]}
-        contentFit="cover"
-        source={require("../assets/aq.png")}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  androidLayout: {
-    transform: [
-      {
-        rotate: "-31.29deg",
-      },
-    ],
-    height: 101,
-    width: 208,
-    backgroundColor: Color.colorDarkgreen,
-    borderRadius: Border.br_5xl,
-    position: "absolute",
-  },
-  watchLayout: {
-    height: 166,
-    position: "absolute",
-  },
-  aeIconLayout: {
-    height: 79,
-    left: 6,
-  },
-  series4Typo: {
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    textAlign: "left",
-    letterSpacing: 0,
-  },
-  menuIconLayout: {
-    width: 19,
-    height: 19,
-    position: "absolute",
-  },
-  parentPosition1: {
-    left: 0,
-    top: 0,
-  },
-  iconLayout: {
-    width: 113,
-    borderRadius: 11,
-    position: "absolute",
-  },
-  parentLayout: {
-    width: 246,
-    position: "absolute",
-  },
-  watchTypo: {
-    color: Color.colorLightslategray_200,
-    lineHeight: 19,
-    top: 0,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    fontSize: FontSize.size_smi_5,
-    textAlign: "left",
-    position: "absolute",
-  },
-  groupChildBorder: {
-    borderStyle: "solid",
-    position: "absolute",
-  },
-  frameParentShadowBox: {
-    flexDirection: "row",
-    width: 360,
-    elevation: 16,
-    shadowRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 15.593220710754395,
-    },
-    backgroundColor: Color.colorWhite,
-  },
-  homeTypo: {
-    marginTop: 4,
-    textAlign: "center",
-    lineHeight: 20,
-    fontSize: FontSize.size_3xs,
-  },
-  parentPosition: {
-    left: "50%",
-    zIndex: 1,
-    top: 11,
-    position: "absolute",
-  },
-  androidSmall9Child: {
-    left: -65,
-    top: 11,
-    height: 101,
-    width: 208,
-    backgroundColor: Color.colorDarkgreen,
-    borderRadius: Border.br_5xl,
-  },
-  androidSmall9Item: {
-    top: 598,
-    left: 216,
-  },
-  findYourSuitable: {
-    top: 109,
-    left: 50,
-    fontSize: 28,
-    lineHeight: 37,
-    fontWeight: "700",
-    fontFamily: FontFamily.ralewayBold,
-    color: Color.colorDarkslategray,
-    textAlign: "left",
-    letterSpacing: 0,
-    position: "absolute",
-  },
-  unsplashj4dnkxz3sa: {
-    top: -2,
-    width: 110,
-    borderRadius: 11,
-    height: 79,
-    transform: [
-      {
-        rotate: "-31.29deg",
-      },
-    ],
-    position: "absolute",
-  },
-  gucciBlack: {
-    color: Color.secondary,
-    fontFamily: FontFamily.ralewaySemiBold,
-    fontWeight: "600",
-    fontSize: FontSize.size_smi_5,
-    textAlign: "left",
-    letterSpacing: 0,
-  },
-  series4: {
-    fontSize: FontSize.size_3xs_4,
-    lineHeight: 11,
-    color: Color.colorLightslategray_100,
-    marginTop: 6.24,
-  },
-  gucciBlackParent: {
-    justifyContent: "center",
-  },
-  text: {
-    lineHeight: 15,
-    fontFamily: FontFamily.poppinsMedium,
-    marginTop: 15.59,
-    color: Color.colorTan,
-    fontWeight: "500",
-    fontSize: FontSize.size_smi_5,
-    textAlign: "left",
-    letterSpacing: 0,
-  },
-  frameParent: {
-    top: 98,
-    justifyContent: "center",
-    left: 6,
-    position: "absolute",
-  },
-  galaxyWatch: {
-    top: 236,
-    left: 198,
-    width: 122,
-    shadowOpacity: 1,
-    elevation: 27.29,
-    shadowRadius: 27.29,
-    shadowOffset: {
-      width: 0,
-      height: 15.593220710754395,
-    },
-    shadowColor: "rgba(23, 20, 57, 0.04)",
-    backgroundColor: Color.colorLightgray,
-    height: 166,
-    borderRadius: 11,
-    overflow: "hidden",
-  },
-  menuIcon: {
-    top: 13,
-    left: 16,
-    height: 19,
-    overflow: "hidden",
-  },
-  amazfitBipU: {
-    left: 139,
-    top: 0,
-    height: 166,
-    width: 122,
-    shadowOpacity: 1,
-    elevation: 27.29,
-    shadowRadius: 27.29,
-    shadowOffset: {
-      width: 0,
-      height: 15.593220710754395,
-    },
-    shadowColor: "rgba(23, 20, 57, 0.04)",
-    backgroundColor: Color.colorLightgray,
-    borderRadius: 11,
-    position: "absolute",
-    overflow: "hidden",
-  },
-  aeIcon: {
-    top: 12,
-    height: 79,
-    left: 6,
-  },
-  miWatch: {
-    height: 166,
-    position: "absolute",
-    width: 122,
-    shadowOpacity: 1,
-    elevation: 27.29,
-    shadowRadius: 27.29,
-    shadowOffset: {
-      width: 0,
-      height: 15.593220710754395,
-    },
-    shadowColor: "rgba(23, 20, 57, 0.04)",
-    backgroundColor: Color.colorLightgray,
-    borderRadius: 11,
-    overflow: "hidden",
-  },
-  productCard: {
-    top: 407,
-    left: 59,
-    width: 261,
-  },
-  handBags: {
-    lineHeight: 19,
-    left: 0,
-    top: 0,
-    color: Color.colorTan,
-    fontFamily: FontFamily.ralewaySemiBold,
-    fontWeight: "600",
-    fontSize: FontSize.size_smi_5,
-    textAlign: "left",
-    position: "absolute",
-  },
-  watch: {
-    left: 85,
-  },
-  books: {
-    left: 144,
-  },
-  glasses: {
-    left: 200,
-  },
-  handBagsParent: {
-    left: 0,
-    top: 0,
-    height: 19,
-  },
-  groupChild: {
-    top: 24,
-    left: -1,
-    borderColor: Color.colorDarkslategray,
-    borderTopWidth: 1.6,
-    width: 37,
-    height: 2,
-  },
-  groupParent: {
-    top: 200,
-    left: 54,
-    height: 25,
-  },
-  iconlybrokensearch: {
-    height: 19,
-    width: 19,
-    position: "absolute",
-  },
-  searchProduct: {
-    top: 3,
-    left: 31,
-    fontSize: 11,
-    color: "rgba(27, 21, 61, 0.55)",
-    position: "absolute",
-  },
-  iconlybrokensearchParent: {
-    width: 108,
-    height: 19,
-  },
-  androidSmall9Inner: {
-    top: 48,
-    left: 81,
-    borderRadius: 31,
-    borderColor: "rgba(144, 149, 166, 0.5)",
-    borderWidth: 0.8,
-    width: 209,
-    paddingLeft: 12,
-    paddingTop: 9,
-    paddingRight: 72,
-    paddingBottom: 9,
-    justifyContent: "center",
-  },
-  frameChild: {
-    width: 86,
-    height: 55,
-    zIndex: 0,
-    backgroundColor: Color.colorWhite,
-  },
-  homeIcon: {
-    width: 24,
-    height: 24,
-    overflow: "hidden",
-  },
-  home: {
-    fontFamily: FontFamily.robotoBold,
-    textAlign: "center",
-    lineHeight: 20,
-    fontSize: FontSize.size_3xs,
-    fontWeight: "600",
-    color: Color.colorTan,
-  },
-  homeParent: {
-    position: "absolute",
-  },
-  frameWrapper: {
-    left: 30,
-    width: 25,
-    height: 35,
-    zIndex: 1,
-    top: 11,
-    position: "absolute",
-  },
-  categories: {
-    fontFamily: FontFamily.robotoRegular,
-    color: Color.colorDimgray,
-    textAlign: "center",
-    lineHeight: 20,
-    fontSize: FontSize.size_3xs,
-  },
-  categoriesParent: {
-    marginLeft: -25,
-    alignItems: "center",
-  },
-  rectangleGroup: {
-    marginLeft: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cartParent: {
-    marginLeft: -18.5,
-    alignItems: "center",
-  },
-  quillhamburgerParent: {
-    marginLeft: -12,
-  },
-  frameView: {
-    left: 3,
-    top: 583,
-    flexDirection: "row",
-    width: 360,
-    elevation: 16,
-    shadowRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  frameParent1: {
-    left: 3,
-    top: 583,
-    flexDirection: "row",
-    width: 360,
-    elevation: 16,
-    shadowRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  home2: {
-    color: "#f6b304",
-    fontFamily: FontFamily.robotoBold,
-    textAlign: "center",
-    lineHeight: 20,
-    fontSize: FontSize.size_3xs,
-    fontWeight: "600",
-  },
-  frameParent3: {
-    marginLeft: 5,
-  },
-  frameParent2: {
-    left: 3,
-    top: 583,
-    flexDirection: "row",
-    width: 360,
-    elevation: 16,
-    shadowRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  aqIcon: {
-    top: 240,
-    left: 201,
-    height: 86,
-  },
-  androidSmall9: {
-    borderRadius: 20,
+  container: {
     flex: 1,
-    width: "100%",
-    height: 640,
-    overflow: "hidden",
-    backgroundColor: Color.colorWhite,
+  },
+  salesListTitle: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  itemContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  updateButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+  },
+  deleteButton: {
+    backgroundColor: '#f44336',
+    padding: 10,
+    borderRadius: 5,
+  },
+  addButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    margin: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  rectangleView: {
+    borderRadius: 7,
+    backgroundColor: 'darkolivegreen',
+    width: 240,
+    height: 32,
+    marginTop: 10,
+  },
+  login: {
+    fontSize: 16,
+    color: 'orange',
+    textAlign: 'center',
+    marginTop: 5,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  dateText: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  totalContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
-export default AndroidSmall;
+export default SalesList;
