@@ -2,17 +2,19 @@ const Stack = createNativeStackNavigator();
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import Boarding1 from "./screens/Boarding1.js";
-import Login from "./screens/Login";
-import loginOrSign from "./screens/loginOrSign";
-import CreatAcc from "./screens/CreatAcc";
-import Boarding2 from "./screens/Boarding2";
-import HHH from "./screens/AndroidSmall.js";
 import Property1Default from "./components/Property1Default";
 import Property1Variant from "./components/Property1Variant";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
+import Boarding1 from "./screens/Boarding1.js";
+import Login from "./screens/Login";
+import loginOrSign from "./screens/loginOrSign";
+import CreatAcc from "./screens/CreatAcc";
+import Boarding2 from "./screens/Boarding2";
+import Expenses from "./screens/Expenses.js";
+import HHH from "./screens/AndroidSmall.js";
+
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -35,6 +37,11 @@ const App = () => {
       <NavigationContainer>
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="Expenses"
+              component={Expenses}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Boarding1"
               component={Boarding1}

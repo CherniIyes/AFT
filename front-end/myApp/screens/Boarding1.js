@@ -15,40 +15,63 @@ const AndroidSmall = ({ navigation }) => {
         contentFit="cover"
         source={require("../assets/vector.png")}
       />
-      <Text style={[styles.welcomeToAft, styles.welcomeFlexBox]}>{`Welcome to 
+      <View style={styles.katha}>
+
+        <Text style={[styles.welcomeToAft, styles.welcomeFlexBox]}>{`Welcome to 
 AFT`}</Text>
-      <View style={[styles.instanceParent, styles.frameViewPosition]}>
-        <View style={[styles.rectangleWrapper, styles.rectangleLayout]}>
-          <View style={[styles.instanceChild, styles.instancePosition]} />
+        <View style={[styles.instanceParent, styles.frameViewPosition]}>
+          <View style={[styles.rectangleWrapper, styles.rectangleLayout]}>
+            <View style={[styles.instanceChild, styles.instancePosition]} />
+          </View>
+          <View style={[styles.rectangleContainer, styles.rectangleLayout]}>
+            <View style={[styles.instanceItem, styles.instancePosition]} />
+          </View>
         </View>
-        <View style={[styles.rectangleContainer, styles.rectangleLayout]}>
-          <View style={[styles.instanceItem, styles.instancePosition]} />
+        <Text
+          style={[styles.welcomeToAft1, styles.welcomeFlexBox]}
+        >{`Welcome To AFT
+        Elevate Your Farming And Master Your Management`}</Text>
+        <View style={[styles.frameView, styles.frameViewPosition]}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Boarding2')}
+            style={{
+              borderWidth: 1,
+              borderRadius: Border.br_5xl,
+              position: 'absolute',
+              backgroundColor: '#092f03',
+              top: 35,
+              left: 167,
+              width: 129,
+              height: 40,
+            }}
+          >
+
+            <Text style={styles.get}>Get started</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <Text
-        style={[styles.welcomeToAft1, styles.welcomeFlexBox]}
-      >{`Welcome To AFT
-Elevate Your Farming And Master Your Management`}</Text>
-      <View style={[styles.frameView, styles.frameViewPosition]}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Boarding2')}
-          style={{
-            position: 'absolute',
-            backgroundColor: '#092f03',
-            top: 35,
-            left: 167,
-            width: 129,
-            height: 40,
-          }}
-        >
-          <Text style={{ color: '#f7b304' }}>Get started</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </View >
   );
 };
 
 const styles = StyleSheet.create({
+  filsa: {
+    borderWidth: 1,
+    borderRadius: Border.br_5xl,
+    color: '#f7b304',
+  },
+  get: {
+    color: '#f7b304',
+    position: "relative",
+    left: 35,
+    top: 10,
+
+  }, katha: {
+    position: "relative",
+    left: 14,
+    top: 201,
+
+  },
   androidLayout: {
     transform: [
       {
