@@ -58,15 +58,15 @@ CREATE TABLE IF NOT EXISTS `aft`.`cows` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cow_number` VARCHAR(50) NULL DEFAULT NULL,
   `cow_race` VARCHAR(50) NULL DEFAULT NULL,
-  `artificial_insemination_date` DATE NULL DEFAULT NULL,
+  `artificial_insemination_date` VARCHAR(100) NULL DEFAULT NULL,
   `artificial_insemination_triggered` ENUM('Yes', 'No') NULL DEFAULT 'No',
-  `return_in_heat_control_date` DATE NULL DEFAULT NULL,
-  `pregnancy_detection_date` DATE NULL DEFAULT NULL,
-  `drying_off_date` DATE NULL DEFAULT NULL,
-  `calving_and_delivery_date` DATE NULL DEFAULT NULL,
+  `return_in_heat_control_date` VARCHAR(100) NULL DEFAULT NULL,
+  `pregnancy_detection_date` VARCHAR(100) NULL DEFAULT NULL,
+  `drying_off_date` VARCHAR(100) NULL DEFAULT NULL,
+  `calving_and_delivery_date` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
