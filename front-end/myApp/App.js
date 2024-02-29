@@ -17,7 +17,7 @@ import HHH from "./screens/AndroidSmall.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
-import { View } from "react-native";
+
 import './assets/fonts/Inter-Medium.ttf';
 import DairyValueChain from "./screens/DairyValueChain.js";
 
