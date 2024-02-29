@@ -18,6 +18,40 @@ CREATE SCHEMA IF NOT EXISTS `aft` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_
 USE `aft` ;
 
 -- -----------------------------------------------------
+-- Table `aft`.`article`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aft`.`article` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `part_name` VARCHAR(100) NOT NULL,
+  `content` TEXT NOT NULL,
+  `image_url` VARCHAR(2505) NOT NULL,
+  `title` VARCHAR(45) NOT NULL,
+  `articalimg` VARCHAR(2005) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aft`.`article2`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aft`.`article2` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `part_name` VARCHAR(100) NOT NULL,
+  `content` TEXT NOT NULL,
+  `image_url` VARCHAR(255) NOT NULL,
+  `title` VARCHAR(45) NOT NULL,
+  `articalimg` VARCHAR(1000) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `aft`.`cows`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`cows` (
@@ -49,7 +83,6 @@ CREATE TABLE IF NOT EXISTS `aft`.`expenses` (
   `hay` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -69,9 +102,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `aft`.`sells`
+-- Table `aft`.`sales`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`sells` (
+CREATE TABLE IF NOT EXISTS `aft`.`sales` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product` VARCHAR(45) NOT NULL,
   `price` INT NOT NULL,
@@ -79,21 +112,7 @@ CREATE TABLE IF NOT EXISTS `aft`.`sells` (
   `product details` VARCHAR(4000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `aft`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`user` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(450) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -101,17 +120,3 @@ COLLATE = utf8mb4_0900_ai_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
--- Table `aft`.`article`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`article` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `part_name` VARCHAR(100) NOT NULL,
-  `content` TEXT NOT NULL,
-  `image_url` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
