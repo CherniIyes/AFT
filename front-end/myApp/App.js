@@ -14,6 +14,7 @@ import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import { View } from "react-native";
 import './assets/fonts/Inter-Medium.ttf';
+import DairyValueChain from "./screens/DairyValueChain.js";
 
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +38,7 @@ const App = () => {
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
