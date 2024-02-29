@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  Modal,
-  TextInput,
-  StyleSheet,
-} from 'react-native';
+import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList ,Pressable,Modal,} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
 
@@ -23,13 +16,14 @@ const SalesList = () => {
   const [updatedProductDetails, setUpdatedProductDetails] = useState('');
   const [selectedYear, setSelectedYear] = useState(null);
   const [years, setYears] = useState([]);
-
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [newProduct, setNewProduct] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [newDate, setNewDate] = useState('');
   const [newProductDetails, setNewProductDetails] = useState('');
-
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,6 +38,22 @@ const SalesList = () => {
 
     fetchData();
   }, []);
+
+const handleDateIconPress = () => {
+    setShowDatePicker(true);
+};
+
+const handleDateChange = (event, newDate) => {
+    if (Platform.OS === "android") {
+          setShowDatePicker(false);
+    }
+    if (newDate) {
+          setDate(newDate);
+          const formattedDate = newDate.toLocaleDateString();
+          setSelectedDate(formattedDate);
+    }
+};
+
   const onViewDetails = (item) => {
     console.log('Item details:', item);
   };
@@ -81,17 +91,24 @@ const SalesList = () => {
   const onOpenAddModal = () => {
     setAddModalVisible(true);
   };
-
-  const onAdd = () => {
-    const newProductItem = {
-      product: newProduct,
-      price: parseFloat(newPrice),
-      date: newDate,
-      productdetails: newProductDetails,
-    };
-
-    setFilteredAftData([...filteredAftData, newProductItem]);
-    setAddModalVisible(false);
+  
+  const onAdd = async () => {
+    try {
+      const response = await axios.post("http://192.168.50.59:5464/sales/Add", {
+        product: newProduct,
+        price: parseFloat(newPrice),
+        date: date,
+        productdetails: newProductDetails,
+      });
+  
+      const newProductItem = response.data;
+  
+      setFilteredAftData([...filteredAftData, newProductItem]);
+      setAddModalVisible(false);
+    } catch (error) {
+      console.error('Error adding product:', error);
+      // Handle the error as needed
+    }
   };
 
   const calculateTotal = () => {
@@ -166,12 +183,26 @@ const SalesList = () => {
               value={newPrice}
               onChangeText={(text) => setNewPrice(text)}
             />
-            <TextInput
+            <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+                              <Text>{selectedDate || "📅"}</Text>
+                        </TouchableOpacity>
+                        {showDatePicker && (
+  <DateTimePicker
+    value={date}
+    mode="date"
+    display="spinner"
+    onChange={handleDateChange}
+    textColor="#000"  // Set the text color to black
+    style={{ backgroundColor: '#fff' }}  // Set the background color to white
+  />
+)}
+
+            {/* <TextInput
               style={styles.input}
               placeholder="Date"
               value={newDate}
               onChangeText={(text) => setNewDate(text)}
-            />
+            /> */}
             <TextInput
               style={styles.input}
               placeholder="Product Details"
@@ -235,6 +266,11 @@ const SalesList = () => {
 };
 
 const styles = StyleSheet.create({
+    dateIcon: {
+        marginRight: 10,
+        borderWidth: 0.5,
+        padding: 9,
+  },
   container: {
     flex: 1,
   },
