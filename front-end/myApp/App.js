@@ -1,6 +1,8 @@
-const Stack = createNativeStackNavigator();
-import * as React from "react";
+
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import * as React from "react";
 import { useFonts } from "expo-font";
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -15,9 +17,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Milk from "./screens/Milk.js"
 
+import HomePage from "./screens/HomePage.js";
+import Article1 from "./screens/Article1.js";
+import Article2 from "./screens/Article2.js";
+import { View } from "react-native";
+import './assets/fonts/Inter-Medium.ttf';
+
+
+const Stack = createNativeStackNavigator();
+
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
-
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
@@ -70,6 +80,24 @@ const App = () => {
         ) : null}
       </NavigationContainer>
     </>
+=======
+    <NavigationContainer>
+      {hideSplashScreen ? (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="HomePage" component={HomePage} />
+          <Stack.Screen name="Article1" component={Article1} />
+          <Stack.Screen name="Article2" component={Article2} />
+          <Stack.Screen name="Boarding1" component={Boarding1} />
+          <Stack.Screen name="Boarding2" component={Boarding2} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="logOrSign" component={loginOrSign} />
+          <Stack.Screen name="CreatAcc" component={CreatAcc} />
+        </Stack.Navigator>
+      ) : (
+        <View />
+      )}
+    </NavigationContainer>
   );
 };
+
 export default App;
