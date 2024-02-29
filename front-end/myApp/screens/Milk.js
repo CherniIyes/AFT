@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const ProfitCalculatorScreen = () => {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [dailyProfit, setDailyProfit] = useState(0);
@@ -19,8 +19,15 @@ const ProfitCalculatorScreen = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://192.168.50.79:6464/milk');
+      setTableData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      setError('Error fetching data: ' + error.message);
+    }
+  };
   const handleSubmit = async () => {
     try {
       const response = await axios.post('http://192.168.50.79:6464/milk/add', {
@@ -29,9 +36,16 @@ const ProfitCalculatorScreen = () => {
         quantity: quantity
       });
       if (response.status === 200) {
-        fetchData(); // Fetch updated data after successful addition
+        // Update frontend state with the new entry
+        const newEntry = { id: response.data.id, day: date, price: price, quantity: quantity };
+        setTableData(prevData => [...prevData, newEntry]);
+  
+        // Reset input fields
         setPrice('');
         setQuantity('');
+  
+        // Fetch updated data
+        fetchData();
       } 
     } catch (error) {
       console.error('Error posting data:', error);
@@ -39,17 +53,6 @@ const ProfitCalculatorScreen = () => {
   };
 
 
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://192.168.50.79:6464/milk');
-      setTableData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      
-      setError('Error fetching data: ' + error.message);
-    }
-  };
 
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
@@ -61,7 +64,6 @@ const ProfitCalculatorScreen = () => {
     const yearlyProfit = dailyProfit * 365; // Assuming 365 days in a year
     setYearlyProfit(yearlyProfit);
   };
-
 
   const renderProfitCards = () => {
     return [
@@ -79,68 +81,84 @@ const ProfitCalculatorScreen = () => {
     ));
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.tableRow}>
-      <Text style={styles.tableText}>{item.day}</Text>
-      <Text style={styles.tableText}>{item.price} Dt</Text>
-      <Text style={styles.tableText}>{item.quantity} L</Text>
-    </View>
-  );
+  const renderItem = ({ item, index }) => {
+    if (index === 0) {
+      // Render headers in the first row
+      return (
+        <View style={styles.tableRow}>
+          <Text style={[styles.tableText, styles.firstRow]}>Date</Text>
+          <Text style={[styles.tableText, styles.firstRow]}>Price</Text>
+          <Text style={[styles.tableText, styles.firstRow]}>Quantity</Text>
+        </View>
+      );
+    } else {
+      // Render data rows
+      return (
+        <View style={styles.tableRow}>
+          <Text style={styles.tableText}>{item.day}</Text>
+          <Text style={styles.tableText}>{item.price} Dt</Text>
+          <Text style={styles.tableText}>{item.quantity} L</Text>
+        </View>
+      );
+    }
+  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <Text>Date:</Text>
-      <View style={styles.inputContainer}>
-        <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          value={date}
-          onChangeText={setDate}
-          keyboardType="default"
-        />
-      </View>
-      <Text>Price per Litre:</Text>
-      <View style={styles.inputContainer}>
-        <Ionicons name="cash-outline" size={24} color="black" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          value={price}
-          onChangeText={setPrice}
-          keyboardType="numeric"
-        />
-      </View>
-      <Text>Quantity (Litres):</Text>
-      <View style={styles.inputContainer}>
-        <Ionicons name="cube-outline" size={24} color="black" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          value={quantity}
-          onChangeText={setQuantity}
-          keyboardType="numeric"
-        />
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={calculateProfit}>
-        <Text style={styles.buttonText}>Calculate</Text>
-      </TouchableOpacity>
-
-      <View style={styles.profitContainer}>
-        {renderProfitCards()}
-      </View>
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      {error && <Text style={styles.errorText}>{error}</Text>}
-      {tableData.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableHeader}>Table Data</Text>
-          <FlatList
-            data={tableData}
-            renderItem={renderItem}
-            keyExtractor={item => item.id.toString()}
+      <ScrollView>
+        <Text>Date:</Text>
+        <View style={styles.inputContainer}>
+          <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            value={date}
+            onChangeText={setDate}
+            keyboardType="default"
           />
         </View>
-      )}
+        <Text>Price per Litre:</Text>
+        <View style={styles.inputContainer}>
+          <Ionicons name="cash-outline" size={24} color="black" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            value={price}
+            onChangeText={setPrice}
+            keyboardType="numeric"
+          />
+        </View>
+        <Text>Quantity (Litres):</Text>
+        <View style={styles.inputContainer}>
+          <Ionicons name="cube-outline" size={24} color="black" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={calculateProfit}>
+          <Text style={styles.buttonText}>Calculate</Text>
+        </TouchableOpacity>
+
+        <View style={styles.profitContainer}>
+          {renderProfitCards()}
+        </View>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        {tableData.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Table Milk Data : </Text>
+            <FlatList
+              data={tableData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </View>
+        )}
+      </ScrollView>
     </GestureHandlerRootView>
   );
 };
@@ -212,6 +230,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   tableRow: {
     flexDirection: 'row',
@@ -224,6 +243,9 @@ const styles = StyleSheet.create({
   tableText: {
     flex: 1,
     textAlign: 'center',
+  },
+  firstRow: {
+    fontWeight: 'bold',
   },
   errorText: {
     color: 'red',
