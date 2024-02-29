@@ -18,12 +18,12 @@ const ProfitCalculatorScreen = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    fetchData(); 
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.50.79:6464/milk');
+      const response = await axios.get('http://192.168.100.43:6464/milk');
       setTableData(response.data);
       calculateTotalPrice();
     } catch (error) {
@@ -34,7 +34,7 @@ const ProfitCalculatorScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.50.79:6464/milk/add', {
+      const response = await axios.post('http://192.168.100.43:6464/milk/add', {
         day: date,
         price: price,
         quantity: quantity
@@ -52,7 +52,7 @@ const ProfitCalculatorScreen = () => {
         // Calculate total price
         const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
         setTotalPrice(totalPrice);
-      } 
+      }
     } catch (error) {
       console.error('Error posting data:', error);
     }
