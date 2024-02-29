@@ -18,6 +18,9 @@ import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 
+import './assets/fonts/Inter-Medium.ttf';
+import DairyValueChain from "./screens/DairyValueChain.js";
+
 
 
 
@@ -41,42 +44,15 @@ const App = () => {
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="HomePage"
-            component={HomePage} />
-          <Stack.Screen
-            name="Milk"
-            component={Milk}
-          // options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Expenses"
-            component={Expenses}
-          // options={{ headerShown: false }}
-          />
-
-
-          <Stack.Screen
-            name="Article1"
-            component={Article1} />
-          <Stack.Screen
-            name="Article2"
-            component={Article2} />
-          <Stack.Screen
-            name="Boarding1"
-            component={Boarding1} />
-          <Stack.Screen
-            name="Boarding2"
-            component={Boarding2} />
-          <Stack.Screen
-            name="Login"
-            component={Login} />
-          <Stack.Screen
-            name="logOrSign"
-            component={loginOrSign} />
-          <Stack.Screen
-            name="CreatAcc"
-            component={CreatAcc} />
+           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+          <Stack.Screen name="HomePage" component={HomePage} />
+          <Stack.Screen name="Article1" component={Article1} />
+          <Stack.Screen name="Article2" component={Article2} />
+          <Stack.Screen name="Boarding1" component={Boarding1} />
+          <Stack.Screen name="Boarding2" component={Boarding2} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="logOrSign" component={loginOrSign} />
+          <Stack.Screen name="CreatAcc" component={CreatAcc} />
         </Stack.Navigator>
       ) : (
         <View />
