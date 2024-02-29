@@ -32,9 +32,7 @@ const ProfitCalculatorScreen = () => {
         fetchData(); // Fetch updated data after successful addition
         setPrice('');
         setQuantity('');
-      } else {
-        console.error('Failed to add data');
-      }
+      } 
     } catch (error) {
       console.error('Error posting data:', error);
     }
