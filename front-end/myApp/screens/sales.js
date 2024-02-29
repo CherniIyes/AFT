@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList ,Pressable,Modal,} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import DropDownPicker from 'react-native-dropdown-picker';
+
 import axios from 'axios';
 
 const SalesList = () => {
