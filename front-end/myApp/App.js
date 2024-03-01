@@ -1,11 +1,11 @@
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
-import Property1Default from "./components/Property1Default";
-import Property1Variant from "./components/Property1Variant";
-import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
@@ -17,13 +17,14 @@ import HHH from "./screens/AndroidSmall.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
-
+import Milk from "./screens/Milk.js";
+import SalesList from "./screens/sales.js";
 import './assets/fonts/Inter-Medium.ttf';
 import DairyValueChain from "./screens/DairyValueChain.js";
 
 
 
-
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -44,7 +45,17 @@ const App = () => {
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+           <Stack.Screen
+            name="SalesList"
+            component={SalesList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Milk"
+            component={Milk}
+            options={{ headerShown: false }}
+          />
+         
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
@@ -60,5 +71,8 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+// Register the main component
+AppRegistry.registerComponent('main', () => App);
 
 export default App;
