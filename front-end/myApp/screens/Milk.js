@@ -169,99 +169,82 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FFFFFF',
   },
-  salesListTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  dropDownPickerContainer: {
-    height: 40,
-    margin: 10,
-  },
-  itemContainer: {
+  inputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
     marginBottom: 10,
   },
-  dateText: {
-    color: '#555',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  updateButton: {
-    backgroundColor: '#4CAF50',
-    padding: 8,
-    borderRadius: 5,
+  icon: {
     marginRight: 10,
   },
-  deleteButton: {
-    backgroundColor: '#f44336',
-    padding: 8,
-    borderRadius: 5,
-  },
-  addButton: {
-    backgroundColor: '#2196F3',
-    padding: 16,
-    alignItems: 'center',
-    borderRadius: 50,
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-  },
   input: {
+    flex: 1,
     height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 10,
     padding: 10,
   },
-  dateIcon: {
-    marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
+  button: {
+    backgroundColor: '#107c2e',
+    padding: 8,
     alignItems: 'center',
     borderRadius: 5,
+    marginTop: 10,
   },
-  rectangleView: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  login: {
-    color: '#fff',
+  buttonText: {
+    color: '#f7b304',
     fontWeight: 'bold',
   },
-  totalContainer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingTop: 10,
+  profitContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
-  totalText: {
+  card: {
+    flex: 1,
+    marginHorizontal: 5,
+    elevation: 4,
+  },
+  cardTitle: {
     fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardText: {
+    fontSize: 16,
+  },
+  submitButton: {
+    backgroundColor: '#107c2e',
+    padding: 8,
+    alignItems: 'center',
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  profitIcon: {
+    alignSelf: 'center',
+    marginBottom: 10,
+  },
+  tableContainer: {
+    marginTop: 20,
+  },
+  tableHeader: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  tableText: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  firstRow: {
     fontWeight: 'bold',
   },
   errorText: {

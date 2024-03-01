@@ -1,19 +1,28 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
-import { AppRegistry, View } from "react-native";
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
+import Expenses from "./screens/Expenses.js";
+import Milk from "./screens/Milk.js";
+import HHH from "./screens/AndroidSmall.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import Milk from "./screens/Milk.js";
 import SalesList from "./screens/sales.js";
 import './assets/fonts/Inter-Medium.ttf';
+import DairyValueChain from "./screens/DairyValueChain.js";
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +40,7 @@ const App = () => {
   if (!fontsLoaded && !error) {
     return null;
   }
-
+  const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
       {hideSplashScreen ? (
