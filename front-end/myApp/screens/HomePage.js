@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: 'relative',
     top: 50,
-    width: '100%',
   },
   searchContainer: {
     marginBottom: 10, // Add margin at the bottom to separate search and buttons
