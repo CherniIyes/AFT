@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollVi
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons ,  MaterialCommunityIcons} from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const ProfitCalculatorScreen = () => {
@@ -23,6 +23,8 @@ const ProfitCalculatorScreen = () => {
 
   const fetchData = async () => {
     try {
+      const response = await axios.get('http://192.168.100.62:6464/milk');
+
       const response = await axios.get('http://192.168.100.43:6464/milk');
       setTableData(response.data);
       calculateTotalPrice();
@@ -34,20 +36,24 @@ const ProfitCalculatorScreen = () => {
 
   const handleSubmit = async () => {
     try {
+      const response = await axios.post('http:/192.168.100.62:6464/milk/add', {
+
       const response = await axios.post('http://192.168.100.43:6464/milk/add', {
         day: date,
-        price: price,
-        quantity: quantity
+        price: parseFloat(price), // Ensure price is converted to a number
+        quantity: parseInt(quantity) // Ensure quantity is converted to an integer
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
-        const newEntry = { id: response.data.id, day: date, price: price, quantity: quantity };
+        const newEntry = { id: response.data.id, day: date, price: parseFloat(price), quantity: parseInt(quantity) };
         setTableData(prevData => [...prevData, newEntry]);
-
+  
         // Reset input fields
         setDate('');
         setPrice('');
         setQuantity('');
+      } 
+
 
         // Calculate total price
         const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
@@ -57,6 +63,10 @@ const ProfitCalculatorScreen = () => {
       console.error('Error posting data:', error);
     }
   };
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [tableData]);
 
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
@@ -79,19 +89,20 @@ const ProfitCalculatorScreen = () => {
 
   const renderProfitCards = () => {
     return [
-      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'money-bill-wave' },
-      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'money-bill-wave' },
-      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'money-bill-wave' }
+      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'cow' },
+      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'cow' },
+      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'cow' }
     ].map((item, index) => (
       <Card key={index} style={styles.card}>
         <Card.Content>
-          <FontAwesome5 name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
+          <MaterialCommunityIcons name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
           <Text style={styles.cardTitle}>{item.title}</Text>
           <Text style={styles.cardText}>{item.value}</Text>
         </Card.Content>
       </Card>
     ));
   };
+  
 
   const renderItem = ({ item, index }) => {
     if (index === 0) {
