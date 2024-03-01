@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList ,Pressable,Modal,} from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  FlatList,
+  Pressable,
+  Modal,
+} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 
 const SalesList = () => {
@@ -9,21 +18,22 @@ const SalesList = () => {
   const [filteredAftData, setFilteredAftData] = useState([]);
   const [error, setError] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
+
   const [updatedProduct, setUpdatedProduct] = useState('');
   const [updatedPrice, setUpdatedPrice] = useState('');
   const [updatedDate, setUpdatedDate] = useState('');
   const [updatedProductDetails, setUpdatedProductDetails] = useState('');
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [years, setYears] = useState([]);
-  const [isAddModalVisible, setAddModalVisible] = useState(false);
+
   const [newProduct, setNewProduct] = useState('');
   const [newPrice, setNewPrice] = useState('');
-  const [newDate, setNewDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
   const [newProductDetails, setNewProductDetails] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
+
+  const [isAddModalVisible, setAddModalVisible] = useState(false);
+  const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,23 +49,27 @@ const SalesList = () => {
     fetchData();
   }, []);
 
-const handleDateIconPress = () => {
+  const handleDateIconPress = () => {
     setShowDatePicker(true);
-};
+  };
 
-const handleDateChange = (event, newDate) => {
-    if (Platform.OS === "android") {
-          setShowDatePicker(false);
+  const handleDateChange = (event, newDate) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
     }
     if (newDate) {
-          setDate(newDate);
-          const formattedDate = newDate.toLocaleDateString();
-          setSelectedDate(formattedDate);
+      setDate(newDate);
+      const formattedDate = newDate.toLocaleDateString();
+      setSelectedDate(formattedDate);
     }
-};
+  };
 
   const onViewDetails = (item) => {
     console.log('Item details:', item);
+  };
+
+  const onOpenAddModal = () => {
+    setAddModalVisible(true);
   };
 
   const onOpenUpdateModal = (item) => {
@@ -67,49 +81,67 @@ const handleDateChange = (event, newDate) => {
     setUpdateModalVisible(true);
   };
 
-  const onUpdate = () => {
-    const updatedItem = {
-      product: updatedProduct,
-      price: parseFloat(updatedPrice),
-      date: updatedDate,
-      productdetails: updatedProductDetails,
-    };
-
-    const updatedData = filteredAftData.map((item) =>
-      item.id === selectedItem.id ? { ...item, ...updatedItem } : item
-    );
-
-    setFilteredAftData(updatedData);
-    setUpdateModalVisible(false);
-  };
-
-  const onDelete = (item) => {
-    const updatedData = filteredAftData.filter((i) => i.id !== item.id);
-    setFilteredAftData(updatedData);
-  };
-
-  const onOpenAddModal = () => {
-    setAddModalVisible(true);
-  };
+  const onUpdate = async () => {
+    try {
+      const updatedItem = {
+        product: updatedProduct,
+        price: parseFloat(updatedPrice),
+        date: updatedDate,
+        productdetails: updatedProductDetails,
+      };
   
+      await axios.put(`http://192.168.50.59:5464/sales/Update/${selectedItem.id}`, updatedItem);
+  
+      // Update the state dynamically
+      setFilteredAftData((prevData) =>
+        prevData.map((item) => (item.id === selectedItem.id ? { ...item, ...updatedItem } : item))
+      );
+  
+      setUpdateModalVisible(false);
+    } catch (error) {
+      console.error('Error updating sales item:', error);
+      setError('Error updating item. Please try again.');
+    }
+  };
+
+  const onDelete = async (item) => {
+    try {
+      await axios.delete(`http://192.168.50.59:5464/sales/delete/${item.id}`);
+  
+      // Update the state dynamically by excluding the deleted item
+      setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
+    } catch (error) {
+      console.error('Error deleting sales item:', error);
+      setError('Error deleting item. Please try again.');
+    }
+  };
   const onAdd = async () => {
     try {
-      const response = await axios.post("http://192.168.50.59:5464/sales/Add", {
+      const response = await axios.post('http://192.168.50.59:5464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
-        date: date,
+        date: selectedDate,
         productdetails: newProductDetails,
       });
   
       const newProductItem = response.data;
   
-      setFilteredAftData([...filteredAftData, newProductItem]);
+      // Update the state dynamically
+      setFilteredAftData((prevData) => [...prevData, newProductItem]);
+      setAllAftData((prevData) => [...prevData, newProductItem]); // Update all data as well
       setAddModalVisible(false);
+  
+      // Clear input fields after successful addition
+      setNewProduct('');
+      setNewPrice('');
+      setSelectedDate('');
+      setNewProductDetails('');
     } catch (error) {
       console.error('Error adding product:', error);
-      // Handle the error as needed
     }
   };
+  
+  
 
   const calculateTotal = () => {
     const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
@@ -128,13 +160,20 @@ const handleDateChange = (event, newDate) => {
     <View style={styles.container}>
       <Text style={styles.salesListTitle}>Sales List</Text>
 
-      {/* Dropdown for selecting the year */}
-      <DropDownPicker
-        items={years.map((year) => ({ label: year, value: year }))}
-        defaultValue={selectedYear}
-        containerStyle={{ height: 40, margin: 10 }}
-        onChangeItem={(item) => setSelectedYear(item.value)}
-      />
+      <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+        <Text>{selectedDate || '📅'}</Text>
+      </TouchableOpacity>
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="spinner"
+          onChange={handleDateChange}
+          textColor="#000"
+          style={{ backgroundColor: '#fff' }}
+        />
+      )}
 
       <FlatList
         data={filteredAftData}
@@ -143,10 +182,9 @@ const handleDateChange = (event, newDate) => {
           <View style={styles.itemContainer}>
             <Pressable onPress={() => onViewDetails(item)}>
               <View>
-              <Text>{item.product}</Text>
-                <Text style={styles.dateText}>{item.date}</Text>
-               
-                <Text>Price: {item.price.toFixed(2)}DT</Text>
+                <Text>{item.product}</Text>
+                <Text style={styles.date}>{item.date}</Text>
+                <Text>Price: {item.price}DT</Text>
                 <Text>{item.productdetails}</Text>
               </View>
             </Pressable>
@@ -183,26 +221,14 @@ const handleDateChange = (event, newDate) => {
               value={newPrice}
               onChangeText={(text) => setNewPrice(text)}
             />
-            <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-                              <Text>{selectedDate || "📅"}</Text>
-                        </TouchableOpacity>
-                        {showDatePicker && (
-  <DateTimePicker
-    value={date}
-    mode="date"
-    display="spinner"
-    onChange={handleDateChange}
-    textColor="#000"  // Set the text color to black
-    style={{ backgroundColor: '#fff' }}  // Set the background color to white
-  />
-)}
-
-            {/* <TextInput
-              style={styles.input}
-              placeholder="Date"
-              value={newDate}
-              onChangeText={(text) => setNewDate(text)}
-            /> */}
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="spinner"
+              onChange={(newDate) => setNewDate(newDate)}
+              textColor="#000"
+              style={{ backgroundColor: '#fff' }}
+            />
             <TextInput
               style={styles.input}
               placeholder="Product Details"
@@ -235,11 +261,13 @@ const handleDateChange = (event, newDate) => {
               value={updatedPrice}
               onChangeText={(text) => setUpdatedPrice(text)}
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Date"
-              value={updatedDate}
-              onChangeText={(text) => setUpdatedDate(text)}
+            <DateTimePicker
+              value={new Date(updatedDate)}
+              mode="date"
+              display="spinner"
+              onChange={(event, newDate) => setUpdatedDate(newDate)}
+              textColor="#000"
+              style={{ backgroundColor: '#fff' }}
             />
             <TextInput
               style={styles.input}
@@ -266,18 +294,22 @@ const handleDateChange = (event, newDate) => {
 };
 
 const styles = StyleSheet.create({
-    dateIcon: {
-        marginRight: 10,
-        borderWidth: 0.5,
-        padding: 9,
-  },
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   salesListTitle: {
-    fontSize: 20,
-    textAlign: 'center',
-    marginVertical: 10,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333333',
+  },
+  dateIcon: {
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   itemContainer: {
     padding: 10,
@@ -358,6 +390,7 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginTop: 10,
   },
 });
 

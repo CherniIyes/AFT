@@ -4,7 +4,7 @@ module.exports = {
       getAll: (req, res) => {
             model.getAll((err, results) => {
                   if (err) {
-                        res.status(500).send(err);
+                        res.status(200).send(err);
                   } else {
                         res.json(results);
                   }
@@ -13,7 +13,7 @@ module.exports = {
       getOne: (req, res) => {
             model.getOne(req.params.id, (err, results) => {
                   if (err) {
-                        res.status(500).send(err);
+                        res.status(200).send(err);
                   } else {
                         res.json(results);
                   }
@@ -22,7 +22,7 @@ module.exports = {
       Add: (req, res) => {
             model.Add(req.body, (err, results) => {
                   if (err) {
-                        res.status(500).send(err);
+                        res.status(200).send(err);
                   } else {
                         res.json(results);
                   }
@@ -34,7 +34,7 @@ module.exports = {
 
             model.Update(newData, id, (err, results) => {
                   if (err) {
-                        res.status(500).send(err);
+                        res.status(200).send(err);
                   } else {
                         res.json(results);
                   }
@@ -43,7 +43,7 @@ module.exports = {
       DELETE: (req, res) => {
             model.DELETE(req.params.id, (err, results) => {
                   if (err) {
-                        res.status(500).send(err);
+                        res.status(200).send(err);
                   } else {
                         res.json(results);
                   }

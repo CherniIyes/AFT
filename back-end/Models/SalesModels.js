@@ -8,17 +8,21 @@ module.exports = {
     });
   },
   Add: (data, callback) => {
-    const sql = "INSERT INTO sales SET ?";
-    connection.query(sql, [data], (err, results) => {
-      callback(err, results);
-    });
-  },
+      const sql = "INSERT INTO sales SET ?";
+      console.log("Adding data:", data);
+      connection.query(sql, [data], (err, results) => {
+         if (err) {
+            console.error("Error in Add function:", err);
+         }
+         callback(err, results);
+      });
+   },
   Update: (data, id, callback) => {
     const sql =
-      "UPDATE sales SET `product`=?, `price`=?, `image`=?, `product details`=? WHERE id=?";
+      "UPDATE sales SET `product`=?, `price`=?, `date`=?, `product details`=? WHERE id=?";
     connection.query(
       sql,
-      [data.product, data.price, data.image, data['product details'], id],
+      [data.product, data.price, data.date, data['product details'], id],
       (err, results) => {
         callback(err, results);
       }
