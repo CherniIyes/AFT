@@ -39,7 +39,18 @@ class Cow {
   }
 
   save(callback) {
-    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [this.cow_number, this.cow_race, this.artificial_insemination_date, this.artificial_insemination_triggered, this.return_in_heat_control_date, this.pregnancy_detection_date, this.drying_off_date, this.calving_and_delivery_date], (err, result) => {
+    const values = [
+      this.cow_number,
+      this.cow_race,
+      this.artificial_insemination_date,
+      this.artificial_insemination_triggered,
+      this.return_in_heat_control_date,
+      this.pregnancy_detection_date,
+      this.drying_off_date,
+      this.calving_and_delivery_date
+    ];
+
+    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
       if (err) {
         console.error(err);
         return callback(err);

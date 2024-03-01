@@ -18,6 +18,9 @@ import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 
+import './assets/fonts/Inter-Medium.ttf';
+import DairyValueChain from "./screens/DairyValueChain.js";
+
 
 
 
@@ -44,6 +47,10 @@ const App = () => {
           <Stack.Screen
             name="HomePage"
             component={HomePage} />
+          <Stack.Screen
+            name="DairyValueChain"
+            component={DairyValueChain}
+          />
           <Stack.Screen
             name="Milk"
             component={Milk}
