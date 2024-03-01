@@ -9,10 +9,10 @@ module.exports = {
             })
       },
       add: (data, callback) => {
-            const sql = "INSERT INTO expenses SET ?"
+            const sql = "INSERT INTO expenses SET ?";
             connection.query(sql, [data], (err, results) => {
-                  callback(err, results)
-            })
+                  callback(err, results);
+            });
       },
       update: (data, id, callback) => {
             const sql = "UPDATE expenses SET `handwork`=?, `fodder`=?, `bills`=?, `medicalexpenses`=?, `hay`=? WHERE id=? "

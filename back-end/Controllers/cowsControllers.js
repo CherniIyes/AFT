@@ -14,7 +14,14 @@
 
   exports.createCow = (req, res) => {
     const { cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date } = req.body;
-    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date], (err, result) => {
+  
+    if (!cow_number || !cow_race || !artificial_insemination_date || !artificial_insemination_triggered || !return_in_heat_control_date || !pregnancy_detection_date || !drying_off_date || !calving_and_delivery_date) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+  
+    const values = [cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date];
+  
+    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
@@ -22,7 +29,7 @@
       res.status(201).json({ message: 'Cow created successfully', id: result.insertId });
     });
   };
-
+  
   exports.getCowById = (req, res) => {
     const { id } = req.params;
     db.query('SELECT * FROM cows WHERE id = ?', [id], (err, results) => {

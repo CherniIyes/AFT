@@ -50,7 +50,7 @@ const AndroidSmall4 = ({ navigation }) => {
       <Text style={{ color: '#107c2e' }}>Back</Text>
     </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CreatAcc')}
+          onPress={() => navigation.navigate('logOrSign')}
           style={{
             position: 'absolute',
             backgroundColor: '#092f03',
