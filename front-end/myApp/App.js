@@ -44,13 +44,13 @@ const App = () => {
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="HomePage"
             component={HomePage} />
           <Stack.Screen
             name="DairyValueChain"
             component={DairyValueChain}
-          />
+          /> */}
           <Stack.Screen
             name="Milk"
             component={Milk}
