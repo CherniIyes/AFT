@@ -4,6 +4,8 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image 
 import Slider from '@react-native-community/slider';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons'
+
 
 const HomePage = () => {
 
@@ -47,33 +49,6 @@ const HomePage = () => {
     <View style={styles.windowContainer}>
 
 
-      <View style={styles.headerContainer}>
-
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text>Dairy Production</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Sales</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Dairy Value Chain</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Expenses</Text>
-          </TouchableOpacity>
-        </View>
-
-      </View>
-
-
 
 
 
@@ -87,36 +62,6 @@ const styles = StyleSheet.create({
   windowContainer: {
     flex: 1,
     padding: 20,
-  },
-  headerContainer: {
-    flexDirection: 'column', // Change from 'row' to 'column'
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    elevation: 2,
-    position: 'relative',
-    top: 50,
-  },
-  searchContainer: {
-    marginBottom: 10, // Add margin at the bottom to separate search and buttons
-  },
-  searchInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    width: 100, // Make the search input full width
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginLeft: 10,
-  },
-  button: {
-    marginLeft: 10,
   },
   sliderContainer: {
     alignItems: 'center',

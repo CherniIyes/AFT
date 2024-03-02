@@ -16,7 +16,15 @@ const Expenses = () => {
 
       const handleButtonPress = async () => {
             try {
-                  const response = await axios.post("http://192.168.100.43:6464/exp/add", {
+                  // const response = await axios.post("http://192.168.100.43:6464/exp/add", {
+                  //       handwork: input1,
+                  //       fodder: input2,
+                  //       bills: input3,
+                  //       medicalexpenses: input4,
+                  //       hay: input5,
+                  //       date: selectedDate,
+                  // });
+                  const response = await axios.post("http://192.168.1.4:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -52,6 +60,7 @@ const Expenses = () => {
 
       const fetchExpensesData = async () => {
             try {
+                  // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
                   const response = await axios.get("http://192.168.1.4:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
@@ -65,7 +74,7 @@ const Expenses = () => {
       }, [])
 
       return (
-            <View style={styles.container}>
+            <View style={styles.fullcontainer}>
                   <Text>Expenses</Text>
                   <View style={styles.inputsContainer}>
                         <TextInput
@@ -145,6 +154,14 @@ const Expenses = () => {
 };
 
 const styles = StyleSheet.create({
+      fullcontainer: {
+            flex: 1,
+            padding: 4,
+            backgroundColor: '#FFFFFF',
+            position: 'relative',
+            marginTop: 105,  // Adjusted to provide space for the headerContainer
+            marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+      },
       tableContainer: {
             marginTop: 20,
       },

@@ -3,8 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollVi
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
-import { Ionicons ,  MaterialCommunityIcons} from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { color } from 'react-native-elements/dist/helpers';
 
 const ProfitCalculatorScreen = () => {
   const [date, setDate] = useState('');
@@ -18,14 +19,15 @@ const ProfitCalculatorScreen = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.100.62:6464/milk');
-
-      const response = await axios.get('http://192.168.100.43:6464/milk');
+      // const response = await axios.get('http://192.168.100.62:6464/milk');
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.get('http://192.168.100.43:6464/milk');
+      const response = await axios.get('http://192.168.1.4:6464/milk');
       setTableData(response.data);
       calculateTotalPrice();
     } catch (error) {
@@ -36,28 +38,36 @@ const ProfitCalculatorScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http:/192.168.100.62:6464/milk/add', {
-
-      const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      // The URL in the following line seems to have a typo, fix it.
+      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price), // Ensure price is converted to a number
+      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
+      // });
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price),
+      //   quantity: parseInt(quantity),
+      // }); 
+      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
         day: date,
-        price: parseFloat(price), // Ensure price is converted to a number
-        quantity: parseInt(quantity) // Ensure quantity is converted to an integer
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
         const newEntry = { id: response.data.id, day: date, price: parseFloat(price), quantity: parseInt(quantity) };
         setTableData(prevData => [...prevData, newEntry]);
-  
-        // Reset input fields
-        setDate('');
-        setPrice('');
-        setQuantity('');
-      } 
-
 
         // Calculate total price
         const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
         setTotalPrice(totalPrice);
+
+        // Reset input fields
+        setDate('');
+        setPrice('');
+        setQuantity('');
       }
     } catch (error) {
       console.error('Error posting data:', error);
@@ -102,7 +112,6 @@ const ProfitCalculatorScreen = () => {
       </Card>
     ));
   };
-  
 
   const renderItem = ({ item, index }) => {
     if (index === 0) {
@@ -127,6 +136,7 @@ const ProfitCalculatorScreen = () => {
   };
 
   return (
+
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>
         <Text>Date:</Text>
@@ -188,11 +198,14 @@ const ProfitCalculatorScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  fullcontainer: {
     flex: 1,
-    padding: 20,
+    padding: 4,
     backgroundColor: '#FFFFFF',
-  },
+    position: 'relative',
+    marginTop: 105,  // Adjusted to provide space for the headerContainer
+    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+},
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -223,6 +236,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+
   },
   card: {
     flex: 1,
@@ -235,7 +249,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardText: {
-    fontSize: 16,
+    fontSize: 12,
   },
   submitButton: {
     backgroundColor: '#107c2e',
@@ -263,6 +277,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     paddingBottom: 10,
     marginBottom: 10,
+
   },
   tableText: {
     flex: 1,
