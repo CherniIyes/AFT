@@ -122,7 +122,7 @@ const ProfitCalculatorScreen = () => {
 
   return (
 
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView style={styles.fullcontainer}>
       <ScrollView>
         <Text>Date:</Text>
         <View style={styles.inputContainer}>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginTop: 105,  // Adjusted to provide space for the headerContainer
     marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
-},
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
