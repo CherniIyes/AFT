@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
 
 
 const DairyValueChain = () => {
@@ -10,7 +11,7 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
 
   const handleSubmit = () => {
- 
+
     const aiDateObj = new Date(aiDate);
     const returnInHeatControlDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 18));
     const pregnancyDetectionDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 27));
@@ -27,7 +28,7 @@ const DairyValueChain = () => {
 
   const handleToggle = () => {
     setAiTriggered(!aiTriggered);
-    
+
     if (!aiTriggered) {
       setCalculatedDates(null);
     }

@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -67,7 +68,7 @@ const HomePage = () => {
         />
       </View>
 
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text>Dairy Production</Text>
         </TouchableOpacity>
@@ -80,40 +81,40 @@ const HomePage = () => {
         <TouchableOpacity style={styles.button}>
           <Text>Expenses</Text>
         </TouchableOpacity>
-      </View>
-
-      <View style={styles.sliderContainer}>
-        <Slider
-          value={sliderValue}
-          style={{ width: "100%" }}
-          minimumValue={0}
-          maximumValue={2}
-          minimumTrackTintColor="#34D399"
-          maximumTrackTintColor="#10B981"
-          thumbTintColor="#10B981"
-          onValueChange={handleSliderChange}
-        />
-        <MaterialIcons
-          name="park"
-          size={24}
-          color="#10B981"
-          style={{
-            position: "absolute",
-            left: `${sliderValue * (100 / 2)}%`,
-            top: 20,
-            zIndex: 1,
-          }}
-        />
-      </View>
-
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={{ uri: images[Math.floor(sliderValue)] }}
-        />
-      </View>
-
+      </View> */}
       <ScrollView>
+        <View style={styles.sliderContainer}>
+          <Slider
+            value={sliderValue}
+            style={{ width: "100%" }}
+            minimumValue={0}
+            maximumValue={2}
+            minimumTrackTintColor="#34D399"
+            maximumTrackTintColor="#10B981"
+            thumbTintColor="#10B981"
+            onValueChange={handleSliderChange}
+          />
+          <MaterialIcons
+            name="park"
+            size={24}
+            color="#10B981"
+            style={{
+              position: "absolute",
+              left: `${sliderValue * (100 / 2)}%`,
+              top: 20,
+              zIndex: 1,
+            }}
+          />
+        </View>
+
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={{ uri: images[Math.floor(sliderValue)] }}
+          />
+        </View>
+
+
         <Text>These are our articles</Text>
         <TouchableOpacity
           onPress={() => handleCardClick(articles.length > 0 ? articles[0].title : "")}
@@ -146,7 +147,11 @@ const HomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 4,
+    backgroundColor: '#FFFFFF',
+    position: 'relative',
+    marginTop: 105,  // Adjusted to provide space for the headerContainer
+    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
   },
   searchContainer: {
     marginBottom: 20,
