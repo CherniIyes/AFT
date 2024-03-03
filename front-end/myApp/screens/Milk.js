@@ -15,13 +15,11 @@ const ProfitCalculatorScreen = () => {
   const [monthlyProfit, setMonthlyProfit] = useState(0);
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchData = async () => {
     try {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
@@ -29,13 +27,11 @@ const ProfitCalculatorScreen = () => {
       // const response = await axios.get('http://192.168.100.43:6464/milk');
       const response = await axios.get('http://192.168.1.4:6464/milk');
       setTableData(response.data);
-      calculateTotalPrice();
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
-
   const handleSubmit = async () => {
     try {
       // The URL in the following line seems to have a typo, fix it.
@@ -57,7 +53,7 @@ const ProfitCalculatorScreen = () => {
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
-        const newEntry = { id: response.data.id, day: date, price: parseFloat(price), quantity: parseInt(quantity) };
+        const newEntry = { id: response.data.id, day: date, price: price, quantity: quantity };
         setTableData(prevData => [...prevData, newEntry]);
 
         // Calculate total price
@@ -65,7 +61,6 @@ const ProfitCalculatorScreen = () => {
         setTotalPrice(totalPrice);
 
         // Reset input fields
-        setDate('');
         setPrice('');
         setQuantity('');
       }
@@ -74,9 +69,7 @@ const ProfitCalculatorScreen = () => {
     }
   };
 
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [tableData]);
+
 
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
@@ -89,23 +82,15 @@ const ProfitCalculatorScreen = () => {
     setYearlyProfit(yearlyProfit);
   };
 
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    tableData.forEach(item => {
-      totalPrice += parseFloat(item.price);
-    });
-    setTotalPrice(totalPrice);
-  };
-
   const renderProfitCards = () => {
     return [
-      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'cow' },
-      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'cow' },
-      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'cow' }
+      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'money-bill-wave' }
     ].map((item, index) => (
       <Card key={index} style={styles.card}>
         <Card.Content>
-          <MaterialCommunityIcons name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
+          <FontAwesome5 name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
           <Text style={styles.cardTitle}>{item.title}</Text>
           <Text style={styles.cardText}>{item.value}</Text>
         </Card.Content>
@@ -189,7 +174,6 @@ const ProfitCalculatorScreen = () => {
               renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
             />
-            <Text style={styles.tableText}>Total Price: {totalPrice.toFixed(2)}</Text>
           </View>
         )}
       </ScrollView>
