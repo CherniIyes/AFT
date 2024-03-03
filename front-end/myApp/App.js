@@ -44,7 +44,7 @@ const App = () => {
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+           {/* <Stack.Screen name="DairyValueChain" component={DairyValueChain} /> */}
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
