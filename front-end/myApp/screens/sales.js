@@ -89,14 +89,14 @@ const SalesList = () => {
         date: updatedDate,
         productdetails: updatedProductDetails,
       };
-  
+
       await axios.put(`http://192.168.50.59:5464/sales/Update/${selectedItem.id}`, updatedItem);
-  
+
       // Update the state dynamically
       setFilteredAftData((prevData) =>
         prevData.map((item) => (item.id === selectedItem.id ? { ...item, ...updatedItem } : item))
       );
-  
+
       setUpdateModalVisible(false);
     } catch (error) {
       console.error('Error updating sales item:', error);
@@ -107,7 +107,7 @@ const SalesList = () => {
   const onDelete = async (item) => {
     try {
       await axios.delete(`http://192.168.50.59:5464/sales/delete/${item.id}`);
-  
+
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
     } catch (error) {
@@ -123,14 +123,14 @@ const SalesList = () => {
         date: selectedDate,
         productdetails: newProductDetails,
       });
-  
+
       const newProductItem = response.data;
-  
+
       // Update the state dynamically
       setFilteredAftData((prevData) => [...prevData, newProductItem]);
       setAllAftData((prevData) => [...prevData, newProductItem]); // Update all data as well
       setAddModalVisible(false);
-  
+
       // Clear input fields after successful addition
       setNewProduct('');
       setNewPrice('');
@@ -140,8 +140,8 @@ const SalesList = () => {
       console.error('Error adding product:', error);
     }
   };
-  
-  
+
+
 
   const calculateTotal = () => {
     const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
@@ -296,7 +296,11 @@ const SalesList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 4,
     backgroundColor: '#FFFFFF',
+    position: 'relative',
+    marginTop: 105,  // Adjusted to provide space for the headerContainer
+    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
   },
   salesListTitle: {
     fontSize: 24,

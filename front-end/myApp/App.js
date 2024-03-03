@@ -13,6 +13,7 @@ import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Expenses from "./screens/Expenses.js";
 import Milk from "./screens/Milk.js";
+import Sales from "./screens/sales.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
@@ -63,7 +64,7 @@ const MainScreen = ({ navigation, route }) => {
               <FontAwesome6 name="cow" size={24} color="black" />
               <Text>Dairy Production</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('CreatAcc')} style={styles.filsa}>
+            <TouchableOpacity onPress={() => navigation.navigate('Sales')} style={styles.filsa}>
               <MaterialIcons name="point-of-sale" size={24} color="black" />
               <Text>Sales</Text>
             </TouchableOpacity>
@@ -80,10 +81,10 @@ const MainScreen = ({ navigation, route }) => {
       </View>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Milk" component={Milk} />
           <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
-          <Stack.Screen name="Milk" component={Milk} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
@@ -91,6 +92,7 @@ const MainScreen = ({ navigation, route }) => {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
+          <Stack.Screen name="Sales" component={Sales} />
         </Stack.Navigator>
       ) : (
         <View />
