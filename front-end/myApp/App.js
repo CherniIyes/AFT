@@ -12,7 +12,7 @@ import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Expenses from "./screens/Expenses.js";
-
+// import Milk from "./screens/Milk.js"
 import Sales from "./screens/sales.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
@@ -98,26 +98,27 @@ const MainScreen = ({ navigation, route }) => {
       </View>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="HomePage" component={HomePage} />
 
           <Stack.Screen name="Article1" component={Article1} />
                 
-          {/* <Stack.Screen name="Article2" component={Article2} />
-           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+          
+            
          
           <Stack.Screen name="Expenses" component={Expenses} />
           
   
     
           <Stack.Screen name="Boarding2" component={Boarding2} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="logOrSign" component={loginOrSign} />
-          <Stack.Screen name="CreatAcc" component={CreatAcc} />
-          <Stack.Screen name="Sales" component={Sales} /> */}
+          
+  
+    
+     
           <Stack.Screen name="Article2" component={Article2} />
-          <Stack.Screen name="Boarding2" component={Boarding2} />
+          {/* <Stack.Screen name="Milk" component={Milk} /> */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="Sales" component={Sales} />
