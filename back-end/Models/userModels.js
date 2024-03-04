@@ -62,7 +62,7 @@ const login = async (email, password, callback) => {
   
                   if (passwordMatch) {
                       // Passwords match, login successful
-                      return callback(null, true);
+                      return callback(null, user);
                   } else {
                       // Passwords do not match
                       return callback(null, false);

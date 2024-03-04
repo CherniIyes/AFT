@@ -3,10 +3,17 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollVi
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
-import { Ionicons ,  MaterialCommunityIcons} from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { color } from 'react-native-elements/dist/helpers';
 
-const ProfitCalculatorScreen = () => {
+const ProfitCalculatorScreen = ({ navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false, // Set this to true if you want to show the header
+      tabBarVisible: true, // Set this to false if you want to hide the tabBar
+    });
+  }, [navigation]);
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -14,19 +21,18 @@ const ProfitCalculatorScreen = () => {
   const [monthlyProfit, setMonthlyProfit] = useState(0);
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
-
+const [reload,setReload]=useState(true)
   useEffect(() => {
-    fetchData(); 
-  }, []);
-
+    fetchData();
+  }, [reload]);
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.100.62:8081/milk');
-
+      // const response = await axios.get('http://192.168.100.62:6464/milk');
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.get('http://192.168.100.43:6464/milk');
+      const response = await axios.get('http://192.168.1.4:6464/milk');
       setTableData(response.data);
-      calculateTotalPrice();
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
@@ -34,34 +40,41 @@ const ProfitCalculatorScreen = () => {
   };
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http:/192.168.100.62:6464/milk/add', {
+      // The URL in the following line seems to have a typo, fix it.
+      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price), // Ensure price is converted to a number
+      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
+      // });
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price),
+      //   quantity: parseInt(quantity),
+      // }); 
+      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
         day: date,
-        price: parseFloat(price), // Ensure price is converted to a number
-        quantity: parseInt(quantity) // Ensure quantity is converted to an integer
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
-        const newEntry = { id: response.data.id, day: date, price: parseFloat(price), quantity: parseInt(quantity) };
-        setTableData(prevData => [...prevData, newEntry]);
-  
+    setReload(!reload)
+        // Calculate total price
+        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+        setTotalPrice(totalPrice);
+
         // Reset input fields
-        setDate('');
         setPrice('');
         setQuantity('');
-      } 
-  
-      // Calculate total price
-      const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-      setTotalPrice(totalPrice);
+      }
     } catch (error) {
       console.error('Error posting data:', error);
       setError('Error posting data: ' + error.message);
     }
   };
-  
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [tableData]);
+
+
 
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
@@ -74,30 +87,21 @@ const ProfitCalculatorScreen = () => {
     setYearlyProfit(yearlyProfit);
   };
 
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    tableData.forEach(item => {
-      totalPrice += parseFloat(item.price);
-    });
-    setTotalPrice(totalPrice);
-  };
-
   const renderProfitCards = () => {
     return [
-      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'cow' },
-      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'cow' },
-      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'cow' }
+      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'money-bill-wave' }
     ].map((item, index) => (
       <Card key={index} style={styles.card}>
         <Card.Content>
-          <MaterialCommunityIcons name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
+          <FontAwesome5 name={item.icon} size={24} color="#107c2e" style={styles.profitIcon} />
           <Text style={styles.cardTitle}>{item.title}</Text>
           <Text style={styles.cardText}>{item.value}</Text>
         </Card.Content>
       </Card>
     ));
   };
-  
 
   const renderItem = ({ item, index }) => {
     if (index === 0) {
@@ -122,7 +126,8 @@ const ProfitCalculatorScreen = () => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+
+    <GestureHandlerRootView style={styles.fullcontainer}>
       <ScrollView>
         <Text>Date:</Text>
         <View style={styles.inputContainer}>
@@ -174,7 +179,6 @@ const ProfitCalculatorScreen = () => {
               renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
             />
-            <Text style={styles.tableText}>Total Price: {totalPrice.toFixed(2)}</Text>
           </View>
         )}
       </ScrollView>
@@ -183,10 +187,13 @@ const ProfitCalculatorScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  fullcontainer: {
     flex: 1,
-    padding: 20,
+    padding: 4,
     backgroundColor: '#FFFFFF',
+    position: 'relative',
+    marginTop: 105,  // Adjusted to provide space for the headerContainer
+    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
   },
   inputContainer: {
     flexDirection: 'row',
@@ -218,6 +225,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+
   },
   card: {
     flex: 1,
@@ -230,7 +238,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   cardText: {
-    fontSize: 16,
+    fontSize: 12,
   },
   submitButton: {
     backgroundColor: '#107c2e',
@@ -258,6 +266,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     paddingBottom: 10,
     marginBottom: 10,
+
   },
   tableText: {
     flex: 1,
