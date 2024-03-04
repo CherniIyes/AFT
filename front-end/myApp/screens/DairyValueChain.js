@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
-import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
+
 
 
 const DairyValueChain = () => {
