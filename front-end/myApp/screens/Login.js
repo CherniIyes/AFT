@@ -1,20 +1,32 @@
 import React, { useState } from "react";
-import { Image } from "expo-image";
-import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
+import { Image, TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import axios from 'axios';
 
 const AndroidSmall1 = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState('');
+
   const handleEmailChange = (text) => {
     setEmail(text);
   };
+
   const handlePasswordChange = (text) => {
     setPassword(text);
+  };
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      // You can access the user information with result.user
+      console.log('Google Sign-In successful:', result.user);
+    } catch (error) {
+      console.error('Google Sign-In error:', error.message);
+    }
   };
 
   const handleSignIn = async () => {
@@ -26,7 +38,7 @@ const AndroidSmall1 = ({ navigation }) => {
 
       console.log('Password being sent:', password);
 
-      const loginResponse = await axios.post('http://192.168.1.4:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.137.99:5464/user/login', {
         email,
         password,
       });
@@ -94,7 +106,6 @@ const AndroidSmall1 = ({ navigation }) => {
           onChangeText={handlePasswordChange}
           value={password}
         />
-
       </View>
       <View style={styles.rectangleView} />
       <View style={styles.androidSmall1Child2} />
@@ -112,23 +123,23 @@ const AndroidSmall1 = ({ navigation }) => {
       <TouchableOpacity onPress={handleSignIn}>
         <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
       </TouchableOpacity>
-
+  
       <Text style={styles.dontHaveAnContainer}>
         <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
         <Text style={[styles.signUp, styles.loginTypo]}>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CreatAcc')}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('CreatAcc')}>
             <Text style={styles.sign}>Sign Up</Text>
           </TouchableOpacity>
         </Text>
       </Text>
       <Text style={styles.logIn}>{`Log In `}</Text>
+  
+      <TouchableOpacity onPress={handleSignInWithGoogle}>
+        <Text style={[styles.login, styles.loginTypo]}>LOGIN WITH GOOGLE</Text>
+      </TouchableOpacity>
     </View>
   );
-};
-
+  }
 const styles = StyleSheet.create({
   androidLayout: {
     transform: [

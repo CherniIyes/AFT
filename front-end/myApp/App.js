@@ -1,33 +1,27 @@
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-import * as React from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
-import Boarding1 from "./screens/Boarding1.js";
+import { AppRegistry, View } from "react-native";
+import Boarding1 from "./screens/Boarding1";
 import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
-import Expenses from "./screens/Expenses.js";
-import Milk from "./screens/Milk.js";
-import HHH from "./screens/AndroidSmall.js";
-import HomePage from "./screens/HomePage.js";
-import Article1 from "./screens/Article1.js";
-import Article2 from "./screens/Article2.js";
-import Milk from "./screens/Milk.js";
-import SalesList from "./screens/sales.js";
-import './assets/fonts/Inter-Medium.ttf';
-import DairyValueChain from "./screens/DairyValueChain.js";
-
-
+import Expenses from "./screens/Expenses";
+import Milk from "./screens/Milk";
+import HHH from "./screens/AndroidSmall";
+import HomePage from "./screens/HomePage";
+import Article1 from "./screens/Article1";
+import Article2 from "./screens/Article2";
+import SalesList from "./screens/sales";
+import DairyValueChain from "./screens/DairyValueChain";
+import "./assets/fonts/Inter-Medium.ttf";
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
+  const [hideSplashScreen, setHideSplashScreen] = useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
@@ -40,28 +34,23 @@ const App = () => {
   if (!fontsLoaded && !error) {
     return null;
   }
-  const Stack = createNativeStackNavigator();
+
   return (
     <NavigationContainer>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen
-            name="SalesList"
-            component={SalesList}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Milk"
-            component={Milk}
-            options={{ headerShown: false }}
-          />
+             <Stack.Screen name="Login" component={Login} />
+           <Stack.Screen name="SalesList" component={SalesList} />
+        
+          
          
+         
+          <Stack.Screen name="Milk" component={Milk} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="Boarding2" component={Boarding2} />
-          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
         </Stack.Navigator>

@@ -37,7 +37,7 @@ const SalesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.50.59:5464/sales/getAll');
+        const response = await axios.get('http://192.168.137.99:5464/sales/getAll');
         setAllAftData(response.data);
         setFilteredAftData(response.data);
       } catch (error) {
@@ -90,7 +90,7 @@ const SalesList = () => {
         productdetails: updatedProductDetails,
       };
   
-      await axios.put(`http://192.168.50.59:5464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.137.99:5464/sales/Update/${selectedItem.id}`, updatedItem);
   
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -106,7 +106,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.50.59:5464/sales/delete/${item.id}`);
+      await axios.delete(`http://192.168.137.99:5464/sales/delete/${item.id}`);
   
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -117,7 +117,7 @@ const SalesList = () => {
   };
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.50.59:5464/sales/Add', {
+      const response = await axios.post('http://192.168.137.99:5464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
         date: selectedDate,
@@ -165,14 +165,24 @@ const SalesList = () => {
       </TouchableOpacity>
 
       {showDatePicker && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="spinner"
-          onChange={handleDateChange}
-          textColor="#000"
-          style={{ backgroundColor: '#fff' }}
-        />
+        Platform.OS === 'ios' ? (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="spinner"
+            onChange={handleDateChange}
+            textColor="#000"
+            style={{ backgroundColor: '#fff' }}
+          />
+        ) : (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            onChange={handleDateChange}
+            textColor="#000"
+            style={{ backgroundColor: '#fff' }}
+          />
+        )
       )}
 
       <FlatList
@@ -212,26 +222,40 @@ const SalesList = () => {
             <TextInput
               style={styles.input}
               placeholder="Product"
+              placeholderTextColor="#A0A0A0"
               value={newProduct}
               onChangeText={(text) => setNewProduct(text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Price"
+              placeholderTextColor="#A0A0A0"
               value={newPrice}
               onChangeText={(text) => setNewPrice(text)}
             />
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="spinner"
-              onChange={(newDate) => setNewDate(newDate)}
-              textColor="#000"
-              style={{ backgroundColor: '#fff' }}
-            />
+            {Platform.OS === 'ios' && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={(event, newDate) => setNewDate(newDate)}
+                textColor="#000"
+                style={{ backgroundColor: '#fff' }}
+              />
+            )}
+            {Platform.OS === 'android' && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                onChange={(event, newDate) => setNewDate(newDate)}
+                textColor="#000"
+                style={{ backgroundColor: '#fff' }}
+              />
+            )}
             <TextInput
               style={styles.input}
               placeholder="Product Details"
+              placeholderTextColor="#A0A0A0"
               value={newProductDetails}
               onChangeText={(text) => setNewProductDetails(text)}
             />
@@ -252,26 +276,40 @@ const SalesList = () => {
             <TextInput
               style={styles.input}
               placeholder="Product"
+              placeholderTextColor="#A0A0A0"
               value={updatedProduct}
               onChangeText={(text) => setUpdatedProduct(text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Price"
+              placeholderTextColor="#A0A0A0"
               value={updatedPrice}
               onChangeText={(text) => setUpdatedPrice(text)}
             />
-            <DateTimePicker
-              value={new Date(updatedDate)}
-              mode="date"
-              display="spinner"
-              onChange={(event, newDate) => setUpdatedDate(newDate)}
-              textColor="#000"
-              style={{ backgroundColor: '#fff' }}
-            />
+            {Platform.OS === 'ios' && (
+              <DateTimePicker
+                value={new Date(updatedDate)}
+                mode="date"
+                display="spinner"
+                onChange={(event, newDate) => setUpdatedDate(newDate)}
+                textColor="#000"
+                style={{ backgroundColor: '#fff' }}
+              />
+            )}
+            {Platform.OS === 'android' && (
+              <DateTimePicker
+                value={new Date(updatedDate)}
+                mode="date"
+                onChange={(event, newDate) => setUpdatedDate(newDate)}
+                textColor="#000"
+                style={{ backgroundColor: '#fff' }}
+              />
+            )}
             <TextInput
               style={styles.input}
               placeholder="Product Details"
+              placeholderTextColor="#A0A0A0"
               value={updatedProductDetails}
               onChangeText={(text) => setUpdatedProductDetails(text)}
             />
