@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer,getFocusedRouteNameFromRoute  } from "@react-navigation/native";
 import * as React from "react";
 import { useFonts } from "expo-font";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
@@ -43,7 +43,6 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
-        {/* Add other screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -51,6 +50,24 @@ const App = () => {
 
 const MainScreen = ({ navigation, route }) => {
   const { hideSplashScreen } = route.params || { hideSplashScreen: true }; // Add a default value
+
+  React.useLayoutEffect(() => {
+    const currentRouteName = getFocusedRouteNameFromRoute(route);
+
+    const screensWithoutHeaderAndTabBar = ['Boarding1', 'Login', 'logOrSign', 'CreatAcc', 'Boarding2'];
+
+    if (screensWithoutHeaderAndTabBar.includes(currentRouteName)) {
+      navigation.setOptions({
+        headerShown: false,
+        tabBarVisible: false,
+      });
+    } else {
+      navigation.setOptions({
+        headerShown: false,
+        tabBarVisible: true,
+      });
+    }
+  }, [navigation, route]);
 
   return (
     <View style={styles.windowContainer}>
@@ -81,17 +98,17 @@ const MainScreen = ({ navigation, route }) => {
       </View>
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Boarding1" component={Boarding1} />
+          <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="Milk" component={Milk} />
           <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
-          <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="Boarding2" component={Boarding2} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
-          <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="Sales" component={Sales} />
         </Stack.Navigator>
       ) : (
@@ -192,3 +209,51 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// in my react native project i have a number of screens
+// Boarding1
+// Login
+// loginOrSign
+// CreatAcc
+// Boarding2
+// Expenses
+// Milk
+// Sales
+// HomePage
+// DairyValueChain
+
+// and in the app.js where everything in redered i also have
+// headerContainer
+// tabBarContainer
+
+// the headerContainer is my navbar and the tabBarContainer is my tabbar
+// when i am in the Boarding1 or Login or loginOrSign or CreatAcc or Boarding2 i dont want the headerContainer  and the tabBarContainer to render but when i am in the Expenses or Milk or Sales or HomePage or DairyValueChain i want the headerContainer  and the tabBarContainer to render

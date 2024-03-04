@@ -7,7 +7,13 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { color } from 'react-native-elements/dist/helpers';
 
-const ProfitCalculatorScreen = () => {
+const ProfitCalculatorScreen = ({ navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false, // Set this to true if you want to show the header
+      tabBarVisible: true, // Set this to false if you want to hide the tabBar
+    });
+  }, [navigation]);
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');

@@ -45,6 +45,7 @@ const AndroidSmall1 = ({ navigation }) => {
       setEmail('');
       setPassword('');
 
+      navigation.navigate('HomePage');
       alert("Sign in successful");
     } catch (error) {
       console.error("Error during sign-in:", error);
