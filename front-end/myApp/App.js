@@ -18,11 +18,12 @@ import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
-
+import profile from "./screens/Profile.js"
 
 
 const Stack = createStackNavigator();
 const App = () => {
+  const [oneUser ,setOneUser] = React.useState({})
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -122,6 +123,7 @@ const MainScreen = ({ navigation, route }) => {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="Sales" component={Sales} />
+          <Stack.Screen name="profile" component={profile} />
         </Stack.Navigator>
       ) : (
         <View />
@@ -136,7 +138,7 @@ const MainScreen = ({ navigation, route }) => {
             <AntDesign name="wallet" size={24} color="black" />
             <Text style={styles.tabBarbuttonText}> Wallet</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
+          <TouchableOpacity onPress={() => navigation.navigate('profile')} style={styles.tabBarbutton}>
             <AntDesign name="profile" size={24} color="black" />
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>

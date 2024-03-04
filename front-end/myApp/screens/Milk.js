@@ -22,10 +22,10 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
-
+const [reload,setReload]=useState(true)
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [reload]);
   const fetchData = async () => {
     try {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
@@ -59,9 +59,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
-        const newEntry = { id: response.data.id, day: date, price: price, quantity: quantity };
-        setTableData(prevData => [...prevData, newEntry]);
-
+    setReload(!reload)
         // Calculate total price
         const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
         setTotalPrice(totalPrice);
@@ -72,6 +70,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error posting data:', error);
+      setError('Error posting data: ' + error.message);
     }
   };
 
