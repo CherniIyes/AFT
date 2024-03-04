@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xl,
     alignItems: "center",
     justifyContent: "center",
-    
+
     margin: 5,
   },
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xl,
     alignItems: "center",
     justifyContent: "center",
-    
+
     margin: 5,
   },
   buttonText: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interRegular,
   },
   instanceParent: {
-    
+
     // flexDirection: "row",
     // justifyContent: "space-between",  // Adjust this based on your design
     top: 450,
