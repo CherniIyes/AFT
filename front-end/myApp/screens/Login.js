@@ -26,7 +26,7 @@ const AndroidSmall1 = ({ navigation }) => {
 
       console.log('Password being sent:', password);
 
-      const loginResponse = await axios.post('http://192.168.1.4:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.100.42:6464/user/login', {
         email,
         password,
       });

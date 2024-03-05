@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView, Button } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
@@ -7,13 +7,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { color } from 'react-native-elements/dist/helpers';
 
-const ProfitCalculatorScreen = ({ navigation }) => {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false, // Set this to true if you want to show the header
-      tabBarVisible: true, // Set this to false if you want to hide the tabBar
-    });
-  }, [navigation]);
+const ProfitCalculatorScreen = () => {
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -31,7 +25,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
       // If you want to use a different endpoint, you should change the URL in the line above.
       // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.1.4:6464/milk');
+      const response = await axios.get('http://192.168.100.42:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -52,7 +46,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       //   price: parseFloat(price),
       //   quantity: parseInt(quantity),
       // }); 
-      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
+      const response = await axios.post('http://192.168.100.42:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
@@ -161,16 +155,17 @@ const ProfitCalculatorScreen = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={calculateProfit}>
+        {/* <TouchableOpacity style={styles.button} onPress={calculateProfit}>
           <Text style={styles.buttonText}>Calculate</Text>
-        </TouchableOpacity>
-
+        </TouchableOpacity> */}
+        <Button title="Calculate" onPress={calculateProfit} style={styles.button} color="#107c2e" />
         <View style={styles.profitContainer}>
           {renderProfitCards()}
         </View>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        {/* <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>

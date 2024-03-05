@@ -236,12 +236,12 @@ const HomePage = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
+      {/* <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search..."
         />
-      </View>
+      </View> */}
 
       {/* <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>

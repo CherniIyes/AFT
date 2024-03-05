@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList } from "react-native";
+import { TextInput, StyleSheet, View, Text,Button, TouchableOpacity, Platform, FlatList } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ const Expenses = () => {
                   //       hay: input5,
                   //       date: selectedDate,
                   // });
-                  const response = await axios.post("http://192.168.1.4:6464/exp/add", {
+                  const response = await axios.post("http://192.168.100.42:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -61,7 +61,7 @@ const Expenses = () => {
       const fetchExpensesData = async () => {
             try {
                   // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
-                  const response = await axios.get("http://192.168.1.4:6464/exp/getall");
+                  const response = await axios.get("http://192.168.100.42:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);
@@ -79,31 +79,31 @@ const Expenses = () => {
                   <View style={styles.inputsContainer}>
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 1"
+                              placeholder="HandWork"
                               value={input1}
                               onChangeText={(text) => setInput1(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 2"
+                              placeholder="Fodder"
                               value={input2}
                               onChangeText={(text) => setInput2(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 3"
+                              placeholder="Bills"
                               value={input3}
                               onChangeText={(text) => setInput3(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 4"
+                              placeholder="Medical Expenses"
                               value={input4}
                               onChangeText={(text) => setInput4(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 5"
+                              placeholder="Hay"
                               value={input5}
                               onChangeText={(text) => setInput5(text)}
                         />
@@ -111,9 +111,10 @@ const Expenses = () => {
                               <Text>{selectedDate || "📅"}</Text>
                         </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
+                  {/* <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
                         <Text>Submit</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
+                  <Button title="Submit" onPress={handleButtonPress} style={styles.button} color="#107c2e" />
                   {showDatePicker && (
                         <DateTimePicker
                               value={date}
@@ -156,7 +157,7 @@ const Expenses = () => {
 const styles = StyleSheet.create({
       fullcontainer: {
             flex: 1,
-            padding: 4,
+            // padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
             marginTop: 105,  // Adjusted to provide space for the headerContainer
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
             padding: 9,
       },
       button: {
-            backgroundColor: "blue",
+            backgroundColor: "#107c2e",
             padding: 10,
             alignItems: "center",
             borderRadius: 5,
