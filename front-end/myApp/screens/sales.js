@@ -21,14 +21,13 @@ const SalesList = () => {
 
   const [updatedProduct, setUpdatedProduct] = useState('');
   const [updatedPrice, setUpdatedPrice] = useState('');
-  const [updatedDate, setUpdatedDate] = useState('');
+  const [updatedDate, setUpdatedDate] = useState(new Date());
   const [updatedProductDetails, setUpdatedProductDetails] = useState('');
 
   const [newProduct, setNewProduct] = useState('');
   const [newPrice, setNewPrice] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [newProductDetails, setNewProductDetails] = useState('');
-  const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [isAddModalVisible, setAddModalVisible] = useState(false);
@@ -37,7 +36,7 @@ const SalesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.137.99:5464/sales/getAll');
+        const response = await axios.get('http://192.168.100.51:5464/sales/getAll');
         setAllAftData(response.data);
         setFilteredAftData(response.data);
       } catch (error) {
@@ -53,14 +52,10 @@ const SalesList = () => {
     setShowDatePicker(true);
   };
 
-  const handleDateChange = (event, newDate) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-    if (newDate) {
-      setDate(newDate);
-      const formattedDate = newDate.toLocaleDateString();
-      setSelectedDate(formattedDate);
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      setSelectedDate(selectedDate);
     }
   };
 
@@ -76,7 +71,7 @@ const SalesList = () => {
     setSelectedItem(item);
     setUpdatedProduct(item.product);
     setUpdatedPrice(item.price.toString());
-    setUpdatedDate(item.date);
+    setUpdatedDate(new Date(item.date));
     setUpdatedProductDetails(item.productdetails);
     setUpdateModalVisible(true);
   };
@@ -86,11 +81,11 @@ const SalesList = () => {
       const updatedItem = {
         product: updatedProduct,
         price: parseFloat(updatedPrice),
-        date: updatedDate,
+        date: updatedDate.toLocaleDateString(),
         productdetails: updatedProductDetails,
       };
   
-      await axios.put(`http://192.168.137.99:5464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.100.51:5464/sales/Update/${selectedItem.id}`, updatedItem);
   
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -106,7 +101,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.137.99:5464/sales/delete/${item.id}`);
+      await axios.delete(`http://192.168.100.51:5464/sales/delete/${item.id}`);
   
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -115,12 +110,13 @@ const SalesList = () => {
       setError('Error deleting item. Please try again.');
     }
   };
+
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.137.99:5464/sales/Add', {
+      const response = await axios.post('http://192.168.100.51:5464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
-        date: selectedDate,
+        date: selectedDate.toLocaleDateString(),
         productdetails: newProductDetails,
       });
   
@@ -134,15 +130,13 @@ const SalesList = () => {
       // Clear input fields after successful addition
       setNewProduct('');
       setNewPrice('');
-      setSelectedDate('');
+      setSelectedDate(new Date());
       setNewProductDetails('');
     } catch (error) {
       console.error('Error adding product:', error);
     }
   };
   
-  
-
   const calculateTotal = () => {
     const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
     return totalPrice.toFixed(2);
@@ -161,28 +155,18 @@ const SalesList = () => {
       <Text style={styles.salesListTitle}>Sales List</Text>
 
       <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-        <Text>{selectedDate || '📅'}</Text>
+        <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
       </TouchableOpacity>
 
       {showDatePicker && (
-        Platform.OS === 'ios' ? (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="spinner"
-            onChange={handleDateChange}
-            textColor="#000"
-            style={{ backgroundColor: '#fff' }}
-          />
-        ) : (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            onChange={handleDateChange}
-            textColor="#000"
-            style={{ backgroundColor: '#fff' }}
-          />
-        )
+        <DateTimePicker
+          value={selectedDate}
+          mode="date"
+          display="spinner"
+          onChange={handleDateChange}
+          textColor="#000"
+          style={{ backgroundColor: '#fff' }}
+        />
       )}
 
       <FlatList
@@ -235,19 +219,19 @@ const SalesList = () => {
             />
             {Platform.OS === 'ios' && (
               <DateTimePicker
-                value={date}
+                value={selectedDate}
                 mode="date"
                 display="spinner"
-                onChange={(event, newDate) => setNewDate(newDate)}
+                onChange={(event, newDate) => setSelectedDate(newDate)}
                 textColor="#000"
                 style={{ backgroundColor: '#fff' }}
               />
             )}
             {Platform.OS === 'android' && (
               <DateTimePicker
-                value={date}
+                value={selectedDate}
                 mode="date"
-                onChange={(event, newDate) => setNewDate(newDate)}
+                onChange={(event, newDate) => setSelectedDate(newDate)}
                 textColor="#000"
                 style={{ backgroundColor: '#fff' }}
               />
@@ -289,7 +273,7 @@ const SalesList = () => {
             />
             {Platform.OS === 'ios' && (
               <DateTimePicker
-                value={new Date(updatedDate)}
+                value={updatedDate}
                 mode="date"
                 display="spinner"
                 onChange={(event, newDate) => setUpdatedDate(newDate)}
@@ -299,7 +283,7 @@ const SalesList = () => {
             )}
             {Platform.OS === 'android' && (
               <DateTimePicker
-                value={new Date(updatedDate)}
+                value={updatedDate}
                 mode="date"
                 onChange={(event, newDate) => setUpdatedDate(newDate)}
                 textColor="#000"
@@ -330,6 +314,7 @@ const SalesList = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
