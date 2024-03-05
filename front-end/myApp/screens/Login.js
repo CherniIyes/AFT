@@ -51,12 +51,13 @@ const AndroidSmall1 = ({ navigation }) => {
         return;
       }
 
-      sessionStorage.setItem('user', true);
+      localStorage.setItem('user',JSON.stringify(loginResponse.data));
       setUser(loginResponse.data);
       console.log('user:', loginResponse.data);
       setEmail('');
       setPassword('');
 
+      navigation.navigate('HomePage');
       alert("Sign in successful");
     } catch (error) {
       console.error("Error during sign-in:", error);
