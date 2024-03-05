@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView, RefreshControl } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
@@ -10,10 +10,11 @@ import { color } from 'react-native-elements/dist/helpers';
 const ProfitCalculatorScreen = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false, // Set this to true if you want to show the header
-      tabBarVisible: true, // Set this to false if you want to hide the tabBar
+      headerShown: false,
+      tabBarVisible: true,
     });
   }, [navigation]);
+
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -22,51 +23,35 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
-const [reload,setReload]=useState(true)
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     fetchData();
-  }, [reload]);
+  }, []);
+
   const fetchData = async () => {
     try {
-      // const response = await axios.get('http://192.168.100.62:6464/milk');
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.1.4:6464/milk');
+      const response = await axios.get('http://192.168.137.55:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
+
   const handleSubmit = async () => {
     try {
-      // The URL in the following line seems to have a typo, fix it.
-      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price), // Ensure price is converted to a number
-      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
-      // });
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price),
-      //   quantity: parseInt(quantity),
-      // }); 
-      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
+      const response = await axios.post('http://192.168.137.55:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
       });
       if (response.status === 200) {
-        // Update frontend state with the new entry
-    setReload(!reload)
-        // Calculate total price
-        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-        setTotalPrice(totalPrice);
-
-        // Reset input fields
+        setRefreshing(true);
+        setDate('');
         setPrice('');
         setQuantity('');
+        setRefreshing(false);
       }
     } catch (error) {
       console.error('Error posting data:', error);
@@ -74,18 +59,20 @@ const [reload,setReload]=useState(true)
     }
   };
 
-
-
   const calculateProfit = () => {
     const dailyProfit = parseFloat(price) * parseInt(quantity);
     setDailyProfit(dailyProfit);
-
-    const monthlyProfit = dailyProfit * 30; // Assuming 30 days in a month
+    const monthlyProfit = dailyProfit * 30;
     setMonthlyProfit(monthlyProfit);
-
-    const yearlyProfit = dailyProfit * 365; // Assuming 365 days in a year
+    const yearlyProfit = dailyProfit * 365;
     setYearlyProfit(yearlyProfit);
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  }, []);
 
   const renderProfitCards = () => {
     return [
@@ -105,7 +92,6 @@ const [reload,setReload]=useState(true)
 
   const renderItem = ({ item, index }) => {
     if (index === 0) {
-      // Render headers in the first row
       return (
         <View style={styles.tableRow}>
           <Text style={[styles.tableText, styles.firstRow]}>Date</Text>
@@ -114,7 +100,6 @@ const [reload,setReload]=useState(true)
         </View>
       );
     } else {
-      // Render data rows
       return (
         <View style={styles.tableRow}>
           <Text style={styles.tableText}>{item.day}</Text>
@@ -126,9 +111,11 @@ const [reload,setReload]=useState(true)
   };
 
   return (
-
     <GestureHandlerRootView style={styles.fullcontainer}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <Text>Date:</Text>
         <View style={styles.inputContainer}>
           <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
@@ -159,11 +146,9 @@ const [reload,setReload]=useState(true)
             keyboardType="numeric"
           />
         </View>
-
         <TouchableOpacity style={styles.button} onPress={calculateProfit}>
           <Text style={styles.buttonText}>Calculate</Text>
         </TouchableOpacity>
-
         <View style={styles.profitContainer}>
           {renderProfitCards()}
         </View>
@@ -192,8 +177,8 @@ const styles = StyleSheet.create({
     padding: 4,
     backgroundColor: '#FFFFFF',
     position: 'relative',
-    marginTop: 105,  // Adjusted to provide space for the headerContainer
-    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+    marginTop: 105,
+    marginBottom: 23,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -225,7 +210,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-
   },
   card: {
     flex: 1,
@@ -266,7 +250,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     paddingBottom: 10,
     marginBottom: 10,
-
   },
   tableText: {
     flex: 1,

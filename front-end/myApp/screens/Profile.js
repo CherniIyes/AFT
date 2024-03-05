@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const ProfessionalProfile = () => {
+const ProfessionalProfile = (props) => {
+  console.log("user",props.user);
   var user = {}
   // Constants
   const profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNErRk-0VnxqOmNa71Rok-FLZKUt6Y38mJkA&usqp=CAU";

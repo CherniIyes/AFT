@@ -5,11 +5,14 @@ import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
 import axios from 'axios';
+import Profile from "./Profile.js"
+import HomePage from "./HomePage.js";
 
 const AndroidSmall1 = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState('');
+  
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -26,7 +29,7 @@ console.log(email);
 
       console.log('Password being sent:', password);
 
-      const loginResponse = await axios.post('http://192.168.1.4:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.137.55:6464/user/login', {
         email,
         password,
       });
@@ -39,12 +42,16 @@ console.log(email);
         return;
       }
 
-      localStorage.setItem('user',JSON.stringify(loginResponse.data));
-      setUser(loginResponse.data);
-      console.log('user:', loginResponse.data);
+      // localStorage.setItem('user',JSON.stringify(loginResponse.data));
+      // setUser(loginResponse.data);
+      setUser(email);
+
+      console.log('user:', email);
+      <Profile user={user}/>,
+      <HomePage user={user}/>
+
       setEmail('');
       setPassword('');
-
       navigation.navigate('HomePage');
       alert("Sign in successful");
     } catch (error) {
