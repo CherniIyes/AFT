@@ -150,6 +150,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
 
+
 const DairyValueChain = () => {
   const [cowNumber, setCowNumber] = useState('');
   const [cowRace, setCowRace] = useState('');
@@ -193,7 +194,7 @@ const DairyValueChain = () => {
       calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
     };
 
-    
+
     fetch('http://192.168.100.53:6464/cows/add', {
       method: 'POST',
       headers: {
@@ -201,19 +202,19 @@ const DairyValueChain = () => {
       },
       body: JSON.stringify(cowData),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Data successfully saved:', data);
- 
-      setCowNumber('');
-      setCowRace('');
-      setAiDate('');
-      setCalculatedDates(null);
-      setAiTriggered(false);
-    })
-    .catch(error => {
-      console.error('Error saving data:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log('Data successfully saved:', data);
+
+        setCowNumber('');
+        setCowRace('');
+        setAiDate('');
+        setCalculatedDates(null);
+        setAiTriggered(false);
+      })
+      .catch(error => {
+        console.error('Error saving data:', error);
+      });
   };
 
   return (
@@ -285,8 +286,11 @@ const DairyValueChain = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    padding: 4,
     backgroundColor: '#FFFFFF',
+    marginTop: 105,
+    marginBottom: 23,
   },
   title: {
     fontSize: 24,
