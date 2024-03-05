@@ -22,7 +22,7 @@ const AndroidSmall3 = ({ navigation }) => {
       // Proceed to server registration
       console.log('Data being sent to server:', { username, email, password });
 
-      const registerResponse = await axios.post('http://192.168.1.4:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.100.51:6464/user/register', {
         username,
         email,
         password

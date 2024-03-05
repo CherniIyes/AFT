@@ -1,19 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer,getFocusedRouteNameFromRoute  } from "@react-navigation/native";
-import * as React from "react";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import React, { useState } from "react";
 import { useFonts } from "expo-font";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import './assets/fonts/Inter-Medium.ttf';
 
-import { AppRegistry, View } from "react-native";
-import Boarding1 from "./screens/Boarding1";
+import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
 import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Expenses from "./screens/Expenses.js";
-// import Milk from "./screens/Milk.js"
+import Milk from "./screens/Milk.js"
 import Sales from "./screens/sales.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
@@ -24,6 +23,8 @@ import profile from "./screens/Profile.js"
 
 const Stack = createStackNavigator();
 const App = () => {
+
+
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -37,7 +38,9 @@ const App = () => {
   if (!fontsLoaded && !error) {
     return null;
   }
-  const Stack = createNativeStackNavigator();
+
+  const Stack = createStackNavigator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -48,71 +51,56 @@ const App = () => {
 };
 
 const MainScreen = ({ navigation, route }) => {
+  const [view, setView] = useState("")
+  console.log("setViewiewwwwwww", view);
   const { hideSplashScreen } = route.params || { hideSplashScreen: true }; // Add a default value
+  const currentRouteName = getFocusedRouteNameFromRoute(route);
 
-  React.useLayoutEffect(() => {
-    const currentRouteName = getFocusedRouteNameFromRoute(route);
-
-    const screensWithoutHeaderAndTabBar = ['Boarding1', 'Login', 'logOrSign', 'CreatAcc', 'Boarding2'];
-
-    if (screensWithoutHeaderAndTabBar.includes(currentRouteName)) {
-      navigation.setOptions({
-        headerShown: false,
-        tabBarVisible: false,
-      });
-    } else {
-      navigation.setOptions({
-        headerShown: false,
-        tabBarVisible: true,
-      });
-    }
-  }, [navigation, route]);
 
   return (
+
     <View style={styles.windowContainer}>
-      <View style={styles.headerContainer}>
-        <View style={styles.ContainerInBetween}>
-          {/* <View style={styles.searchContainer}>
-            <TextInput style={styles.searchInput} placeholder="Search..." />
-          </View> */}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Milk')} style={styles.filsa}>
-              <FontAwesome6 name="cow" size={24} color="black" />
-              <Text>Dairy Production</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Sales')} style={styles.filsa}>
-              <MaterialIcons name="point-of-sale" size={24} color="black" />
-              <Text>Sales</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('DairyValueChain')} style={styles.filsa}>
-              <MaterialCommunityIcons name="cow" size={24} color="black" />
-              <Text>Dairy Value Chain</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.filsa}>
-              <MaterialCommunityIcons name="point-of-sale" size={24} color="black" />
-              <Text>Expenses</Text>
-            </TouchableOpacity>
+      {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && (
+        <View style={styles.headerContainer}>
+          <View style={styles.ContainerInBetween}>
+            {/* // <View style={styles.searchContainer}>
+          //   <TextInput style={styles.searchInput} placeholder="Search..." />
+          // </View> */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
+                <FontAwesome6 name="cow" size={24} color="black" />
+                <Text>Dairy Production</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); setView('Sales'); }} style={styles.filsa}>
+                <MaterialIcons name="point-of-sale" size={24} color="black" />
+                <Text>Sales</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); setView('DairyValueChain') }} style={styles.filsa}>
+                <MaterialCommunityIcons name="cow" size={24} color="black" />
+                <Text>Dairy Value Chain</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); setView('Expenses') }} style={styles.filsa}>
+                <MaterialCommunityIcons name="point-of-sale" size={24} color="black" />
+                <Text>Expenses</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      )}
+
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+         <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
+          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="HomePage" component={HomePage} />
-
           <Stack.Screen name="Article1" component={Article1} />
-                
-          
-            
-         
-          <Stack.Screen name="Expenses" component={Expenses} />
-          
-  
-    
           <Stack.Screen name="Boarding2" component={Boarding2} />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Article2" component={Article2} />
+          <Stack.Screen name="Milk" component={Milk} />
+   
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="Sales" component={Sales} />
           <Stack.Screen name="profile" component={profile} />
@@ -120,24 +108,27 @@ const MainScreen = ({ navigation, route }) => {
       ) : (
         <View />
       )}
-      <View style={styles.tabBarContainer}>
-        <View style={styles.tabBarbuttonContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('HomePage')} style={styles.tabBarbutton}>
-            <AntDesign name="home" size={24} color="black" />
-            <Text style={styles.tabBarbuttonText}> Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
-            <AntDesign name="wallet" size={24} color="black" />
-            <Text style={styles.tabBarbuttonText}> Wallet</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('profile')} style={styles.tabBarbutton}>
-            <AntDesign name="profile" size={24} color="black" />
-            <Text style={styles.tabBarbuttonText}> Profile</Text>
-          </TouchableOpacity>
+      {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && (
+        <View style={styles.tabBarContainer}>
+          <View style={styles.tabBarbuttonContainer}>
+            <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
+              <AntDesign name="home" size={24} color="black" />
+              <Text style={styles.tabBarbuttonText}> Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
+              <AntDesign name="wallet" size={24} color="black" />
+              <Text style={styles.tabBarbuttonText}> Wallet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
+              <AntDesign name="profile" size={24} color="black" />
+              <Text style={styles.tabBarbuttonText}> Profile</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -215,51 +206,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// in my react native project i have a number of screens
-// Boarding1
-// Login
-// loginOrSign
-// CreatAcc
-// Boarding2
-// Expenses
-// Milk
-// Sales
-// HomePage
-// DairyValueChain
-
-// and in the app.js where everything in redered i also have
-// headerContainer
-// tabBarContainer
-
-// the headerContainer is my navbar and the tabBarContainer is my tabbar
-// when i am in the Boarding1 or Login or loginOrSign or CreatAcc or Boarding2 i dont want the headerContainer  and the tabBarContainer to render but when i am in the Expenses or Milk or Sales or HomePage or DairyValueChain i want the headerContainer  and the tabBarContainer to render

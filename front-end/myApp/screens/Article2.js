@@ -6,7 +6,7 @@ function Article2() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.6:6464/article2') // Assuming this endpoint is correct
+    fetch('http://192.168.100.51:6464/article2') // Assuming this endpoint is correct
       .then((response) => response.json())
       .then((json) => {
         setData(json);
