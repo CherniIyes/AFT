@@ -18,7 +18,7 @@ import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
-
+import profile from "./screens/Profile.js"
 
 
 const Stack = createStackNavigator();
@@ -102,6 +102,7 @@ const MainScreen = ({ navigation, route }) => {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="Sales" component={Sales} />
+          <Stack.Screen name="profile" component={profile} />
         </Stack.Navigator>
       ) : (
         <View />
