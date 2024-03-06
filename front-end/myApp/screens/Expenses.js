@@ -157,10 +157,10 @@ const Expenses = () => {
 const styles = StyleSheet.create({
       fullcontainer: {
             flex: 1,
-            // padding: 4,
+            padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
-            marginTop: 105,  // Adjusted to provide space for the headerContainer
+            marginTop: 130,  // Adjusted to provide space for the headerContainer
             marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
       },
       tableContainer: {
