@@ -11,6 +11,7 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const [cowDataList, setCowDataList] = useState([]);
 
   const handleSubmit = () => {
     if (!selectedDate) {
@@ -52,7 +53,7 @@ const DairyValueChain = () => {
       calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
     };
 
-    fetch('http://192.168.146.235:6464/cows/add', {
+    fetch('http://192.168.1.15:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,6 +89,7 @@ const DairyValueChain = () => {
       setShowDatePicker(false);
     }
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -106,7 +108,7 @@ const DairyValueChain = () => {
           onChangeText={setCowRace}
         />
         <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-          <Text>{selectedDate || "Select Date"}</Text>
+          <Text>{selectedDate || "Artificial insemination date"}</Text>
         </TouchableOpacity>
         {showDatePicker && (
           <DateTimePicker
@@ -168,7 +170,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   container: {
-    padding: 20,
+    flex: 1,
+    padding: 4,
     backgroundColor: '#FFFFFF',
     paddingTop: '30%', // Adjusted paddingTop instead of marginTop
     minHeight: '100%',

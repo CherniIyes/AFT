@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   rectangleLayout: {
     height: 6,
     width: 30,
-    top: 14,
+    top: 25,
     position: "absolute",
   },
   instancePosition: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     height: 62,
   },
   instanceGroup: {
-    top: 506,
+    top: 450,
     left: 11,
     width: 339,
     height: 101,

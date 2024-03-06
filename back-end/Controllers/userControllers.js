@@ -63,7 +63,7 @@ const login = async (req, res) => {
         }
 
         if (success) {
-            return res.status(200).send("Login successful");
+            return res.status(200).json(success[0]);
         } else {
             return res.status(401).send("Login failed. Check your email and password.");
         }

@@ -16,7 +16,7 @@ const AndroidSmall1 = ({ navigation }) => {
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
-
+console.log(email);
   const handleSignIn = async () => {
     try {
       if (!email || !password) {
@@ -26,7 +26,7 @@ const AndroidSmall1 = ({ navigation }) => {
 
       console.log('Password being sent:', password);
 
-      const loginResponse = await axios.post('http://192.168.1.4:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.100.42:6464/user/login', {
         email,
         password,
       });
@@ -39,7 +39,7 @@ const AndroidSmall1 = ({ navigation }) => {
         return;
       }
 
-      sessionStorage.setItem('user', true);
+      localStorage.setItem('user',JSON.stringify(loginResponse.data));
       setUser(loginResponse.data);
       console.log('user:', loginResponse.data);
       setEmail('');
