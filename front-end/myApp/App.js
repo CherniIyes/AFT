@@ -1,10 +1,15 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
-import './assets/fonts/Inter-Medium.ttf';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -12,19 +17,17 @@ import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Expenses from "./screens/Expenses.js";
-import Milk from "./screens/Milk.js"
+import Milk from "./screens/Milk.js";
 import Sales from "./screens/sales.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
-import Profile from "./screens/Profile.js"
-
+import Profile from "./screens/Profile.js";
 
 const Stack = createStackNavigator();
+
 const App = () => {
-
-
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -39,8 +42,6 @@ const App = () => {
     return null;
   }
 
-  const Stack = createStackNavigator();
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -51,11 +52,9 @@ const App = () => {
 };
 
 const MainScreen = ({ navigation, route }) => {
-  const [view, setView] = useState("")
-  console.log("setViewiewwwwwww", view);
-  const { hideSplashScreen } = route.params || { hideSplashScreen: true }; // Add a default value
+  const [view, setView] = useState("");
+  const { hideSplashScreen } = route.params || { hideSplashScreen: true };
   const currentRouteName = getFocusedRouteNameFromRoute(route);
-
 
   return (
 
@@ -63,24 +62,21 @@ const MainScreen = ({ navigation, route }) => {
       {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
       {/* <View style={styles.headerContainer}>
         <View style={styles.ContainerInBetween}>
-          // <View style={styles.searchContainer}>
-          //   <TextInput style={styles.searchInput} placeholder="Search..." />
-          // </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
-              <FontAwesome6 name="cow" size={24} color="black" />
+              <FontAwesome6 name="cow" size={wp('6%')} color="black" />
               <Text>Dairy Production</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('Sales'); setView('Sales'); }} style={styles.filsa}>
-              <MaterialIcons name="point-of-sale" size={24} color="black" />
+              <MaterialIcons name="point-of-sale" size={wp('6%')} color="black" />
               <Text>Sales</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); setView('DairyValueChain') }} style={styles.filsa}>
-              <MaterialCommunityIcons name="cow" size={24} color="black" />
+              <MaterialCommunityIcons name="cow" size={wp('6%')} color="black" />
               <Text>Dairy Value Chain</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); setView('Expenses') }} style={styles.filsa}>
-              <MaterialCommunityIcons name="point-of-sale" size={24} color="black" />
+              <MaterialCommunityIcons name="point-of-sale" size={wp('6%')} color="black" />
               <Text>Expenses</Text>
             </TouchableOpacity>
           </View>
@@ -90,12 +86,12 @@ const MainScreen = ({ navigation, route }) => {
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Boarding2" component={Boarding2} />
           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
-          <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
           <Stack.Screen name="Article2" component={Article2} />
@@ -111,15 +107,15 @@ const MainScreen = ({ navigation, route }) => {
       {/* <View style={styles.tabBarContainer}>
         <View style={styles.tabBarbuttonContainer}>
           <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
-            <AntDesign name="home" size={24} color="black" />
+            <AntDesign name="home" size={wp('6%')} color="black" />
             <Text style={styles.tabBarbuttonText}> Home</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
-            <AntDesign name="wallet" size={24} color="black" />
+            <AntDesign name="wallet" size={wp('6%')} color="black" />
             <Text style={styles.tabBarbuttonText}> Wallet</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.tabBarbutton}>
-            <AntDesign name="profile" size={24} color="black" />
+            <AntDesign name="profile" size={wp('6%')} color="black" />
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>
         </View>
@@ -133,75 +129,76 @@ const MainScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   windowContainer: {
     flex: 1,
-    // padding: 20,
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   ContainerInBetween: {
-    top: 60,
+    top: hp('8%'),
   },
   headerContainer: {
-    flexDirection: 'column', // Change from 'row' to 'column'
-    justifyContent: 'flex-start', // Adjusted to 'flex-start'
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: wp('0%'),
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     elevation: 2,
-    height: 120,
-    position: 'absolute', // Changed to 'absolute'
-    top: 0, // Adjusted to 0
+    height: hp('13%'),
+    position: 'absolute',
+    top: 0,
     right: 0,
-    left: 0, // Added left
-    zIndex: 2, // Added zIndex to layer on top
+    left: 0,
+    zIndex: 2,
   },
-  // searchContainer: {
-  //   marginBottom: 10,
-  // },
-  // searchInput: {
-  //   height: 40,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   borderRadius: 5,
-  //   paddingLeft: 10,
-  //   width: '100%', // Changed to '100%'
-  // },
   buttonContainer: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     justifyContent: 'space-between',
+    position: "relative",
+    bottom: hp('2%'),
   },
   filsa: {
-    marginLeft: 10,
-    fontSize: 50,
+    marginLeft: wp('2%'),
+    marginRight: wp('2%'),
+    fontSize: wp('10%'),
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   tabBarContainer: {
-    flexDirection: 'column', // Change from 'row' to 'column'
-    justifyContent: 'flex-end', // Adjusted to 'flex-end'
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: wp('2%'),
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     elevation: 2,
-    position: 'absolute', // Changed to 'absolute'
-    bottom: 0, // Adjusted to 0
+    position: 'absolute',
+    bottom: 0,
     right: 0,
-    left: 0, // Added left
-    zIndex: 2, // Added zIndex to layer on top
+    left: 0,
+    zIndex: 2,
+    height: hp('8%'),
   },
   tabBarbuttonContainer: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     alignItems: 'center',
+    justifyContent: 'space-between',
+    position: "relative",
+    top: hp('1%'),
   },
   tabBarbutton: {
-    marginLeft: 10,
-    fontSize: 50,
+    marginLeft: wp('2%'),
+    marginRight: wp('2%'),
+    fontSize: wp('10%'),
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   tabBarbuttonText: {
-    right: 5,
+    right: wp('1%'),
   },
 });
-
 export default App;
