@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
             padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
-            marginTop: 130,  // Adjusted to provide space for the headerContainer
-            marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+            marginTop: 105,  
+            marginBottom: 23,  
       },
       tableContainer: {
             marginTop: 20,
