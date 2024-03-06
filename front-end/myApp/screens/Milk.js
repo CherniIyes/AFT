@@ -6,6 +6,7 @@ import { Card } from 'react-native-paper';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { color } from 'react-native-elements/dist/helpers';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ProfitCalculatorScreen = ({ navigation }) => {
   React.useLayoutEffect(() => {
@@ -24,6 +25,8 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     fetchData();
@@ -31,7 +34,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.137.55:6464/milk');
+      const response = await axios.get('http://192.168.1.10:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -41,7 +44,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.137.55:6464/milk/add', {
+      const response = await axios.post('http://192.168.1.10:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
@@ -110,6 +113,17 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     }
   };
 
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setSelectedDate(currentDate);
+    setDate(currentDate.toISOString().split('T')[0]); // Format the date
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
   return (
     <GestureHandlerRootView style={styles.fullcontainer}>
       <ScrollView
@@ -122,10 +136,18 @@ const ProfitCalculatorScreen = ({ navigation }) => {
           <TextInput
             style={styles.input}
             value={date}
-            onChangeText={setDate}
+            onFocus={showDatepicker}
             keyboardType="default"
           />
         </View>
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
         <Text>Price per Litre:</Text>
         <View style={styles.inputContainer}>
           <Ionicons name="cash-outline" size={24} color="black" style={styles.icon} />

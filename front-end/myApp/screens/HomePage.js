@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
-import { Slider } from "react-native-elements";
+import Slider from "@react-native-community/slider";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,9 +11,13 @@ const HomePage = (props) => {
     "https://c1.wallpaperflare.com/preview/854/259/728/cow-small-calf-baby-meadow-sweet.jpg",
   ];
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [sliderValue, setSliderValue] = useState(0);
   const [articles, setArticles] = useState([]);
   const navigation = useNavigation();
+
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
+  };
 
   useEffect(() => {
     fetchArticles();
@@ -25,13 +29,11 @@ const HomePage = (props) => {
         title: "Importance of dairy hygiene",
         articleImg: "https://c0.wallpaperflare.com/preview/624/812/844/white-and-black-cow-standing-on-green-grass-field-during-daytime.jpg",
         likes: 10,
-        rating: 4.5,
       },
       {
         title: "Teat disinfection",
         articleImg: "https://c1.wallpaperflare.com/preview/314/313/121/cow-milk-cow-beef-pasture.jpg",
         likes: 15,
-        rating: 4.2,
       },
     ];
     setArticles(fetchedArticles);
@@ -39,7 +41,11 @@ const HomePage = (props) => {
 
   const handleCardClick = (title) => {
     console.log("Navigating to full article view:", title);
-    navigation.navigate("FullArticle", { title });
+    if (title === "Importance of dairy hygiene") {
+      navigation.navigate("Article1");
+    } else if (title === "Teat disinfection") {
+      navigation.navigate("Article2");
+    }
   };
 
   const handleLike = (index) => {
@@ -48,61 +54,65 @@ const HomePage = (props) => {
     setArticles(updatedArticles);
   };
 
-  const handleRatingChange = (newRating, index) => {
-    const updatedArticles = [...articles];
-    updatedArticles[index].rating = newRating;
-    setArticles(updatedArticles);
-  };
-
-  const filteredArticles = articles.filter(article =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
         />
       </View>
 
       <ScrollView>
-        <View style={styles.imageContainer}>
-          {filteredArticles.map((article, index) => (
-            <TouchableOpacity key={index} onPress={() => handleCardClick(article.title)}>
-              <View style={styles.card}>
-                <Image
-                  style={styles.cardImage}
-                  source={{ uri: article.articleImg }}
-                />
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>{article.title}</Text>
-                  <View style={styles.ratingContainer}>
-                    <MaterialIcons name="star" size={24} color="#FFD700" />
-                    <Text style={styles.rating}>{article.rating}</Text>
-                  </View>
-                  <View style={styles.likeContainer}>
-                    <TouchableOpacity onPress={() => handleLike(index)}>
-                      <MaterialIcons name="favorite" size={24} color="red" />
-                    </TouchableOpacity>
-                    <Text style={styles.likes}>Likes: {article.likes}</Text>
-                  </View>
-                  <Slider
-                    value={article.rating}
-                    minimumValue={0}
-                    maximumValue={5}
-                    step={0.1}
-                    thumbTintColor="#FFD700"
-                    onValueChange={(value) => handleRatingChange(value, index)}
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+        <View style={styles.sliderContainer}>
+          <Slider
+            value={sliderValue}
+            style={{ width: "100%" }}
+            minimumValue={0}
+            maximumValue={2}
+            minimumTrackTintColor="#34D399"
+            maximumTrackTintColor="#10B981"
+            thumbTintColor="#10B981"
+            onValueChange={handleSliderChange}
+          />
+          <MaterialIcons
+            name="park"
+            size={24}
+            color="#10B981"
+            style={{
+              position: "absolute",
+              left: `${sliderValue * (100 / 2)}%`,
+              top: 20,
+              zIndex: 1,
+            }}
+          />
         </View>
+
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={{ uri: images[Math.floor(sliderValue)] }}
+          />
+        </View>
+
+        <Text style={styles.sectionTitle}>Articles</Text>
+        {articles.map((article, index) => (
+          <TouchableOpacity key={index} onPress={() => handleCardClick(article.title)}>
+            <View style={styles.card}>
+              <Image
+                style={styles.cardImage}
+                source={{ uri: article.articleImg }}
+              />
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{article.title}</Text>
+                <TouchableOpacity onPress={() => handleLike(index)}>
+                  <MaterialIcons name="favorite" size={24} color="red" />
+                </TouchableOpacity>
+                <Text>Likes: {article.likes}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );
@@ -123,16 +133,29 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
+  sliderContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    position: "relative",
+  },
   imageContainer: {
     alignItems: "center",
     marginBottom: 20,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    resizeMode: "cover",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   card: {
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
     marginBottom: 20,
-    width: '90%',
-    alignSelf: 'center',
   },
   cardImage: {
     width: "100%",
@@ -147,22 +170,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  rating: {
-    marginLeft: 5,
-  },
-  likeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  likes: {
-    marginLeft: 5,
   },
 });
 
