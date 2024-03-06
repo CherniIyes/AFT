@@ -24,18 +24,17 @@ AFT`}</Text>
         <View style={[styles.instanceParent, styles.frameViewPosition]}>
 
           <View style={styles.mourabaa}>
-            <View style={[styles.rectangleWrapper, styles.rectangleLayout]}>
+            <View style={[styles.swipeRectangle1, styles.rectangleLayout]}>
               <View style={[styles.instanceChild, styles.instancePosition]} />
             </View>
-            <View style={[styles.rectangleContainer, styles.rectangleLayout]}>
+            <View style={[styles.swipeRectangle2, styles.rectangleLayout]}>
               <View style={[styles.instanceItem, styles.instancePosition]} />
             </View>
           </View>
         </View>
         <Text
           style={[styles.welcomeToAft1, styles.welcomeFlexBox]}
-        >{`Welcome To AFT
-        Elevate Your Farming And Master Your Management`}</Text>
+        >{`Welcome To AFT Elevate Your Farming And Master Your Management`}</Text>
         <View style={[styles.frameView, styles.frameViewPosition]}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Boarding2')}
@@ -44,8 +43,6 @@ AFT`}</Text>
               borderRadius: Border.br_5xl,
               position: 'absolute',
               backgroundColor: '#092f03',
-              top: 35,
-              left: 167,
               width: 129,
               height: 40,
             }}
@@ -71,17 +68,40 @@ const styles = StyleSheet.create({
     width: 1000, // Adjust the width
   },
 
-  rectangleLayout: {
-    height: 6,
-    width: 30,
-    top: 14,
-    position: "absolute",
+  // rectangleLayout: {
+  //   height: 6,
+  //   width: 30,
+  //   top: 0,
+  //   position: "absolute",
+  //   zIndex: 1,
+  // },
+  swipeRectangle1: {
+    left: 47,
   },
-  rectangleWrapper: {
-    left: 31,
+  swipeRectangle2: {
+    left: 80,
   },
-  rectangleContainer: {
-    left: 68,
+  welcomeToAft: {
+    top: -20,
+    left: 20,
+    fontSize: FontSize.titleText_size, // Increase the value here
+    fontWeight: "700",
+    fontSize: 45,
+    fontFamily: FontFamily.titleText,
+    color: Color.colorDarkslategray_100,
+    width: 342,
+    height: 95,
+  },
+
+  welcomeToAft1: {
+    top: 130,
+    left: 15,
+    fontSize: FontSize.paragraphe_size,
+    fontFamily: FontFamily.paragraphe,
+    color: Color.colorBlack,
+    fontSize: 20,
+    width: 350,
+    height: 50,
   },
   // mourabaa: {
   //   position:"relative",
@@ -102,8 +122,8 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xl,
   },
   thirdGreenSquare: {
-    top: 825,
-    left: 216,
+    top: 850,
+    left: 250,
   },
   filsa: {
     borderWidth: 1,
@@ -163,28 +183,7 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     maxHeight: "100%",
   },
-  welcomeToAft: {
-    top: 100,
-    left: 9,
-    fontSize: FontSize.titleText_size, // Increase the value here
-    fontWeight: "700",
-    fontSize: 45,
-    fontFamily: FontFamily.titleText,
-    color: Color.colorDarkslategray_100,
-    width: 342,
-    height: 95,
-  },
 
-  welcomeToAft1: {
-    top: 300,
-    left: -23,
-    fontSize: FontSize.paragraphe_size,
-    fontFamily: FontFamily.paragraphe,
-    color: Color.colorBlack,
-    fontSize: 20,
-    width: 360,
-    height: 83,
-  },
   instanceChild: {
     backgroundColor: Color.colorDarkgreen,
     left: "0%",
@@ -206,10 +205,10 @@ const styles = StyleSheet.create({
   },
 
   frameView: {
-    top: 506,
-    left: -51,
-    width: 463,
-    height: 110,
+    top: 348,
+    left: 130,
+    width: 130,
+    height: 40,
   },
 
 });
