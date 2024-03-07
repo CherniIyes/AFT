@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { createStackNavigator } from "@react-navigation/stack";
@@ -46,9 +41,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
-      </Stack.Navigator>
+      <Navigationsss />
     </NavigationContainer>
   );
 };
