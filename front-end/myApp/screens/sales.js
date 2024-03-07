@@ -3,12 +3,14 @@ import {
   TextInput,
   StyleSheet,
   View,
+  Image,
   Text,
   TouchableOpacity,
   Platform,
   FlatList,
   Pressable,
   Modal,
+  ScrollView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
@@ -36,7 +38,7 @@ const SalesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.100.51:5464/sales/getAll');
+        const response = await axios.get('http://192.168.100.70:5464/sales/getAll');
         setAllAftData(response.data);
         setFilteredAftData(response.data);
       } catch (error) {
@@ -85,7 +87,7 @@ const SalesList = () => {
         productdetails: updatedProductDetails,
       };
 
-      await axios.put(`http://192.168.100.51:5464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.100.70:5464/sales/Update/${selectedItem.id}`, updatedItem);
 
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -101,7 +103,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.50.59:5464/sales/delete/${item.id}`);
+      await axios.delete(`http://192.168.100.70:5464/sales/delete/${item.id}`);
   
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -113,7 +115,7 @@ const SalesList = () => {
 
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.100.51:5464/sales/Add', {
+      const response = await axios.post('http://192.168.100.70:5464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
         date: selectedDate.toLocaleDateString(),
@@ -136,8 +138,6 @@ const SalesList = () => {
       console.error('Error adding product:', error);
     }
   };
-  
-  
 
   const calculateTotal = () => {
     const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
@@ -153,170 +153,171 @@ const SalesList = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.salesListTitle}>Sales List</Text>
+   <View style={styles.container}>
+      <View style={styles.salesList}>
+        <Text style={styles.salesListTitle}>Sales List</Text>
 
-      <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-        <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+          <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
+        </TouchableOpacity>
 
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="spinner"
-          onChange={handleDateChange}
-          textColor="#000"
-          style={{ backgroundColor: '#fff' }}
-        />
-      )}
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="spinner"
+            onChange={handleDateChange}
+            textColor="#000"
+            style={{ backgroundColor: '#fff' }}
+          />
+        )}
 
-      <FlatList
-        data={filteredAftData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Pressable onPress={() => onViewDetails(item)}>
-              <View>
-                <Text>{item.product}</Text>
-                <Text style={styles.date}>{item.date}</Text>
-                <Text>Price: {item.price}DT</Text>
-                <Text>{item.productdetails}</Text>
-              </View>
-            </Pressable>
-            <View style={styles.buttonContainer}>
-              <Pressable style={styles.updateButton} onPress={() => onOpenUpdateModal(item)}>
-                <Text style={styles.buttonText}>Update</Text>
+        <FlatList
+          data={filteredAftData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <Pressable onPress={() => onViewDetails(item)}>
+                <View>
+                  <Text style={styles.productName}>{item.product}</Text>
+                  <Text style={styles.date}>{item.date}</Text>
+                  <Text>Price: {item.price}DT</Text>
+                  <Text>{item.productdetails}</Text>
+                </View>
               </Pressable>
-              <Pressable style={styles.deleteButton} onPress={() => onDelete(item)}>
-                <Text style={styles.buttonText}>Delete</Text>
+              <View style={styles.buttonContainer}>
+                <Pressable style={styles.rectangleView} onPress={() => onOpenUpdateModal(item)}>
+                  <Text style={styles.login}>Update</Text>
+                </Pressable>
+                <Pressable style={styles.deleteButton} onPress={() => onDelete(item)}>
+                  <Text style={styles.buttonText}>Delete</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        />
+
+        {/* Add Button */}
+        <Pressable style={styles.addButton} onPress={onOpenAddModal}>
+          <Text style={styles.login}>+</Text>
+        </Pressable>
+
+        {/* Add Modal */}
+        <Modal visible={isAddModalVisible} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Product"
+                placeholderTextColor="#A0A0A0"
+                value={newProduct}
+                onChangeText={(text) => setNewProduct(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Price"
+                placeholderTextColor="#A0A0A0"
+                value={newPrice}
+                onChangeText={(text) => setNewPrice(text)}
+              />
+              {Platform.OS === 'ios' && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  display="spinner"
+                  onChange={(event, newDate) => setSelectedDate(newDate)}
+                  textColor="#000"
+                  style={{ backgroundColor: '#fff' }}
+                />
+              )}
+              {Platform.OS === 'android' && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  onChange={(event, newDate) => setSelectedDate(newDate)}
+                  textColor="#000"
+                  style={{ backgroundColor: '#fff' }}
+                />
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Product Details"
+                placeholderTextColor="#A0A0A0"
+                value={newProductDetails}
+                onChangeText={(text) => setNewProductDetails(text)}
+              />
+              <Pressable style={styles.rectangleView} onPress={onAdd}>
+                <Text style={styles.login}>Add Product</Text>
+              </Pressable>
+              <Pressable style={styles.rectangleView} onPress={() => setAddModalVisible(false)}>
+                <Text style={styles.login}>Cancel</Text>
               </Pressable>
             </View>
           </View>
-        )}
-      />
+        </Modal>
 
-      {/* Add Button */}
-      <Pressable style={styles.addButton} onPress={onOpenAddModal}>
-        <Text style={styles.buttonText}>+</Text>
-      </Pressable>
-
-      {/* Add Modal */}
-      <Modal visible={isAddModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.input}
-              placeholder="Product"
-              placeholderTextColor="#A0A0A0"
-              value={newProduct}
-              onChangeText={(text) => setNewProduct(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              placeholderTextColor="#A0A0A0"
-              value={newPrice}
-              onChangeText={(text) => setNewPrice(text)}
-            />
-            {Platform.OS === 'ios' && (
-              <DateTimePicker
-                value={selectedDate}
-                mode="date"
-                display="spinner"
-                onChange={(event, newDate) => setSelectedDate(newDate)}
-                textColor="#000"
-                style={{ backgroundColor: '#fff' }}
+        {/* Update Modal */}
+        <Modal visible={isUpdateModalVisible} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Product"
+                placeholderTextColor="#A0A0A0"
+                value={updatedProduct}
+                onChangeText={(text) => setUpdatedProduct(text)}
               />
-            )}
-            {Platform.OS === 'android' && (
-              <DateTimePicker
-                value={selectedDate}
-                mode="date"
-                onChange={(event, newDate) => setSelectedDate(newDate)}
-                textColor="#000"
-                style={{ backgroundColor: '#fff' }}
+              <TextInput
+                style={styles.input}
+                placeholder="Price"
+                placeholderTextColor="#A0A0A0"
+                value={updatedPrice}
+                onChangeText={(text) => setUpdatedPrice(text)}
               />
-            )}
-            <TextInput
-              style={styles.input}
-              placeholder="Product Details"
-              placeholderTextColor="#A0A0A0"
-              value={newProductDetails}
-              onChangeText={(text) => setNewProductDetails(text)}
-            />
-            <Pressable style={styles.rectangleView} onPress={onAdd}>
-              <Text style={styles.login}>Add Product</Text>
-            </Pressable>
-            <Pressable style={styles.rectangleView} onPress={() => setAddModalVisible(false)}>
-              <Text style={styles.login}>Cancel</Text>
-            </Pressable>
+              {Platform.OS === 'ios' && (
+                <DateTimePicker
+                  value={updatedDate}
+                  mode="date"
+                  display="spinner"
+                  onChange={(event, newDate) => setUpdatedDate(newDate)}
+                  textColor="#000"
+                  style={{ backgroundColor: '#fff' }}
+                />
+              )}
+              {Platform.OS === 'android' && (
+                <DateTimePicker
+                  value={updatedDate}
+                  mode="date"
+                  onChange={(event, newDate) => setUpdatedDate(newDate)}
+                  textColor="#000"
+                  style={{ backgroundColor: '#fff' }}
+                />
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Product Details"
+                placeholderTextColor="#A0A0A0"
+                value={updatedProductDetails}
+                onChangeText={(text) => setUpdatedProductDetails(text)}
+              />
+              <Pressable style={styles.rectangleView} onPress={onUpdate}>
+                <Text style={styles.login}>Update</Text>
+              </Pressable>
+              <Pressable style={styles.rectangleView} onPress={() => setUpdateModalVisible(false)}>
+                <Text style={styles.login}>Cancel</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      {/* Update Modal */}
-      <Modal visible={isUpdateModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.input}
-              placeholder="Product"
-              placeholderTextColor="#A0A0A0"
-              value={updatedProduct}
-              onChangeText={(text) => setUpdatedProduct(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              placeholderTextColor="#A0A0A0"
-              value={updatedPrice}
-              onChangeText={(text) => setUpdatedPrice(text)}
-            />
-            {Platform.OS === 'ios' && (
-              <DateTimePicker
-                value={updatedDate}
-                mode="date"
-                display="spinner"
-                onChange={(event, newDate) => setUpdatedDate(newDate)}
-                textColor="#000"
-                style={{ backgroundColor: '#fff' }}
-              />
-            )}
-            {Platform.OS === 'android' && (
-              <DateTimePicker
-                value={updatedDate}
-                mode="date"
-                onChange={(event, newDate) => setUpdatedDate(newDate)}
-                textColor="#000"
-                style={{ backgroundColor: '#fff' }}
-              />
-            )}
-            <TextInput
-              style={styles.input}
-              placeholder="Product Details"
-              placeholderTextColor="#A0A0A0"
-              value={updatedProductDetails}
-              onChangeText={(text) => setUpdatedProductDetails(text)}
-            />
-            <Pressable style={styles.rectangleView} onPress={onUpdate}>
-              <Text style={styles.login}>Update</Text>
-            </Pressable>
-            <Pressable style={styles.rectangleView} onPress={() => setUpdateModalVisible(false)}>
-              <Text style={styles.login}>Cancel</Text>
-            </Pressable>
-          </View>
+        {/* Display Total */}
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
         </View>
-      </Modal>
-
-      {/* Display Total */}
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
       </View>
-    </View>
+     </View> 
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -327,8 +328,16 @@ const styles = StyleSheet.create({
     marginTop: 105,  // Adjusted to provide space for the headerContainer
     marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
   },
+  
   salesListTitle: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333333',
+  },
+  
+  productName: {
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333333',
@@ -351,9 +360,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   updateButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4CAF50', // Green color, you can change this
     padding: 10,
     borderRadius: 5,
+    marginRight: 10, // Adjust spacing as needed
   },
   deleteButton: {
     backgroundColor: '#f44336',
@@ -361,7 +371,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   addButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'darkolivegreen',
     padding: 10,
     borderRadius: 5,
     alignSelf: 'flex-end',
@@ -393,7 +403,7 @@ const styles = StyleSheet.create({
   rectangleView: {
     borderRadius: 7,
     backgroundColor: 'darkolivegreen',
-    width: 240,
+    width: 115,
     height: 32,
     marginTop: 10,
   },

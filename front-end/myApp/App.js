@@ -90,7 +90,9 @@ const MainScreen = ({ navigation, route }) => {
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Sales" component={Sales} />
          <Stack.Screen name="Login" component={Login} />
+        
           <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
@@ -102,7 +104,7 @@ const MainScreen = ({ navigation, route }) => {
           <Stack.Screen name="Milk" component={Milk} />
    
           <Stack.Screen name="logOrSign" component={loginOrSign} />
-          <Stack.Screen name="Sales" component={Sales} />
+          
           <Stack.Screen name="profile" component={profile} />
         </Stack.Navigator>
       ) : (
@@ -134,7 +136,7 @@ const MainScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   windowContainer: {
     flex: 1,
-    padding: 20,
+    // padding: 20,
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   ContainerInBetween: {
