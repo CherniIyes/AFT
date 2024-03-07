@@ -132,7 +132,9 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         }>
         <Text>Date:</Text>
         <View style={styles.inputContainer}>
-          <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
+          <TouchableOpacity onPress={showDatepicker}>
+            <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
+          </TouchableOpacity>
           <TextInput
             style={styles.input}
             value={date}
