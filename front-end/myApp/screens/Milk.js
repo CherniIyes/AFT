@@ -16,7 +16,7 @@ const ProfitCalculatorScreen = () => {
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
-const [reload,setReload]=useState(true)
+  const [reload, setReload] = useState(true)
   useEffect(() => {
     fetchData();
   }, [reload]);
@@ -25,7 +25,7 @@ const [reload,setReload]=useState(true)
       // const response = await axios.get('http://192.168.100.62:6464/milk');
       // If you want to use a different endpoint, you should change the URL in the line above.
       // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.100.42:6464/milk');
+      const response = await axios.get('http://192.168.100.52:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -46,14 +46,14 @@ const [reload,setReload]=useState(true)
       //   price: parseFloat(price),
       //   quantity: parseInt(quantity),
       // }); 
-      const response = await axios.post('http://192.168.100.42:6464/milk/add', {
+      const response = await axios.post('http://192.168.100.52:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
       });
       if (response.status === 200) {
         // Update frontend state with the new entry
-    setReload(!reload)
+        setReload(!reload)
         // Calculate total price
         const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
         setTotalPrice(totalPrice);
