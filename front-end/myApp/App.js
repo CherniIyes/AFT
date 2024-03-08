@@ -11,8 +11,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 // import { createStore } from 'redux'
-import { Provider } from 'react-redux';
-import store from './redux/store.js';
+// import { Provider } from 'react-redux';
+// import store from './redux/store.js';
 
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -46,13 +46,13 @@ const App = () => {
   }
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    // <Provider store={store}>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    // </Provider>
   );
 };
 
@@ -66,7 +66,7 @@ const MainScreen = ({ navigation, route }) => {
 
     <View style={styles.windowContainer}>
       {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
-      <View style={styles.headerContainer}>
+      {/* <View style={styles.headerContainer}>
         <View style={styles.ContainerInBetween}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
@@ -87,7 +87,7 @@ const MainScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> */}
       {/* // )} */}
 
       {hideSplashScreen ? (
@@ -110,7 +110,7 @@ const MainScreen = ({ navigation, route }) => {
         <View />
       )}
       {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
-      <View style={styles.tabBarContainer}>
+      {/* <View style={styles.tabBarContainer}>
         <View style={styles.tabBarbuttonContainer}>
           <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
             <AntDesign name="home" size={wp('6%')} color="black" />
@@ -125,7 +125,7 @@ const MainScreen = ({ navigation, route }) => {
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       {/* )} */}
     </View>
 
