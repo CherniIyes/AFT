@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { Provider } from 'react-redux';
 
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -24,6 +20,7 @@ import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
 import Profile from "./screens/Profile.js";
+import store from './redux/store.js';
 
 const Stack = createStackNavigator();
 
@@ -44,9 +41,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
-      </Stack.Navigator>
+      <Navigationsss />
     </NavigationContainer>
   );
 };
@@ -57,10 +52,11 @@ const MainScreen = ({ navigation, route }) => {
   const currentRouteName = getFocusedRouteNameFromRoute(route);
 
   return (
+    // <Provider store={store}>
 
-    <View style={styles.windowContainer}>
-      {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
-      {/* <View style={styles.headerContainer}>
+      <View style={styles.windowContainer}>
+        {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
+        <View style={styles.headerContainer}>
         <View style={styles.ContainerInBetween}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
@@ -81,8 +77,8 @@ const MainScreen = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View> */}
-      {/* // )} */}
+      </View>
+        {/* // )} */}
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -91,6 +87,7 @@ const MainScreen = ({ navigation, route }) => {
 
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+          <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
                 
@@ -111,15 +108,15 @@ const MainScreen = ({ navigation, route }) => {
       {/* <View style={styles.tabBarContainer}>
         <View style={styles.tabBarbuttonContainer}>
           <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
-            <AntDesign name="home" size={wp('6%')} color="black" />
+            <AntDesign name="home" size={24} color="black" />
             <Text style={styles.tabBarbuttonText}> Home</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
-            <AntDesign name="wallet" size={wp('6%')} color="black" />
+            <AntDesign name="wallet" size={24} color="black" />
             <Text style={styles.tabBarbuttonText}> Wallet</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.tabBarbutton}>
-            <AntDesign name="profile" size={wp('6%')} color="black" />
+            <AntDesign name="profile" size={24} color="black" />
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>
         </View>
@@ -128,11 +125,13 @@ const MainScreen = ({ navigation, route }) => {
     </View>
   );
 
+
 };
 
 const styles = StyleSheet.create({
   windowContainer: {
     flex: 1,
+    // padding: 20,
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   ContainerInBetween: {

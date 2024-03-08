@@ -1,39 +1,32 @@
 import React from "react";
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  Linking, 
-  Image, 
-  ScrollView, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  Image,
+  ScrollView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
-const ProfessionalProfile = (props) => {
-  console.log("user",props.user);
-  var user = {}
-  // Constants
+import { Ionicons } from "@expo/vector-icons";
+import { useSelector, useDispatch } from 'react-redux';
+
+const ProfessionalProfile = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  console.log("user", user);
+
   const profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNErRk-0VnxqOmNa71Rok-FLZKUt6Y38mJkA&usqp=CAU";
 
-  // Functions
-  const openLinkedIn = () => Linking.openURL("https://www.linkedin.com/in/john-doe/");
-  const openEmail = () => Linking.openURL("mailto:john.doe@example.com");
-  const makeCall = () => Linking.openURL("tel:+21699047273");
-  if(localStorage.getItem('user')!= undefined)
-  {
-    
-     user = JSON.parse( localStorage.getItem('user'))
-  // JSX
-  }
-  console.log(user);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
         <View style={styles.userInfo}>
           <Text style={styles.name}>{user.username}</Text>
-          <Text style={styles.dob}>Date of Birth: January 1, 1980</Text>
+          <Text style={styles.dob}></Text>
         </View>
       </View>
 
@@ -47,18 +40,18 @@ const ProfessionalProfile = (props) => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Contact:</Text>
         <View style={styles.contactContainer}>
-          <TouchableOpacity onPress={openEmail} style={styles.contactItem}>
+          {/* <TouchableOpacity onPress={openEmail} style={styles.contactItem}>
             <Ionicons name="mail" size={24} color="#F6B304" />
             <Text style={styles.contactText}>Email</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={makeCall} style={styles.contactItem}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity onPress={makeCall} style={styles.contactItem}>
             <Ionicons name="call" size={24} color="#F6B304" />
             <Text style={styles.contactText}>Call</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openLinkedIn} style={styles.contactItem}>
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity onPress={openLinkedIn} style={styles.contactItem}>
             <Ionicons name="logo-linkedin" size={24} color="#F6B304" />
             <Text style={styles.contactText}>LinkedIn</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -196,4 +189,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfessionalProfile;
- 

@@ -1,25 +1,30 @@
 import React, { useState } from "react";
-import { Image } from "expo-image";
-import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
-import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
+import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/action';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 import axios from 'axios';
 import Profile from "./Profile.js"
 import HomePage from "./HomePage.js";
 
-const AndroidSmall1 = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [user, setUser] = useState('');
   
   const handleEmailChange = (text) => {
     setEmail(text);
   };
+
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
-  console.log(email);
+
   const handleSignIn = async () => {
     try {
       if (!email || !password) {
@@ -27,6 +32,7 @@ const AndroidSmall1 = ({ navigation }) => {
         return;
       }
 
+      const loginResponse = await axios.post('http://192.168.100.52:6464/user/login', {
       console.log('Password being sent:', password);
 
       const loginResponse = await axios.post('http://192.168.137.55:6464/user/login', {
@@ -34,13 +40,14 @@ const AndroidSmall1 = ({ navigation }) => {
         password,
       });
 
-      console.log('Login API response:', loginResponse);
-
       if (!loginResponse || !loginResponse.data || loginResponse.data.error) {
         console.error("Login error:", loginResponse.data?.error);
         alert("Invalid email or password. Please try again.");
         return;
       }
+
+      const userData = loginResponse.data;
+      dispatch(login(userData));
 
       // localStorage.setItem('user',JSON.stringify(loginResponse.data));
       // setUser(loginResponse.data);
@@ -53,7 +60,7 @@ const AndroidSmall1 = ({ navigation }) => {
       setEmail('');
       setPassword('');
       navigation.navigate('HomePage');
-      alert("Sign in successful");
+      alert(`Sign in successful! Welcome, ${userData.username}`);
     } catch (error) {
       console.error("Error during sign-in:", error);
 
@@ -65,75 +72,56 @@ const AndroidSmall1 = ({ navigation }) => {
     }
   };
 
+
   return (
-    <View style={styles.androidSmall1}>
-      <Image
-        style={styles.androidSmall1Child}
-        contentFit="cover"
-        source={require("../assets/rectangle-2.png")}
-      />
-      {/* <View style={[styles.androidSmall1Item, styles.androidLayout]} /> */}
-      <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
-      <View style={[styles.lineView, styles.lineViewLayout]} />
-      <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
-      <View style={[styles.vectorParent, styles.vectorFlexBox]}>
-        {/* <Image
-          style={styles.iconLayout}
+    // <Provider store={store}>
+      <View style={styles.androidSmall1}>
+        <Image
+          style={styles.androidSmall1Child}
           contentFit="cover"
-          source={require("../assets/vector1.png")}
-        /> */}
-        <TextInput
-          style={styles.email}
-          placeholder="Email"
-          onChangeText={handleEmailChange}
-          value={email}
+          source={require("../assets/rectangle-2.png")}
         />
-      </View>
-      <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
-        {/* <Image
-          style={styles.vectorIcon1}
-          contentFit="cover"
-          source={require("../assets/vector2.png")}
-        /> */}
-        <TextInput
-          style={styles.email}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-          value={password}
-        />
+        <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
+        <View style={[styles.lineView, styles.lineViewLayout]} />
+        <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
+        <View style={[styles.vectorParent, styles.vectorFlexBox]}>
+          <TextInput
+            style={styles.email}
+            placeholder="Email"
+            onChangeText={handleEmailChange}
+            value={email}
+          />
+        </View>
+        <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
+          <TextInput
+            style={styles.email}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={handlePasswordChange}
+            value={password}
+          />
 
-      </View>
-      <View style={styles.rectangleView} />
-      {/* <View style={styles.androidSmall1Child2} /> */}
-      {/* <Text style={[styles.rememberMe, styles.rememberMeTypo]}>
-        Remember me
-      </Text>
-      <Text style={[styles.forgotPassword, styles.rememberMeTypo]}>
-        Forgot password?
-      </Text> */}
-      {/* <Image
-        style={[styles.eleyeCloseIcon, styles.iconLayout]}
-        contentFit="cover"
-        source={require("../assets/eleyeclose.png")}
-      /> */}
-      <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
-        <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
-      </TouchableOpacity>
+        </View>
+        <View style={styles.rectangleView} />
+        <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
+          <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.dontHaveAnContainer}>
-        <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
-        <Text style={[styles.signUp, styles.loginTypo]}>
+        <Text style={styles.dontHaveAnContainer}>
+          <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
+          <Text style={[styles.signUp, styles.loginTypo]}>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CreatAcc')}
-          >
-            <Text style={styles.sign}>Sign Up</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('CreatAcc')}
+            >
+              <Text style={styles.sign}>Sign Up</Text>
+            </TouchableOpacity>
+          </Text>
         </Text>
-      </Text>
-      <Text style={styles.logIn}>{`Log In `}</Text>
-    </View>
+        <Text style={styles.logIn}>{`Log In `}</Text>
+      </View>
+    // </Provider>
+
   );
 };
 
@@ -149,12 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorDarkslategray_200,
     borderRadius: Border.br_5xl,
     position: "absolute",
-  },  
-  // loginfilsa: {
-    
-  //   position: "relative",
-  //   right:100,
-  // },
+  },
 
   lineViewLayout: {
     height: 1,
@@ -317,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AndroidSmall1;
+export default LoginScreen;
