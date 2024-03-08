@@ -56,12 +56,12 @@ const HomePage = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
+      {/* <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search..."
         />
-      </View>
+      </View> */}
 
       <ScrollView>
         <View style={styles.sliderContainer}>

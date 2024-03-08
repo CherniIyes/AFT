@@ -19,7 +19,7 @@ const AndroidSmall1 = ({ navigation }) => {
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
-console.log(email);
+  console.log(email);
   const handleSignIn = async () => {
     try {
       if (!email || !password) {
@@ -72,16 +72,16 @@ console.log(email);
         contentFit="cover"
         source={require("../assets/rectangle-2.png")}
       />
-      <View style={[styles.androidSmall1Item, styles.androidLayout]} />
+      {/* <View style={[styles.androidSmall1Item, styles.androidLayout]} /> */}
       <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
       <View style={[styles.lineView, styles.lineViewLayout]} />
       <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
       <View style={[styles.vectorParent, styles.vectorFlexBox]}>
-        <Image
+        {/* <Image
           style={styles.iconLayout}
           contentFit="cover"
           source={require("../assets/vector1.png")}
-        />
+        /> */}
         <TextInput
           style={styles.email}
           placeholder="Email"
@@ -90,11 +90,11 @@ console.log(email);
         />
       </View>
       <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
-        <Image
+        {/* <Image
           style={styles.vectorIcon1}
           contentFit="cover"
           source={require("../assets/vector2.png")}
-        />
+        /> */}
         <TextInput
           style={styles.email}
           placeholder="Password"
@@ -105,19 +105,19 @@ console.log(email);
 
       </View>
       <View style={styles.rectangleView} />
-      <View style={styles.androidSmall1Child2} />
-      <Text style={[styles.rememberMe, styles.rememberMeTypo]}>
+      {/* <View style={styles.androidSmall1Child2} /> */}
+      {/* <Text style={[styles.rememberMe, styles.rememberMeTypo]}>
         Remember me
       </Text>
       <Text style={[styles.forgotPassword, styles.rememberMeTypo]}>
         Forgot password?
-      </Text>
-      <Image
+      </Text> */}
+      {/* <Image
         style={[styles.eleyeCloseIcon, styles.iconLayout]}
         contentFit="cover"
         source={require("../assets/eleyeclose.png")}
-      />
-      <TouchableOpacity onPress={handleSignIn}>
+      /> */}
+      <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
         <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
       </TouchableOpacity>
 
@@ -149,10 +149,16 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorDarkslategray_200,
     borderRadius: Border.br_5xl,
     position: "absolute",
-  },
+  },  
+  // loginfilsa: {
+    
+  //   position: "relative",
+  //   right:100,
+  // },
+
   lineViewLayout: {
     height: 1,
-    width: 241,
+    width: 270,
     borderTopWidth: 1,
     borderStyle: "solid",
     left: 66,
@@ -193,8 +199,8 @@ const styles = StyleSheet.create({
     left: -65,
   },
   androidSmall1Inner: {
-    top: 598,
-    left: 216,
+    top: 850,
+    left: 250,
   },
   lineView: {
     top: 347,
@@ -209,6 +215,9 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray_200,
     textAlign: "left",
     fontFamily: FontFamily.interRegular,
+    width: 233,
+    position: "relative",
+    right: 10,
   },
   vectorParent: {
     top: 321,
@@ -227,16 +236,16 @@ const styles = StyleSheet.create({
     top: 463,
     borderRadius: Border.br_7xs,
     backgroundColor: Color.colorDarkolivegreen,
-    width: 240,
+    width: 200,
     height: 32,
-    left: 66,
+    left: 100,
     position: "absolute",
   },
   androidSmall1Child2: {
     borderRadius: Border.br_12xs,
     backgroundColor: Color.colorLightgray,
     height: 11,
-    top: 425,
+    top: 500,
     width: 11,
     left: 66,
     position: "absolute",
@@ -257,7 +266,7 @@ const styles = StyleSheet.create({
   },
   login: {
     top: 470,
-    left: 161,
+    left: 180,
     fontSize: FontSize.size_base,
     color: Color.colorOrange_200,
     textAlign: "left",
@@ -270,6 +279,8 @@ const styles = StyleSheet.create({
   },
   sign: {
     color: Color.colorSeagreen,
+    position: "relative",
+    top: 3,
   },
   text: {
     color: Color.colorGoldenrod,
@@ -279,7 +290,7 @@ const styles = StyleSheet.create({
   },
   dontHaveAnContainer: {
     top: 513,
-    left: 87,
+    left: 120,
     fontSize: FontSize.size_xs,
     textAlign: "left",
     position: "absolute",
@@ -293,6 +304,8 @@ const styles = StyleSheet.create({
     textAlign: "left",
     left: 80,
     position: "absolute",
+    fontSize: 30,
+
   },
   androidSmall1: {
     borderRadius: Border.br_xl,

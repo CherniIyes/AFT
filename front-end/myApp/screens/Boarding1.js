@@ -6,10 +6,12 @@ import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
 
 const AndroidSmall = ({ navigation }) => {
   return (
+
+
     <View style={styles.androidSmall7}>
-      <View style={[styles.androidSmall7Child, styles.androidLayout]} />
-      <View style={[styles.androidSmall7Item, styles.androidLayout]} />
-      <View style={[styles.androidSmall7Inner, styles.androidLayout]} />
+      <View style={[styles.secondGreenSquare, styles.androidLayout]} />
+      <View style={[styles.firstGreenSquare, styles.androidLayout]} />
+      <View style={[styles.thirdGreenSquare, styles.androidLayout]} />
       <Image
         style={[styles.vectorIcon, styles.frameViewPosition]}
         contentFit="cover"
@@ -20,17 +22,19 @@ const AndroidSmall = ({ navigation }) => {
         <Text style={[styles.welcomeToAft, styles.welcomeFlexBox]}>{`Welcome to 
 AFT`}</Text>
         <View style={[styles.instanceParent, styles.frameViewPosition]}>
-          <View style={[styles.rectangleWrapper, styles.rectangleLayout]}>
-            <View style={[styles.instanceChild, styles.instancePosition]} />
-          </View>
-          <View style={[styles.rectangleContainer, styles.rectangleLayout]}>
-            <View style={[styles.instanceItem, styles.instancePosition]} />
+
+          <View style={styles.mourabaa}>
+            <View style={[styles.swipeRectangle1, styles.rectangleLayout]}>
+              <View style={[styles.instanceChild, styles.instancePosition]} />
+            </View>
+            <View style={[styles.swipeRectangle2, styles.rectangleLayout]}>
+              <View style={[styles.instanceItem, styles.instancePosition]} />
+            </View>
           </View>
         </View>
         <Text
           style={[styles.welcomeToAft1, styles.welcomeFlexBox]}
-        >{`Welcome To AFT
-        Elevate Your Farming And Master Your Management`}</Text>
+        >{`Welcome To AFT Elevate Your Farming And Master Your Management`}</Text>
         <View style={[styles.frameView, styles.frameViewPosition]}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Boarding2')}
@@ -39,8 +43,6 @@ AFT`}</Text>
               borderRadius: Border.br_5xl,
               position: 'absolute',
               backgroundColor: '#092f03',
-              top: 35,
-              left: 167,
               width: 129,
               height: 40,
             }}
@@ -51,10 +53,78 @@ AFT`}</Text>
         </View>
       </View>
     </View >
+
   );
 };
 
 const styles = StyleSheet.create({
+
+  androidSmall7: {
+    borderRadius: Border.br_xl,
+    backgroundColor: Color.colorWhite,
+    flex: 1,
+    height: 800, // Adjust the height
+    overflow: "hidden",
+    width: 1000, // Adjust the width
+  },
+
+  // rectangleLayout: {
+  //   height: 6,
+  //   width: 30,
+  //   top: 0,
+  //   position: "absolute",
+  //   zIndex: 1,
+  // },
+  swipeRectangle1: {
+    left: 47,
+  },
+  swipeRectangle2: {
+    left: 80,
+  },
+  welcomeToAft: {
+    top: -20,
+    left: 20,
+    fontSize: FontSize.titleText_size, // Increase the value here
+    fontWeight: "700",
+    fontSize: 45,
+    fontFamily: FontFamily.titleText,
+    color: Color.colorDarkslategray_100,
+    width: 342,
+    height: 95,
+  },
+
+  welcomeToAft1: {
+    top: 130,
+    left: 15,
+    fontSize: FontSize.paragraphe_size,
+    fontFamily: FontFamily.paragraphe,
+    color: Color.colorBlack,
+    fontSize: 20,
+    width: 350,
+    height: 50,
+  },
+  // mourabaa: {
+  //   position:"relative",
+  //   bottom:25,
+  // },
+  firstGreenSquare: {
+    top: 15,
+    left: -80,
+    height: 101,
+    width: 208,
+    borderRadius: Border.br_5xl,
+  },
+  secondGreenSquare: {
+    top: 108,
+    left: -65,
+    height: 101,
+    width: 208,
+    borderRadius: Border.br_5xl,
+  },
+  thirdGreenSquare: {
+    top: 850,
+    left: 250,
+  },
   filsa: {
     borderWidth: 1,
     borderRadius: Border.br_5xl,
@@ -92,12 +162,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     position: "absolute",
   },
-  rectangleLayout: {
-    height: 6,
-    width: 30,
-    top: 14,
-    position: "absolute",
-  },
+
   instancePosition: {
     borderRadius: Border.br_8xs,
     left: "0%",
@@ -107,24 +172,6 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "absolute",
     width: "100%",
-  },
-  androidSmall7Child: {
-    top: 108,
-    left: -65,
-    height: 101,
-    width: 208,
-    borderRadius: Border.br_5xl,
-  },
-  androidSmall7Item: {
-    top: 11,
-    left: -65,
-    height: 101,
-    width: 208,
-    borderRadius: Border.br_5xl,
-  },
-  androidSmall7Inner: {
-    top: 598,
-    left: 216,
   },
   vectorIcon: {
     height: "3.59%",
@@ -136,16 +183,7 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     maxHeight: "100%",
   },
-  welcomeToAft: {
-    top: 166,
-    left: 9,
-    fontSize: FontSize.titleText_size,
-    fontWeight: "700",
-    fontFamily: FontFamily.titleText,
-    color: Color.colorDarkslategray_100,
-    width: 342,
-    height: 95,
-  },
+
   instanceChild: {
     backgroundColor: Color.colorDarkgreen,
     left: "0%",
@@ -154,44 +192,25 @@ const styles = StyleSheet.create({
     top: "0%",
     height: "100%",
   },
-  rectangleWrapper: {
-    left: 31,
-  },
+
   instanceItem: {
     backgroundColor: Color.gray4,
   },
-  rectangleContainer: {
-    left: 68,
-  },
+
   instanceParent: {
     top: 465,
     left: 116,
     width: 129,
     height: 33,
   },
-  welcomeToAft1: {
-    top: 348,
-    left: -2,
-    fontSize: FontSize.paragraphe_size,
-    fontFamily: FontFamily.paragraphe,
-    color: Color.colorBlack,
-    width: 360,
-    height: 83,
-  },
+
   frameView: {
-    top: 506,
-    left: -51,
-    width: 463,
-    height: 110,
+    top: 348,
+    left: 130,
+    width: 130,
+    height: 40,
   },
-  androidSmall7: {
-    borderRadius: Border.br_xl,
-    backgroundColor: Color.colorWhite,
-    flex: 1,
-    height: 640,
-    overflow: "hidden",
-    width: "100%",
-  },
+
 });
 
 export default AndroidSmall;
