@@ -1,155 +1,7 @@
-// import React, { useState } from 'react';
-// import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
-
-
-
-// const DairyValueChain = () => {
-//   const [cowNumber, setCowNumber] = useState('');
-//   const [cowRace, setCowRace] = useState('');
-//   const [aiDate, setAiDate] = useState('');
-//   const [aiTriggered, setAiTriggered] = useState(false);
-//   const [calculatedDates, setCalculatedDates] = useState(null);
-
-//   const handleSubmit = () => {
-
-//     const aiDateObj = new Date(aiDate);
-//     const returnInHeatControlDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 18));
-//     const pregnancyDetectionDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 27));
-//     const dryingOffDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 175));
-//     const calvingAndDeliveryDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 63));
-
-//     setCalculatedDates({
-//       returnInHeatControlDate,
-//       pregnancyDetectionDate,
-//       dryingOffDate,
-//       calvingAndDeliveryDate,
-//     });
-//   };
-
-//   const handleToggle = () => {
-//     setAiTriggered(!aiTriggered);
-
-//     if (!aiTriggered) {
-//       setCalculatedDates(null);
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Dairy Value Chain</Text>
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Cow Number"
-//         value={cowNumber}
-//         onChangeText={setCowNumber}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Cow Race"
-//         value={cowRace}
-//         onChangeText={setCowRace}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Artificial Insemination Date (YYYY-MM-DD)"
-//         value={aiDate}
-//         onChangeText={setAiDate}
-//       />
-//       <View style={styles.switchContainer}>
-//         <Text style={styles.switchText}>Artificial Insemination Triggered:</Text>
-//         <Switch value={aiTriggered} onValueChange={handleToggle} />
-//       </View>
-//       <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
-//       {calculatedDates && (
-//         <>
-//           <View style={styles.dateContainer}>
-//             <Text style={styles.dateText}>Return in Heat Control Date</Text>
-//             <TextInput
-//               style={styles.dateInput}
-//               value={calculatedDates.returnInHeatControlDate.toISOString().split('T')[0]}
-//               editable={false}
-//             />
-//           </View>
-//           <View style={styles.dateContainer}>
-//             <Text style={styles.dateText}>Pregnancy Detection Date</Text>
-//             <TextInput
-//               style={styles.dateInput}
-//               value={calculatedDates.pregnancyDetectionDate.toISOString().split('T')[0]}
-//               editable={false}
-//             />
-//           </View>
-//           <View style={styles.dateContainer}>
-//             <Text style={styles.dateText}>Drying Off Date</Text>
-//             <TextInput
-//               style={styles.dateInput}
-//               value={calculatedDates.dryingOffDate.toISOString().split('T')[0]}
-//               editable={false}
-//             />
-//           </View>
-//           <View style={styles.dateContainer}>
-//             <Text style={styles.dateText}>Calving and Delivery Date</Text>
-//             <TextInput
-//               style={styles.dateInput}
-//               value={calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]}
-//               editable={false}
-//             />
-//           </View>
-//         </>
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 20,
-//     backgroundColor: '#FFFFFF',
-//   },
-//   title: {
-//     fontSize: 24,
-//     marginBottom: 20,
-//     color: '#107c2e',
-//     fontWeight: 'bold',
-//   },
-//   input: {
-//     marginBottom: 10,
-//     borderWidth: 1,
-//     padding: 10,
-//     borderColor: '#ccc',
-//   },
-//   switchContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginBottom: 10,
-//   },
-//   switchText: {
-//     marginRight: 10,
-//   },
-//   dateContainer: {
-//     marginBottom: 10,
-//   },
-//   dateText: {
-//     marginBottom: 5,
-//     fontWeight: 'bold',
-//   },
-//   dateInput: {
-//     marginBottom: 10,
-//     borderWidth: 1,
-//     padding: 10,
-//     borderColor: '#ccc',
-//   },
-//   button: {
-//     backgroundColor: '',
-//     padding: 10,
-//     borderRadius: 5,
-//   },
-// });
-
-// export default DairyValueChain;
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
-
+import { View, Text, TextInput, Button, Switch, StyleSheet, TouchableOpacity, Platform, ScrollView } from 'react-native';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const DairyValueChain = () => {
   const [cowNumber, setCowNumber] = useState('');
@@ -157,9 +9,35 @@ const DairyValueChain = () => {
   const [aiDate, setAiDate] = useState('');
   const [aiTriggered, setAiTriggered] = useState(false);
   const [calculatedDates, setCalculatedDates] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [cowDataList, setCowDataList] = useState([]);
+  const [allCows, setAllCows] = useState([]);
+
+  const fetchAllCows = () => {
+    fetch('http://192.168.1.15:6464/cows/all')
+      .then(response => response.json())
+      .then(data => {
+        console.log('All cows data:', data);
+        setAllCows(data); // Assuming data is an array of cow objects
+      })
+      .catch(error => {
+        console.error('Error fetching all cows:', error);
+      });
+  };
+
+  useEffect(() => {
+    // Fetch all cows when component mounts
+    fetchAllCows();
+  }, []);
 
   const handleSubmit = () => {
-    const aiDateObj = new Date(aiDate);
+    if (!selectedDate) {
+      console.error('Please select a date for artificial insemination.');
+      return;
+    }
+
+    const aiDateObj = new Date(selectedDate);
     const returnInHeatControlDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 18));
     const pregnancyDetectionDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 27));
     const dryingOffDate = new Date(aiDateObj.setDate(aiDateObj.getDate() + 175));
@@ -182,115 +60,160 @@ const DairyValueChain = () => {
   };
 
   const saveToDatabase = () => {
-    // Prepare data to send to backend
     const cowData = {
       cow_number: cowNumber,
       cow_race: cowRace,
       artificial_insemination_date: aiDate,
-      artificial_insemination_triggered: aiTriggered ? "Yes" : "No", // Convert boolean to "Yes" or "No"
+      artificial_insemination_triggered: aiTriggered ? "Yes" : "No",
       return_in_heat_control_date: calculatedDates.returnInHeatControlDate.toISOString().split('T')[0],
       pregnancy_detection_date: calculatedDates.pregnancyDetectionDate.toISOString().split('T')[0],
       drying_off_date: calculatedDates.dryingOffDate.toISOString().split('T')[0],
       calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
     };
 
-
-    fetch('http://192.168.100.53:6464/cows/add', {
+    fetch('http://192.168.1.15:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(cowData),
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Data successfully saved:', data);
-
-        setCowNumber('');
-        setCowRace('');
-        setAiDate('');
-        setCalculatedDates(null);
-        setAiTriggered(false);
-      })
-      .catch(error => {
-        console.error('Error saving data:', error);
-      });
+    .then(response => response.json())
+    .then(data => {
+      console.log('Data successfully saved:', data);
+      setCowNumber('');
+      setCowRace('');
+      setAiDate('');
+      setCalculatedDates(null);
+      setAiTriggered(false);
+    })
+    .catch(error => {
+      console.error('Error saving data:', error);
+    });
   };
 
+  const handleDateIconPress = () => {
+    setShowDatePicker(true);
+  };
+
+  const handleDateChange = (event, newDate) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+    if (newDate) {
+      const formattedDate = newDate.toISOString().split('T')[0];
+      setSelectedDate(formattedDate);
+      setAiDate(formattedDate);
+      setShowDatePicker(false);
+    }
+  };
+  
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dairy Value Chain</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Cow Number"
-        value={cowNumber}
-        onChangeText={setCowNumber}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Cow Race"
-        value={cowRace}
-        onChangeText={setCowRace}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Artificial Insemination Date (YYYY-MM-DD)"
-        value={aiDate}
-        onChangeText={setAiDate}
-      />
-      <View style={styles.switchContainer}>
-        <Text style={styles.switchText}>Artificial Insemination Triggered:</Text>
-        <Switch value={aiTriggered} onValueChange={handleToggle} />
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Dairy Value Chain</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Cow Number"
+          value={cowNumber}
+          onChangeText={setCowNumber}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Cow Race"
+          value={cowRace}
+          onChangeText={setCowRace}
+        />
+        <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+          <Text>{selectedDate || "Artificial insemination date"}</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            display="spinner"
+            onChange={handleDateChange}
+          />
+        )}
+        <View style={styles.switchContainer}>
+          <Text style={styles.switchText}>Artificial Insemination Triggered:</Text>
+          <Switch value={aiTriggered} onValueChange={handleToggle} />
+        </View>
+        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
+        {calculatedDates && (
+          <>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateText}>Return in Heat Control Date</Text>
+              <TextInput
+                style={styles.dateInput}
+                value={calculatedDates.returnInHeatControlDate.toISOString().split('T')[0]}
+                editable={false}
+              />
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateText}>Pregnancy Detection Date</Text>
+              <TextInput
+                style={styles.dateInput}
+                value={calculatedDates.pregnancyDetectionDate.toISOString().split('T')[0]}
+                editable={false}
+              />
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateText}>Drying Off Date</Text>
+              <TextInput
+                style={styles.dateInput}
+                value={calculatedDates.dryingOffDate.toISOString().split('T')[0]}
+                editable={false}
+              />
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.dateText}>Calving and Delivery Date</Text>
+              <TextInput
+                style={styles.dateInput}
+                value={calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]}
+                editable={false}
+              />
+            </View>
+            <Button title="Save to Database" onPress={saveToDatabase} style={styles.Button} color="#107c2e"/>
+          </>
+        )}
+  
+        {/* Button to show all cows */}
+        <TouchableOpacity style={styles.showAllButton} onPress={fetchAllCows}>
+          <Text style={styles.showAllButtonText}>Show All Cows</Text>
+        </TouchableOpacity>
+  
+        {/* Render all cows in a table */}
+        <View style={styles.tableContainer}>
+          <Text style={styles.tableTitle}>All Cows</Text>
+          <FlatList
+            data={allCows}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.row}>
+                <Text>{item.cow_number}</Text>
+                {/* Render other cow details */}
+              </View>
+            )}
+          />
+        </View>
       </View>
-      <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
-      {calculatedDates && (
-        <>
-          <View style={styles.dateContainer}>
-            <Text style={styles.dateText}>Return in Heat Control Date</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={calculatedDates.returnInHeatControlDate.toISOString().split('T')[0]}
-              editable={false}
-            />
-          </View>
-          <View style={styles.dateContainer}>
-            <Text style={styles.dateText}>Pregnancy Detection Date</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={calculatedDates.pregnancyDetectionDate.toISOString().split('T')[0]}
-              editable={false}
-            />
-          </View>
-          <View style={styles.dateContainer}>
-            <Text style={styles.dateText}>Drying Off Date</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={calculatedDates.dryingOffDate.toISOString().split('T')[0]}
-              editable={false}
-            />
-          </View>
-          <View style={styles.dateContainer}>
-            <Text style={styles.dateText}>Calving and Delivery Date</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]}
-              editable={false}
-            />
-          </View>
-          <Button title="Save to Database" onPress={saveToDatabase} style={styles.button} color="#107c2e" />
-        </>
-      )}
-    </View>
+    </ScrollView>
   );
-};
+            }
 
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     padding: 4,
     backgroundColor: '#FFFFFF',
-    marginTop: 105,
-    marginBottom: 23,
+    paddingTop: '30%', // Adjusted paddingTop instead of marginTop
+    minHeight: '100%',
+    paddingBottom:'30%'
   },
   title: {
     fontSize: 24,
@@ -325,10 +248,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: '#ccc',
   },
-  button: {
-    backgroundColor: '',
+  Button: {
+    backgroundColor: 'black',
     padding: 10,
     borderRadius: 5,
+
+  },
+  dateIcon: {
+    marginRight: 10,
+    borderWidth: 0.5,
+    padding: 9,
   },
 });
 

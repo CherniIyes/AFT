@@ -49,6 +49,7 @@ AFT`}</Text>
           >
 
             <Text style={styles.get}>Get started</Text>
+            {/* hello */}
           </TouchableOpacity>
         </View>
       </View>
