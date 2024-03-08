@@ -1,10 +1,18 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
-import './assets/fonts/Inter-Medium.ttf';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+// import { createStore } from 'redux'
+// import { Provider } from 'react-redux';
+// import store from './redux/store.js';
 
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -18,8 +26,7 @@ import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
-import profile from "./screens/Profile.js"
-
+import Profile from "./screens/Profile.js";
 
 const Stack = createStackNavigator();
 const App = () => {
@@ -42,11 +49,13 @@ const App = () => {
   const Stack = createStackNavigator();
 
   return (
+    // <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    // </Provider>
   );
 };
 
@@ -57,50 +66,41 @@ const MainScreen = ({ navigation, route }) => {
   const currentRouteName = getFocusedRouteNameFromRoute(route);
 
 
-  return (
-
     <View style={styles.windowContainer}>
-      {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && (
-        <View style={styles.headerContainer}>
-          <View style={styles.ContainerInBetween}>
-            {/* // <View style={styles.searchContainer}>
-          //   <TextInput style={styles.searchInput} placeholder="Search..." />
-          // </View> */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
-                <FontAwesome6 name="cow" size={24} color="black" />
-                <Text>Dairy Production</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); setView('Sales'); }} style={styles.filsa}>
-                <MaterialIcons name="point-of-sale" size={24} color="black" />
-                <Text>Sales</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); setView('DairyValueChain') }} style={styles.filsa}>
-                <MaterialCommunityIcons name="cow" size={24} color="black" />
-                <Text>Dairy Value Chain</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); setView('Expenses') }} style={styles.filsa}>
-                <MaterialCommunityIcons name="point-of-sale" size={24} color="black" />
-                <Text>Expenses</Text>
-              </TouchableOpacity>
-            </View>
+      {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
+      {/* <View style={styles.headerContainer}>
+        <View style={styles.ContainerInBetween}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
+              <FontAwesome6 name="cow" size={wp('6%')} color="black" />
+              <Text>Dairy Production</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { navigation.navigate('Sales'); setView('Sales'); }} style={styles.filsa}>
+              <MaterialIcons name="point-of-sale" size={wp('6%')} color="black" />
+              <Text>Sales</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); setView('DairyValueChain') }} style={styles.filsa}>
+              <MaterialCommunityIcons name="cow" size={wp('6%')} color="black" />
+              <Text>Dairy Value Chain</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); setView('Expenses') }} style={styles.filsa}>
+              <MaterialCommunityIcons name="point-of-sale" size={wp('6%')} color="black" />
+              <Text>Expenses</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      )}
+      </View> */}
+      {/* // )} */}
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
-             <Stack.Screen name="HomePage" component={HomePage} />
-           
-        
-        
-          
-<Stack.Screen name="Boarding1" component={Boarding1} />
-        
+          <Stack.Screen name="Boarding1" component={Boarding1} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
-         
-
+          <Stack.Screen name="Boarding2" component={Boarding2} />
+          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+          <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
                 
           
@@ -120,25 +120,27 @@ const MainScreen = ({ navigation, route }) => {
       ) : (
         <View />
       )}
-      {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && (
-        <View style={styles.tabBarContainer}>
-          <View style={styles.tabBarbuttonContainer}>
-            <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
-              <AntDesign name="home" size={24} color="black" />
-              <Text style={styles.tabBarbuttonText}> Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
-              <AntDesign name="wallet" size={24} color="black" />
-              <Text style={styles.tabBarbuttonText}> Wallet</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
-              <AntDesign name="profile" size={24} color="black" />
-              <Text style={styles.tabBarbuttonText}> Profile</Text>
-            </TouchableOpacity>
-          </View>
+      {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
+      {/* <View style={styles.tabBarContainer}>
+        <View style={styles.tabBarbuttonContainer}>
+          <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
+            <AntDesign name="home" size={wp('6%')} color="black" />
+            <Text style={styles.tabBarbuttonText}> Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
+            <AntDesign name="wallet" size={wp('6%')} color="black" />
+            <Text style={styles.tabBarbuttonText}> Wallet</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('profile')} style={styles.tabBarbutton}>
+            <AntDesign name="profile" size={wp('6%')} color="black" />
+            <Text style={styles.tabBarbuttonText}> Profile</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
+
+    // {/* </Provider>  */}
+
   );
 
 };
@@ -146,7 +148,6 @@ const MainScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   windowContainer: {
     flex: 1,
-    padding: 20,
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   ContainerInBetween: {
