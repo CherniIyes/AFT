@@ -6,6 +6,8 @@ import { login } from '../redux/action';
 // import { Provider } from 'react-redux';
 // import store from '../redux/store';
 import axios from 'axios';
+import Profile from "./Profile.js"
+import HomePage from "./HomePage.js";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -13,6 +15,8 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [user, setUser] = useState('');
+  
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -28,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      const loginResponse = await axios.post('http://192.168.100.52:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.137.55:6464/user/login', {
         email,
         password,
       });
@@ -41,6 +45,14 @@ const LoginScreen = ({ navigation }) => {
 
       const userData = loginResponse.data;
       dispatch(login(userData));
+
+      // localStorage.setItem('user',JSON.stringify(loginResponse.data));
+      // setUser(loginResponse.data);
+      setUser(email);
+
+      console.log('user:', email);
+      <Profile user={user}/>,
+      <HomePage user={user}/>
 
       setEmail('');
       setPassword('');
