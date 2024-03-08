@@ -214,9 +214,10 @@ import {
   Image,
 } from "react-native";
 import Slider from "@react-native-community/slider";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons ,FontAwesome5} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
+import  Icon  from "react-native-vector-icons/FontAwesome";
+import axios from "axios";
 const HomePage = (props) => {
   const images = [
     "https://c4.wallpaperflare.com/wallpaper/807/189/316/selective-focus-photography-of-green-flowers-near-sea-wallpaper-preview.jpg",
@@ -236,20 +237,15 @@ const HomePage = (props) => {
     return () => clearInterval(intervalId); // Clear the interval on component unmount
   }, []);
 
+  const handleTest =(idd)=>{
+    navigation.navigate(`Test`,{idd})
+  }
   const fetchArticles = () => {
-    const fetchedArticles = [
-      {
-        title: "Importance of dairy hygiene",
-        articleImg: "https://c0.wallpaperflare.com/preview/624/812/844/white-and-black-cow-standing-on-green-grass-field-during-daytime.jpg",
-        likes: 10,
-      },
-      {
-        title: "Teat disinfection",
-        articleImg: "https://c1.wallpaperflare.com/preview/314/313/121/cow-milk-cow-beef-pasture.jpg",
-        likes: 15,
-      },
-    ];
-    setArticles(fetchedArticles);
+   axios
+   .get("http://192.168.1.10:6464/articles/")
+   .then((fetchedArticles)=>
+   {setArticles(fetchedArticles.data);}
+   )
   };
 
   const handleCardClick = (title) => {
@@ -306,14 +302,18 @@ Here are some insightful articles and steps aimed at enhancing your dairy produc
         {articles.map((article, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => handleCardClick(article.title)}
-          >
+onPress={()=>handleTest(article.id)}      >
             <View style={styles.card}>
               <Image
                 style={styles.cardImage}
-                source={{ uri: article.articleImg }}
+                source={{ uri: article.img }}
               />
+              <View style={styles.flexx}>
               <Text style={styles.sectionTitle}>{article.title}</Text>
+              <View>
+           <Icon name="heart" size={20} color={"red"}/>
+              </View>
+              </View>
             </View>
           </TouchableOpacity>
         ))}
@@ -349,14 +349,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-
   },
   card: {
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
     marginTop:50,
-    paddingBottom:10
-
+    paddingBottom:10,
   },
   cardImage: {
     width: "100%",
@@ -373,6 +371,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
+  flexx :{
+    display:"flex" ,
+    paddingLeft :10,
+    paddingRight:10,
+    flexDirection:"row",
+    justifyContent:"space-between",
+    alignItems:"center"
+
+  }
 });
 
 export default HomePage;
