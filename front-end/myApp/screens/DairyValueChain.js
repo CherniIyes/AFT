@@ -615,7 +615,7 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [cowDataList, setCowDataList] = useState([]);
+ 
   const [allCows, setAllCows] = useState([]);
   const [showTable, setShowTable] = useState(false); // State variable to control table visibility
 
@@ -904,6 +904,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
   },
   tableHeader: {
     flexDirection: 'row',
@@ -916,17 +917,22 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     textAlign: 'center',
+    borderWidth: 1,
+    padding: 3,
   },
   row: {
+    flex: 1,
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
+    padding: 5,
     marginBottom: 5,
   },
   cell: {
     flex: 1,
     textAlign: 'center',
+    
+    
   },
 });
 
