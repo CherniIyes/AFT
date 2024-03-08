@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+// import { createStore } from 'redux'
 import { Provider } from 'react-redux';
+import store from './redux/store.js';
 
 import Boarding1 from "./screens/Boarding1.js";
 import Login from "./screens/Login";
@@ -20,7 +27,6 @@ import Article1 from "./screens/Article1.js";
 import Article2 from "./screens/Article2.js";
 import DairyValueChain from "./screens/DairyValueChain.js";
 import Profile from "./screens/Profile.js";
-import store from './redux/store.js';
 
 const Stack = createStackNavigator();
 
@@ -40,9 +46,13 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <Navigationsss />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={MainScreen} hideSplashScreen={hideSplashScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
@@ -54,9 +64,9 @@ const MainScreen = ({ navigation, route }) => {
   return (
     // <Provider store={store}>
 
-      <View style={styles.windowContainer}>
-        {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
-        <View style={styles.headerContainer}>
+    <View style={styles.windowContainer}>
+      {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
+      <View style={styles.headerContainer}>
         <View style={styles.ContainerInBetween}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
@@ -78,7 +88,7 @@ const MainScreen = ({ navigation, route }) => {
           </View>
         </View>
       </View>
-        {/* // )} */}
+      {/* // )} */}
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -100,7 +110,7 @@ const MainScreen = ({ navigation, route }) => {
         <View />
       )}
       {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
-      {/* <View style={styles.tabBarContainer}>
+      <View style={styles.tabBarContainer}>
         <View style={styles.tabBarbuttonContainer}>
           <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
             <AntDesign name="home" size={24} color="black" />
@@ -115,7 +125,7 @@ const MainScreen = ({ navigation, route }) => {
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>
         </View>
-      </View> */}
+      </View>
       {/* )} */}
     </View>
   );
