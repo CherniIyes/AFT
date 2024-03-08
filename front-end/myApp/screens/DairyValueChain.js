@@ -12,6 +12,24 @@ const DairyValueChain = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [cowDataList, setCowDataList] = useState([]);
+  const [allCows, setAllCows] = useState([]);
+
+  const fetchAllCows = () => {
+    fetch('http://192.168.1.15:6464/cows/all')
+      .then(response => response.json())
+      .then(data => {
+        console.log('All cows data:', data);
+        setAllCows(data); // Assuming data is an array of cow objects
+      })
+      .catch(error => {
+        console.error('Error fetching all cows:', error);
+      });
+  };
+
+  useEffect(() => {
+    // Fetch all cows when component mounts
+    fetchAllCows();
+  }, []);
 
   const handleSubmit = () => {
     if (!selectedDate) {
@@ -160,10 +178,30 @@ const DairyValueChain = () => {
             <Button title="Save to Database" onPress={saveToDatabase} style={styles.Button} color="#107c2e"/>
           </>
         )}
+  
+        {/* Button to show all cows */}
+        <TouchableOpacity style={styles.showAllButton} onPress={fetchAllCows}>
+          <Text style={styles.showAllButtonText}>Show All Cows</Text>
+        </TouchableOpacity>
+  
+        {/* Render all cows in a table */}
+        <View style={styles.tableContainer}>
+          <Text style={styles.tableTitle}>All Cows</Text>
+          <FlatList
+            data={allCows}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.row}>
+                <Text>{item.cow_number}</Text>
+                {/* Render other cow details */}
+              </View>
+            )}
+          />
+        </View>
       </View>
     </ScrollView>
   );
-};
+            }
 
 const styles = StyleSheet.create({
   scrollViewContent: {

@@ -90,11 +90,9 @@ const MainScreen = ({ navigation, route }) => {
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-           <Stack.Screen name="HomePage" component={HomePage} />
-          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
-          
-          
-          <Stack.Screen name="Boarding1" component={Boarding1} />
+           <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+             <Stack.Screen name="HomePage" component={HomePage} />
+           <Stack.Screen name="Boarding1" component={Boarding1} />
         
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
          

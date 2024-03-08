@@ -295,7 +295,8 @@ const HomePage = () => {
           />
         </View>
 
-        <Text>These are our articles</Text>
+        <Text>
+Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.</Text>
         {articles.map((article, index) => (
           <TouchableOpacity
             key={index}
