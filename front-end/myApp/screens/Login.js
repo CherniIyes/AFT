@@ -3,8 +3,8 @@ import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "reac
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/action';
-import { Provider } from 'react-redux';
-import store from '../redux/store';
+// import { Provider } from 'react-redux';
+// import store from '../redux/store';
 import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
