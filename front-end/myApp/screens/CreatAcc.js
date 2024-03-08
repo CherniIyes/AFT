@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
-import { Color, FontSize, FontFamily, Border } from '../GlobalStyles'
-const AndroidSmall3 = ({ navigation }) => {
-  const [username, setusername] = useState('');
+import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
+import { useDispatch } from 'react-redux';
+import { signUp } from '../redux/action';
+import axios from 'axios';
+
+const CreateAccountScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [createUserWithEmailAndPassword, user, error] = useCreateUserWithEmailAndPassword(FIREBASE_AUTH);
 
   const handleSignUp = async () => {
     try {
@@ -19,39 +23,30 @@ const AndroidSmall3 = ({ navigation }) => {
         return;
       }
 
-      // Proceed to server registration
-      console.log('Data being sent to server:', { username, email, password });
-
-      const registerResponse = await axios.post('http://192.168.100.42:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.100.52:6464/user/register', {
         username,
         email,
         password
       });
 
-      console.log('Registration API response:', registerResponse);
-
-      // Check the response from the server and handle accordingly
       if (registerResponse.status === 201) {
-        // Clear form fields and show success message
         alert("Sign up successful");
         setEmail('');
         setPassword('');
-        setusername('');
+        setUsername('');
         navigation.navigate('Login');
       } else {
-        // Handle registration failure
         console.error("User registration failed:", registerResponse.data);
         alert("User creation failed. Please try again.");
       }
     } catch (error) {
-      // Handle errors
       console.error("Error during user creation:", error);
       alert("User creation failed. Please try again.");
     }
   };
 
   const handleNameChange = (text) => {
-    setusername(text);
+    setUsername(text);
   };
 
   const handleEmailChange = (text) => {
@@ -65,7 +60,6 @@ const AndroidSmall3 = ({ navigation }) => {
   const handleConfirmPasswordChange = (text) => {
     setConfirmPassword(text);
   };
-
 
 
   return (
@@ -175,7 +169,7 @@ const AndroidSmall3 = ({ navigation }) => {
 const styles = StyleSheet.create({
 
   androidLayout: {
-    // borderRadius: Border.br_5xl,
+    borderRadius: Border.br_5xl,
     position: "absolute",
   },
   signUpFlexBox: {
@@ -220,9 +214,9 @@ const styles = StyleSheet.create({
   },
   androidSmall5Item: {
     top: 598,
-    left: 216,
+    left: 250,
     backgroundColor: Color.colorDarkslategray_200,
-    width: 208,
+    width: 850,
     height: 101,
     transform: [
       {
@@ -368,4 +362,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AndroidSmall3;
+export default CreateAccountScreen;
