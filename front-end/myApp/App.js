@@ -20,7 +20,7 @@ import loginOrSign from "./screens/loginOrSign";
 import CreatAcc from "./screens/CreatAcc";
 import Boarding2 from "./screens/Boarding2";
 import Expenses from "./screens/Expenses.js";
-import Milk from "./screens/Milk.js"
+import Milk from "./screens/Milk.js";
 import Sales from "./screens/sales.js";
 import HomePage from "./screens/HomePage.js";
 import Article1 from "./screens/Article1.js";
@@ -29,9 +29,8 @@ import DairyValueChain from "./screens/DairyValueChain.js";
 import Profile from "./screens/Profile.js";
 
 const Stack = createStackNavigator();
+
 const App = () => {
-
-
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -46,8 +45,6 @@ const App = () => {
     return null;
   }
 
-  const Stack = createStackNavigator();
-
   return (
     // <Provider store={store}>
     <NavigationContainer>
@@ -60,11 +57,12 @@ const App = () => {
 };
 
 const MainScreen = ({ navigation, route }) => {
-  const [view, setView] = useState("")
-  console.log("setViewiewwwwwww", view);
-  const { hideSplashScreen } = route.params || { hideSplashScreen: true }; // Add a default value
+  const [view, setView] = useState("");
+  const { hideSplashScreen } = route.params || { hideSplashScreen: true };
   const currentRouteName = getFocusedRouteNameFromRoute(route);
 
+  return (
+    // <Provider store={store}>
 
     <View style={styles.windowContainer}>
       {/* {['Milk', 'Sales', 'DairyValueChain', 'Expenses', 'HomePage'].includes(view) && ( */}
@@ -94,28 +92,20 @@ const MainScreen = ({ navigation, route }) => {
 
       {hideSplashScreen ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
           <Stack.Screen name="Boarding1" component={Boarding1} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Expenses" component={Expenses} />
           <Stack.Screen name="CreatAcc" component={CreatAcc} />
           <Stack.Screen name="Boarding2" component={Boarding2} />
-          <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
+        
           <Stack.Screen name="HomePage" component={HomePage} />
           <Stack.Screen name="Article1" component={Article1} />
-                
-          
-            
-         
-          <Stack.Screen name="Expenses" component={Expenses} />
-
-          <Stack.Screen name="Boarding2" component={Boarding2} />
-
           <Stack.Screen name="Article2" component={Article2} />
           <Stack.Screen name="Milk" component={Milk} />
-          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="logOrSign" component={loginOrSign} />
           <Stack.Screen name="Sales" component={Sales} />
-          <Stack.Screen name="profile" component={profile} />
+          <Stack.Screen name="profile" component={Profile} />
         </Stack.Navigator>
       ) : (
         <View />
@@ -136,12 +126,14 @@ const MainScreen = ({ navigation, route }) => {
             <Text style={styles.tabBarbuttonText}> Profile</Text>
           </TouchableOpacity>
         </View>
-      )}
+      </View> */}
+      {/* )} */}
     </View>
 
     // {/* </Provider>  */}
 
   );
+
 
 };
 
@@ -151,71 +143,73 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   ContainerInBetween: {
-    top: 60,
+    top: hp('8%'),
   },
   headerContainer: {
-    flexDirection: 'column', // Change from 'row' to 'column'
-    justifyContent: 'flex-start', // Adjusted to 'flex-start'
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: wp('0%'),
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     elevation: 2,
-    height: 120,
-    position: 'absolute', // Changed to 'absolute'
-    top: 0, // Adjusted to 0
+    height: hp('13%'),
+    position: 'absolute',
+    top: 0,
     right: 0,
-    left: 0, // Added left
-    zIndex: 2, // Added zIndex to layer on top
+    left: 0,
+    zIndex: 2,
   },
-  // searchContainer: {
-  //   marginBottom: 10,
-  // },
-  // searchInput: {
-  //   height: 40,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   borderRadius: 5,
-  //   paddingLeft: 10,
-  //   width: '100%', // Changed to '100%'
-  // },
   buttonContainer: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     justifyContent: 'space-between',
+    position: "relative",
+    bottom: hp('2%'),
   },
   filsa: {
-    marginLeft: 10,
-    fontSize: 50,
+    marginLeft: wp('2%'),
+    marginRight: wp('2%'),
+    fontSize: wp('10%'),
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   tabBarContainer: {
-    flexDirection: 'column', // Change from 'row' to 'column'
-    justifyContent: 'flex-end', // Adjusted to 'flex-end'
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: wp('2%'),
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     elevation: 2,
-    position: 'absolute', // Changed to 'absolute'
-    bottom: 0, // Adjusted to 0
+    position: 'absolute',
+    bottom: 0,
     right: 0,
-    left: 0, // Added left
-    zIndex: 2, // Added zIndex to layer on top
+    left: 0,
+    zIndex: 2,
+    height: hp('8%'),
   },
   tabBarbuttonContainer: {
     flexDirection: 'row',
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     alignItems: 'center',
+    justifyContent: 'space-between',
+    position: "relative",
+    top: hp('1%'),
   },
   tabBarbutton: {
-    marginLeft: 10,
-    fontSize: 50,
+    marginLeft: wp('2%'),
+    marginRight: wp('2%'),
+    fontSize: wp('10%'),
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   tabBarbuttonText: {
-    right: 5,
+    right: wp('1%'),
   },
 });
-
 export default App;
