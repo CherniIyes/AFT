@@ -3,8 +3,8 @@ import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "reac
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/action';
-import { Provider } from 'react-redux';
-import store from '../redux/store';
+// import { Provider } from 'react-redux';
+// import store from '../redux/store';
 import axios from 'axios';
 import Profile from "./Profile.js"
 import HomePage from "./HomePage.js";
@@ -31,9 +31,6 @@ const LoginScreen = ({ navigation }) => {
         alert("Please enter both email and password.");
         return;
       }
-
-      const loginResponse = await axios.post('http://192.168.100.52:6464/user/login', {
-      console.log('Password being sent:', password);
 
       const loginResponse = await axios.post('http://192.168.137.55:6464/user/login', {
         email,

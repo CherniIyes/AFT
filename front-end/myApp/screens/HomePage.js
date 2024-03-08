@@ -313,7 +313,7 @@ Here are some insightful articles and steps aimed at enhancing your dairy produc
                 style={styles.cardImage}
                 source={{ uri: article.articleImg }}
               />
-              <Text>{article.title}</Text>
+              <Text style={styles.sectionTitle}>{article.title}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -346,20 +346,24 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+
   },
   card: {
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
-    marginBottom: 20,
+    marginTop:50,
+    paddingBottom:10
+
   },
   cardImage: {
     width: "100%",
     height: 150,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+    marginBottom:20
   },
   cardContent: {
     padding: 10,
