@@ -29,12 +29,10 @@ const Test = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {isImageLoaded && (
-        <Animated.Image
-          style={[styles.image, { height: imageHeight }]}
-          source={{ uri: article.img }}
-        />
-      )}
+      <Animated.Image
+        style={[styles.image, { height: imageHeight }]}
+        source={{ uri: article.img }}
+      />
       <Text style={styles.date}>{article.date}</Text>
       <Text style={styles.author}>{article.Author}</Text>
       <Text style={styles.content}>{article.content}</Text>
@@ -48,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'linear-gradient(to bottom right, #000000, #00755f)',
   },
   image: {
     width: '100%',

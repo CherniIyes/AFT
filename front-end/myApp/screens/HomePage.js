@@ -1,209 +1,3 @@
-
-
-
-// import React, { useState, useEffect } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   ScrollView,
-//   StyleSheet,
-//   Image,
-// } from "react-native";
-// import Slider from "@react-native-community/slider";
-// import { MaterialIcons } from "@expo/vector-icons";
-// import { useNavigation } from "@react-navigation/native";
-
-// const HomePage = () => {
-//   const images = [
-//     "https://c4.wallpaperflare.com/wallpaper/807/189/316/selective-focus-photography-of-green-flowers-near-sea-wallpaper-preview.jpg",
-//     "https://c1.wallpaperflare.com/preview/388/52/975/cow-funny-ruminant-cute.jpg",
-//     "https://c1.wallpaperflare.com/preview/854/259/728/cow-small-calf-baby-meadow-sweet.jpg",
-//   ];
-
-//   const [sliderValue, setSliderValue] = useState(0);
-//   const [articles, setArticles] = useState([]);
-//   const navigation = useNavigation();
-
-//   const handleSliderChange = (value) => {
-//     setSliderValue(value);
-//   };
-
-//   useEffect(() => {
-//     fetchArticles();
-//   }, []);
-
-//   const fetchArticles = () => {
-//     const fetchedArticles = [
-//       {
-//         title: "Importance of dairy hygiene",
-//         articleImg:
-//           "https://c0.wallpaperflare.com/preview/624/812/844/white-and-black-cow-standing-on-green-grass-field-during-daytime.jpg",
-//       },
-//       {
-//         title: "Teat disinfection",
-//         articleImg:
-//           "https://c1.wallpaperflare.com/preview/314/313/121/cow-milk-cow-beef-pasture.jpg",
-//       },
-//     ];
-//     setArticles(fetchedArticles);
-//   };
-
-//   const handleCardClick = (title) => {
-//     console.log("Navigating to full article view:", title);
-//     if (title === "Importance of dairy hygiene") {
-//       navigation.navigate("Article1");
-//     } else if (title === "Teat disinfection") {
-//       navigation.navigate("Article2");
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* <View style={styles.searchContainer}>
-//         <TextInput
-//           style={styles.searchInput}
-//           placeholder="Search..."
-//         />
-//       </View> */}
-
-//       {/* <View style={styles.buttonContainer}>
-//         <TouchableOpacity style={styles.button}>
-//           <Text>Dairy Production</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity style={styles.button}>
-//           <Text>Sales</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity style={styles.button}>
-//           <Text>Dairy Value Chain</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity style={styles.button}>
-//           <Text>Expenses</Text>
-//         </TouchableOpacity>
-//       </View> */}
-//       <ScrollView>
-//         <View style={styles.sliderContainer}>
-//           <Slider
-//             value={sliderValue}
-//             style={{ width: "100%" }}
-//             minimumValue={0}
-//             maximumValue={2}
-//             minimumTrackTintColor="#34D399"
-//             maximumTrackTintColor="#10B981"
-//             thumbTintColor="#10B981"
-//             onValueChange={handleSliderChange}
-//           />
-//           <MaterialIcons
-//             name="park"
-//             size={24}
-//             color="#10B981"
-//             style={{
-//               position: "absolute",
-//               left: `${sliderValue * (100 / 2)}%`,
-//               top: 20,
-//               zIndex: 1,
-//             }}
-//           />
-//         </View>
-
-//         <View style={styles.imageContainer}>
-//           <Image
-//             style={styles.image}
-//             source={{ uri: images[Math.floor(sliderValue)] }}
-//           />
-//         </View>
-
-
-//         <Text>These are our articles</Text>
-//         <TouchableOpacity
-//           onPress={() => handleCardClick(articles.length > 0 ? articles[0].title : "")}
-//         >
-//           <View style={styles.card}>
-//             <Image
-//               style={styles.cardImage}
-//               source={{ uri: articles.length > 0 ? articles[0].articleImg : "" }}
-//             />
-//             <Text>{articles.length > 0 ? articles[0].title : ""}</Text>
-//           </View>
-//         </TouchableOpacity>
-
-//         <TouchableOpacity
-//           onPress={() => handleCardClick(articles.length > 1 ? articles[1].title : "")}
-//         >
-//           <View style={styles.card}>
-//             <Image
-//               style={styles.cardImage}
-//               source={{ uri: articles.length > 1 ? articles[1].articleImg : "" }}
-//             />
-//             <Text>{articles.length > 1 ? articles[1].title : ""}</Text>
-//           </View>
-//         </TouchableOpacity>
-//       </ScrollView>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 4,
-//     backgroundColor: '#FFFFFF',
-//     position: 'relative',
-//     marginTop: 105,  // Adjusted to provide space for the headerContainer
-//     marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
-//   },
-//   searchContainer: {
-//     marginBottom: 20,
-//   },
-//   searchInput: {
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     borderRadius: 5,
-//     padding: 10,
-//   },
-//   buttonContainer: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginBottom: 20,
-//   },
-//   button: {
-//     backgroundColor: "#ddd",
-//     padding: 10,
-//     borderRadius: 5,
-//     flex: 1,
-//     marginHorizontal: 5,
-//     alignItems: "center",
-//   },
-//   sliderContainer: {
-//     alignItems: "center",
-//     marginBottom: 20,
-//     position: "relative",
-//   },
-//   imageContainer: {
-//     alignItems: "center",
-//     marginBottom: 20,
-//   },
-//   image: {
-//     width: "100%",
-//     height: 200,
-//     resizeMode: "cover",
-//   },
-//   card: {
-//     backgroundColor: "#f0f0f0",
-//     borderRadius: 10,
-//     padding: 20,
-//     marginBottom: 20,
-//   },
-//   cardImage: {
-//     width: "100%",
-//     height: 150,
-//     borderRadius: 10,
-//     marginBottom: 10,
-//   },
-// });
-
-// export default HomePage;
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -214,10 +8,11 @@ import {
   Image,
 } from "react-native";
 import Slider from "@react-native-community/slider";
-import { MaterialIcons ,FontAwesome5} from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import  Icon  from "react-native-vector-icons/FontAwesome";
+import { MaterialIcons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+
 const HomePage = (props) => {
   const images = [
     "https://c4.wallpaperflare.com/wallpaper/807/189/316/selective-focus-photography-of-green-flowers-near-sea-wallpaper-preview.jpg",
@@ -227,6 +22,7 @@ const HomePage = (props) => {
 
   const [sliderValue, setSliderValue] = useState(0);
   const [articles, setArticles] = useState([]);
+  const [likedArticles, setLikedArticles] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -237,30 +33,21 @@ const HomePage = (props) => {
     return () => clearInterval(intervalId); // Clear the interval on component unmount
   }, []);
 
-  const handleTest =(idd)=>{
-    navigation.navigate(`Test`,{idd})
-  }
-  const fetchArticles = () => {
-   axios
-   .get("http://192.168.1.10:6464/articles/")
-   .then((fetchedArticles)=>
-   {setArticles(fetchedArticles.data);}
-   )
+  const handleTest = (idd) => {
+    navigation.navigate(`Test`, { idd });
   };
 
-  const handleCardClick = (title) => {
-    console.log("Navigating to full article view:", title);
-    if (title === "Importance of dairy hygiene") {
-      navigation.navigate("Article1");
-    } else if (title === "Teat disinfection") {
-      navigation.navigate("Article2");
-    }
+  const fetchArticles = () => {
+    axios.get("http://192.168.1.10:6464/articles/").then((response) => {
+      setArticles(response.data);
+      setLikedArticles(new Array(response.data.length).fill(false));
+    });
   };
 
   const handleLike = (index) => {
-    const updatedArticles = [...articles];
-    updatedArticles[index].likes += 1;
-    setArticles(updatedArticles);
+    const updatedLikedArticles = [...likedArticles];
+    updatedLikedArticles[index] = !updatedLikedArticles[index];
+    setLikedArticles(updatedLikedArticles);
   };
 
   return (
@@ -272,15 +59,15 @@ const HomePage = (props) => {
             style={{ width: "100%" }}
             minimumValue={0}
             maximumValue={2}
-            minimumTrackTintColor="#34D399"
-            maximumTrackTintColor="#10B981"
-            thumbTintColor="#10B981"
+            minimumTrackTintColor="#F6B304"
+            maximumTrackTintColor="#092F03"
+            thumbTintColor="#F6B304"
             onValueChange={(value) => setSliderValue(value)} // Allow manual sliding if desired
           />
           <MaterialIcons
             name="park"
             size={24}
-            color="#10B981"
+            color="#F6B304"
             style={{
               position: "absolute",
               left: `${sliderValue * (100 / 2)}%`,
@@ -297,26 +84,40 @@ const HomePage = (props) => {
           />
         </View>
 
-        <Text>
-Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.</Text>
+        <Text style={styles.introText}>
+          Welcome to the future of dairy production! Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.
+        </Text>
+
         {articles.map((article, index) => (
-          <TouchableOpacity
-            key={index}
-onPress={()=>handleTest(article.id)}      >
+          <TouchableOpacity 
+            key={index} 
+            onPress={() => handleTest(article.id)}
+            activeOpacity={0.7} // Adjust the opacity as desired
+          >
             <View style={styles.card}>
-              <Image
-                style={styles.cardImage}
-                source={{ uri: article.img }}
-              />
+              <Image style={styles.cardImage} source={{ uri: article.img }} />
               <View style={styles.flexx}>
-              <Text style={styles.sectionTitle}>{article.title}</Text>
-              <View>
-           <Icon name="heart" size={20} color={"red"}/>
-              </View>
+                <Text style={styles.sectionTitle}>{article.title}</Text>
+                <TouchableOpacity onPress={() => handleLike(index)}>
+                  <Icon
+                    name={likedArticles[index] ? "heart" : "heart-o"}
+                    size={20}
+                    color={likedArticles[index] ? "#F6B304" : "#092F03"}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableOpacity>
         ))}
+        
+        {/* Add space between the articles and the footer */}
+        <View style={{ height: 20 }} />
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>© 2024 Your Dairy App. All Rights Reserved.</Text>
+        </View>
+        
       </ScrollView>
     </View>
   );
@@ -329,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     position: "relative",
     marginTop: 105, // Adjusted to provide space for the headerContainer
-    marginBottom: 23, // Adjusted to provide space for the tabBarContainer
+    marginBottom: 70, // Adjusted to provide more space for the tabBarContainer
   },
   sliderContainer: {
     alignItems: "center",
@@ -344,42 +145,67 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     resizeMode: "cover",
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  introText: {
+    fontSize: 16,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    color: '#666',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#092F03",
   },
   card: {
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
-    marginTop:50,
-    paddingBottom:10,
+    marginTop: 50,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardImage: {
     width: "100%",
     height: 150,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
-  cardContent: {
-    padding: 10,
+  flexx: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 5,
+  footer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
   },
-  flexx :{
-    display:"flex" ,
-    paddingLeft :10,
-    paddingRight:10,
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center"
-
-  }
+  footerText: {
+    fontSize: 12,
+    color: "#666",
+  },
 });
 
 export default HomePage;
