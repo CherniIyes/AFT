@@ -6,10 +6,14 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  TextInput,
+  Animated,
+  LayoutAnimation,
+  StatusBar,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { MaterialIcons } from "@expo/vector-icons";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesome5 } from "@expo/vector-icons";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,6 +27,9 @@ const HomePage = (props) => {
   const [sliderValue, setSliderValue] = useState(0);
   const [articles, setArticles] = useState([]);
   const [likedArticles, setLikedArticles] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [faqExpanded, setFaqExpanded] = useState(false);
+  const [faqHeight] = useState(new Animated.Value(0));
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -50,8 +57,23 @@ const HomePage = (props) => {
     setLikedArticles(updatedLikedArticles);
   };
 
+  const filteredArticles = articles.filter((article) =>
+    article.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const toggleFaq = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setFaqExpanded(!faqExpanded);
+    Animated.spring(faqHeight, {
+      toValue: faqExpanded ? 0 : 400,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#092F03" barStyle="light-content" />
       <ScrollView>
         <View style={styles.sliderContainer}>
           <Slider
@@ -85,34 +107,68 @@ const HomePage = (props) => {
         </View>
 
         <Text style={styles.introText}>
-          Welcome to the future of dairy production! Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.
+          Welcome to the <Text style={{ fontWeight: "bold", fontStyle: "italic", color: "#F6B304" }}>future</Text> of dairy production! Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.
         </Text>
 
-        {articles.map((article, index) => (
-          <TouchableOpacity 
-            key={index} 
-            onPress={() => handleTest(article.id)}
-            activeOpacity={0.7} // Adjust the opacity as desired
-          >
-            <View style={styles.card}>
-              <Image style={styles.cardImage} source={{ uri: article.img }} />
-              <View style={styles.flexx}>
-                <Text style={styles.sectionTitle}>{article.title}</Text>
-                <TouchableOpacity onPress={() => handleLike(index)}>
-                  <Icon
-                    name={likedArticles[index] ? "heart" : "heart-o"}
-                    size={20}
-                    color={likedArticles[index] ? "#F6B304" : "#092F03"}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-        
-        {/* Add space between the articles and the footer */}
-        <View style={{ height: 20 }} />
+        {/* Enhanced Search Bar */}
+        <View style={styles.searchContainer}>
+          <FontAwesome5 name="search" size={20} color="#F6B304" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search articles by name..."
+            placeholderTextColor="#666"
+            onChangeText={(text) => setSearchText(text)}
+            value={searchText}
+          />
+        </View>
 
+        {/* Articles */}
+        <View style={styles.articlesContainer}>
+          {filteredArticles.map((article, index) => (
+            <TouchableOpacity 
+              key={index} 
+              onPress={() => handleTest(article.id)}
+              activeOpacity={0.7} // Adjust the opacity as desired
+            >
+              <View style={styles.card}>
+                <Image style={styles.cardImage} source={{ uri: article.img }} />
+                <View style={styles.flexx}>
+                  <Text style={styles.sectionTitle}>{article.title}</Text>
+                  <TouchableOpacity onPress={() => handleLike(index)}>
+                    <FontAwesome5
+                      name={likedArticles[index] ? "heart" : "heart"}
+                      size={20}
+                      color={likedArticles[index] ? "#F6B304" : "#092F03"}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+        
+        {/* Advanced FAQ Section */}
+        <TouchableOpacity onPress={toggleFaq} style={styles.faqHeader}>
+          <Text style={styles.faqHeaderText}>FAQ</Text>
+          <MaterialIcons name={faqExpanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={20} color="#F6B304" />
+        </TouchableOpacity>
+        <Animated.View style={[styles.faqContainer, { height: faqHeight }]}>
+          {/* Add your FAQ content here */}
+          <View style={styles.faqItem}>
+            <Text style={styles.faqQuestion}>Q: How can I improve milk production?</Text>
+            <Text style={styles.faqAnswer}>A: Ensure cows have proper nutrition and a comfortable environment.</Text>
+          </View>
+          <View style={styles.faqItem}>
+            <Text style={styles.faqQuestion}>Q: What are the common diseases in dairy cows?</Text>
+            <Text style={styles.faqAnswer}>A: Common diseases include mastitis, lameness, and metabolic disorders.</Text>
+          </View>
+          <View style={styles.faqItem}>
+            <Text style={styles.faqQuestion}>Q: How often should cows be milked?</Text>
+            <Text style={styles.faqAnswer}>A: Cows should typically be milked two to three times per day.</Text>
+          </View>
+          {/* Add more FAQs as needed */}
+        </Animated.View>
+        
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2024 Your Dairy App. All Rights Reserved.</Text>
@@ -126,11 +182,9 @@ const HomePage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 4,
     backgroundColor: "#FFFFFF",
-    position: "relative",
-    marginTop: 105, // Adjusted to provide space for the headerContainer
-    marginBottom: 70, // Adjusted to provide more space for the tabBarContainer
+    paddingTop: 40,
+    paddingHorizontal: 20,
   },
   sliderContainer: {
     alignItems: "center",
@@ -157,11 +211,10 @@ const styles = StyleSheet.create({
   },
   introText: {
     fontSize: 16,
-    marginHorizontal: 20,
     marginBottom: 20,
     textAlign: 'center',
     fontStyle: 'italic',
-    color: '#666',
+    color: '#092F03',
   },
   sectionTitle: {
     fontSize: 18,
@@ -172,7 +225,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 10,
     shadowColor: '#000',
@@ -189,13 +242,70 @@ const styles = StyleSheet.create({
     height: 150,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   flexx: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#F6B304",
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: 16,
+    color: "#092F03",
+  },
+  articlesContainer: {
+    marginBottom: 20,
+  },
+  faqHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    paddingVertical: 15,
+  },
+  faqHeaderText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#092F03",
+  },
+  faqContainer: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    overflow: "hidden",
+    marginBottom: 20,
+  },
+  faqItem: {
+    marginBottom: 20,
+  },
+  faqQuestion: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#F6B304",
+    marginBottom: 5,
+  },
+  faqAnswer: {
+    fontSize: 16,
+    color: "#092F03",
   },
   footer: {
     alignItems: "center",
