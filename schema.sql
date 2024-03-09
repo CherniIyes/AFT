@@ -22,12 +22,14 @@ USE `aft` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`article` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `content` VARCHAR(1000) NOT NULL,
+  `content` VARCHAR(10000) NOT NULL,
   `Author` VARCHAR(450) NOT NULL,
   `img` VARCHAR(1000) NOT NULL,
-  `date` INT NOT NULL,
+  `date` DATE NOT NULL,
+  `title` VARCHAR(450) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 9
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
