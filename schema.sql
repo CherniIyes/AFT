@@ -22,31 +22,12 @@ USE `aft` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`article` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `part_name` VARCHAR(100) NOT NULL,
-  `content` TEXT NOT NULL,
-  `image_url` VARCHAR(2505) NOT NULL,
-  `title` VARCHAR(45) NOT NULL,
-  `articalimg` VARCHAR(2005) NULL DEFAULT NULL,
+  `content` VARCHAR(1000) NOT NULL,
+  `Author` VARCHAR(450) NOT NULL,
+  `img` VARCHAR(1000) NOT NULL,
+  `date` INT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `aft`.`article2`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aft`.`article2` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `part_name` VARCHAR(100) NOT NULL,
-  `content` TEXT NOT NULL,
-  `image_url` VARCHAR(255) NOT NULL,
-  `title` VARCHAR(45) NOT NULL,
-  `articalimg` VARCHAR(1000) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -58,15 +39,15 @@ CREATE TABLE IF NOT EXISTS `aft`.`cows` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cow_number` VARCHAR(50) NULL DEFAULT NULL,
   `cow_race` VARCHAR(50) NULL DEFAULT NULL,
-  `artificial_insemination_date` VARCHAR(100) NULL DEFAULT NULL,
+  `artificial_insemination_date` DATE NULL DEFAULT NULL,
   `artificial_insemination_triggered` ENUM('Yes', 'No') NULL DEFAULT 'No',
-  `return_in_heat_control_date` VARCHAR(100) NULL DEFAULT NULL,
-  `pregnancy_detection_date` VARCHAR(100) NULL DEFAULT NULL,
-  `drying_off_date` VARCHAR(100) NULL DEFAULT NULL,
-  `calving_and_delivery_date` VARCHAR(100) NULL DEFAULT NULL,
+  `return_in_heat_control_date` DATE NULL DEFAULT NULL,
+  `pregnancy_detection_date` DATE NULL DEFAULT NULL,
+  `drying_off_date` DATE NULL DEFAULT NULL,
+  `calving_and_delivery_date` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -81,10 +62,8 @@ CREATE TABLE IF NOT EXISTS `aft`.`expenses` (
   `bills` INT NULL DEFAULT NULL,
   `medicalexpenses` INT NULL DEFAULT NULL,
   `hay` INT NULL DEFAULT NULL,
-  `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -94,26 +73,26 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`milk` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `day` VARCHAR(45) NOT NULL,
-  `price` INT NOT NULL,
-  `quantity` DECIMAL(10,0) NOT NULL,
+  `day` VARCHAR(45) NULL DEFAULT NULL,
+  `quantity` DECIMAL(10,2) NULL DEFAULT NULL,
+  `price` DECIMAL(10,2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 21
+AUTO_INCREMENT = 139
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table aft.sales
+-- Table `aft`.`sales`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS aft.sales (
-  id INT NOT NULL AUTO_INCREMENT,
-  product VARCHAR(45) NOT NULL,
-  price INT NOT NULL,
-  date VARCHAR(4000) NOT NULL,
-  product details VARCHAR(4000) NOT NULL,
-  PRIMARY KEY (id))
+CREATE TABLE IF NOT EXISTS `aft`.`sales` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `product` VARCHAR(45) NOT NULL,
+  `price` INT NOT NULL,
+  `image` VARCHAR(4000) NOT NULL,
+  `product details` VARCHAR(4000) NOT NULL,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
@@ -124,12 +103,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `aft`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aft`.`user` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `password` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
