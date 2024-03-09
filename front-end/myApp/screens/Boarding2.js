@@ -1,7 +1,6 @@
 import * as React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
-import Property1Default from "../components/Property1Default";
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
 const AndroidSmall4 = ({ navigation }) => {
@@ -10,11 +9,6 @@ const AndroidSmall4 = ({ navigation }) => {
       <View style={[styles.androidSmall8Child, styles.androidLayout]} />
       <View style={[styles.androidSmall8Item, styles.androidLayout]} />
       <View style={[styles.androidSmall8Inner, styles.androidLayout]} />
-      {/* <Image
-        style={[styles.vectorIcon, styles.vectorIconPosition]}
-        contentFit="cover"
-        source={require("../assets/vector.png")}
-      /> */}
       <Text style={[styles.aft, styles.aftFlexBox]}>AFT</Text>
       <View style={[styles.instanceParent, styles.vectorIconPosition]}>
         <View style={[styles.rectangleWrapper, styles.rectangleLayout]}>
@@ -36,16 +30,16 @@ const AndroidSmall4 = ({ navigation }) => {
           onPress={() => navigation.navigate('Boarding1')}
           style={{
             position: 'absolute',
-            top: 48,
-            left: 56,
+            top: responsiveHeight(5.3),
+            left: responsiveWidth(20),
             borderColor: '#107c2e',
             backgroundColor: 'transparent',
             alignItems: 'center',
             justifyContent: 'center',
             borderWidth: 1,
             borderRadius: Border.br_5xl,
-            width: 129,
-            height: 40,
+            height: responsiveHeight(4.3),
+            width: responsiveWidth(25),
           }}
         >
           <Text style={{ color: '#107c2e' }}>Back</Text>
@@ -54,17 +48,15 @@ const AndroidSmall4 = ({ navigation }) => {
           onPress={() => navigation.navigate('logOrSign')}
           style={{
             position: 'absolute',
-            top: 50,
-            left: 210,
-            // width: 111,
-            // height: 32,
+            top: responsiveHeight(5.3),
+            left: responsiveWidth(50),
             borderWidth: 1,
             borderRadius: Border.br_5xl,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#092f03',
-            width: 129,
-            height: 40,
+            height: responsiveHeight(4.3),
+            width: responsiveWidth(25),
           }}
         >
           <Text style={{ color: '#f7b304' }}>Next</Text>
@@ -81,68 +73,45 @@ const styles = StyleSheet.create({
         rotate: "-31.29deg",
       },
     ],
-    width: 208,
+    width: responsiveWidth(55),
     backgroundColor: Color.colorDarkgreen,
     borderRadius: Border.br_5xl,
-    height: 101,
+    height: responsiveHeight(13),
     position: "absolute",
   },
   ButtonsGroup: {
-    top: 500,
-    left: 11,
-    width: 400,
-    height: 30,
+    top: responsiveHeight(49.7),
+    left: responsiveWidth(2),
+    width: responsiveWidth(100),
+    height: responsiveHeight(8),
     position: "absolute",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: responsiveWidth(2),
   },
-
-
-  // rectangleLayout: {
-  //   height: 6,
-  //   width: 30,
-  //   top: 28,
-  //   position: "absolute",
-  //   zIndex: 1,
-  // },
   rectangleWrapper: {
-    left: 61,
+    left: responsiveWidth(10),
   },
   rectangleContainer: {
-    left: 95,
+    left: responsiveWidth(15),
   },
-
-
-
   aft: {
-    top: 194,
-    left: 30,
-    fontSize: FontSize.titleText_size,
+    top: responsiveHeight(15),
+    left: responsiveWidth(15),
+    fontSize: responsiveWidth(15), // Adjust the value as needed
     fontWeight: "700",
     fontFamily: FontFamily.titleText,
     color: Color.colorDarkslategray_100,
-    width: 353,
-    height: 84,
-    fontSize: 45,
+    width: responsiveWidth(70),
   },
-
   letsDelveInto: {
-    top: 321,
-    left: 25,
-    fontSize: FontSize.paragraphe_size,
+    top: responsiveHeight(36),
+    left: responsiveWidth(9),
+    fontSize: responsiveWidth(4), // Adjust the value as needed
     fontFamily: FontFamily.paragraphe,
     color: Color.colorBlack,
-    width: 354,
-    height: 62,
-    fontSize: 20,
-
+    width: responsiveWidth(80),
   },
-
-
-
-
-
-
-
-
   vectorIconPosition: {
     position: "relative",
     overflow: "hidden",
@@ -163,22 +132,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   androidSmall8Child: {
-    top: 108,
-    left: -65,
-    width: 208,
-    backgroundColor: Color.colorDarkgreen,
+    top: responsiveHeight(12),
+    left: responsiveWidth(-31),
+    height: responsiveHeight(13),
+    width: responsiveWidth(55),
     borderRadius: Border.br_5xl,
   },
   androidSmall8Item: {
-    top: 11,
-    left: -65,
-    width: 208,
-    backgroundColor: Color.colorDarkgreen,
+    top: responsiveHeight(0),
+    left: responsiveWidth(-30),
+    height: responsiveHeight(13),
+    width: responsiveWidth(55),
     borderRadius: Border.br_5xl,
   },
   androidSmall8Inner: {
-    top: 850,
-    left: 250,
+    top: responsiveHeight(99),
+    left: responsiveWidth(66),
   },
   vectorIcon: {
     height: "3.59%",
@@ -190,7 +159,6 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     maxHeight: "100%",
   },
-
   instanceItem: {
     borderRadius: Border.br_8xs,
     left: "0%",
@@ -202,26 +170,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
   },
-
   instanceInner: {
     display: "none",
   },
   rectangleFrame: {
-    left: 105,
+    left: responsiveWidth(20),
   },
   instanceParent: {
-    top: 465,
-    left: 115,
-    width: 129,
-    height: 33,
+    top: responsiveHeight(45),
+    left: responsiveWidth(15),
+    width: responsiveWidth(70),
+    height: responsiveHeight(10),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-
-
   androidSmall8: {
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorWhite,
     flex: 1,
-    height: 640,
+    height: responsiveHeight(640),
     overflow: "hidden",
   },
 });

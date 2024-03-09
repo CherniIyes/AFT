@@ -20,14 +20,16 @@ import Article1 from "../screens/Article1.js";
 import Article2 from "../screens/Article2.js";
 import DairyValueChain from "../screens/DairyValueChain.js";
 import Profile from "../screens/Profile.js";
+import Wallet from "../screens/Wallet.js";
 
 
 export default function Navigation() {
       return (
                   <Stack.Navigator screenOptions={{ headerShown: false }}>
+                        <Stack.Screen name="Wallet" component={Wallet} />
                         <Stack.Screen name="CreatAcc" component={CreatAcc} />
-                        <Stack.Screen name="Expenses" component={Expenses} />
                         <Stack.Screen name="Boarding1" component={Boarding1} />
+                        <Stack.Screen name="Expenses" component={Expenses} />
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Boarding2" component={Boarding2} />
                         <Stack.Screen name="DairyValueChain" component={DairyValueChain} />

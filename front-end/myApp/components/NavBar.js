@@ -11,7 +11,7 @@ import loginOrSign from "../screens/loginOrSign";
 import CreatAcc from "../screens/CreatAcc";
 import Boarding2 from "../screens/Boarding2";
 import Expenses from "../screens/Expenses.js";
-import Milk from "./.screens/Milk.js";
+import Milk from "../screens/Milk.js";
 import Sales from "../screens/sales.js";
 import HomePage from "../screens/HomePage.js";
 import Article1 from "../screens/Article1.js";
@@ -21,7 +21,7 @@ import Profile from "../screens/Profile.js";
 
 const Stack = createStackNavigator();
 
-export default function NavBar() {
+export default function NavBar({ navigation }) {
       return (
             <View style={styles.headerContainer} >
                   <View style={styles.ContainerInBetween}>

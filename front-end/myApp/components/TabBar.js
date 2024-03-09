@@ -12,7 +12,7 @@ import loginOrSign from "../screens/loginOrSign";
 import CreatAcc from "../screens/CreatAcc";
 import Boarding2 from "../screens/Boarding2";
 import Expenses from "../screens/Expenses.js";
-import Milk from "./.screens/Milk.js";
+import Milk from "../screens/Milk.js";
 import Sales from "../screens/sales.js";
 import HomePage from "../screens/HomePage.js";
 import Article1 from "../screens/Article1.js";
@@ -24,7 +24,7 @@ import Profile from "../screens/Profile.js";
 
 const Stack = createStackNavigator();
 
-export default function TabBar() {
+export default function TabBar({ navigation }) {
       return (
             <View style={styles.tabBarContainer}>
                   <View style={styles.tabBarbuttonContainer}>
@@ -32,7 +32,7 @@ export default function TabBar() {
                               <AntDesign name="home" size={wp('6%')} color="black" />
                               <Text style={styles.tabBarbuttonText}> Home</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('Expenses')} style={styles.tabBarbutton}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={styles.tabBarbutton}>
                               <AntDesign name="wallet" size={wp('6%')} color="black" />
                               <Text style={styles.tabBarbuttonText}> Wallet</Text>
                         </TouchableOpacity>
