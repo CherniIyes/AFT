@@ -19,7 +19,7 @@ const ProfitCalculatorScreen = () => {
   const [reload, setReload] = useState(true)
   useEffect(() => {
     fetchData();
-  }, [reload]);
+  }, []);
   const fetchData = async () => {
     try {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
