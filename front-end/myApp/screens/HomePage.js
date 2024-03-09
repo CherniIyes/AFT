@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,11 @@ import {
   TextInput,
   Animated,
   LayoutAnimation,
-  StatusBar,
+  Easing,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome"; // Updated import
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
@@ -29,8 +29,9 @@ const HomePage = (props) => {
   const [likedArticles, setLikedArticles] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [faqExpanded, setFaqExpanded] = useState(false);
-  const [faqHeight] = useState(new Animated.Value(0));
+  const [faqHeight, setFaqHeight] = useState(new Animated.Value(0));
   const navigation = useNavigation();
+  const animationValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     fetchArticles();
@@ -39,6 +40,21 @@ const HomePage = (props) => {
     }, 3000); // Change the slider value every 3 seconds
     return () => clearInterval(intervalId); // Clear the interval on component unmount
   }, []);
+
+  useEffect(() => {
+    animateIcon();
+  }, [likedArticles]);
+
+  const animateIcon = () => {
+    Animated.timing(animationValue, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      animationValue.setValue(0);
+    });
+  };
 
   const handleTest = (idd) => {
     navigation.navigate(`Test`, { idd });
@@ -64,7 +80,7 @@ const HomePage = (props) => {
   const toggleFaq = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setFaqExpanded(!faqExpanded);
-    Animated.spring(faqHeight, {
+    Animated.timing(faqHeight, {
       toValue: faqExpanded ? 0 : 400,
       duration: 300,
       useNativeDriver: false,
@@ -73,7 +89,6 @@ const HomePage = (props) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#092F03" barStyle="light-content" />
       <ScrollView>
         <View style={styles.sliderContainer}>
           <Slider
@@ -107,12 +122,18 @@ const HomePage = (props) => {
         </View>
 
         <Text style={styles.introText}>
-          Welcome to the <Text style={{ fontWeight: "bold", fontStyle: "italic", color: "#F6B304" }}>future</Text> of dairy production! Here are some insightful articles and steps aimed at enhancing your dairy production and elevating its quality.
+          Welcome to the{" "}
+          <Text style={{ fontWeight: "bold", fontStyle: "italic", color: "#F6B304" }}>
+            future
+          </Text>{" "}
+          of dairy production! Here are some insightful articles and steps aimed
+          at enhancing your dairy production and elevating its quality.
+          <Icon name="tree" size={18} color="#4CAF50" /> Let's grow together!
         </Text>
 
         {/* Enhanced Search Bar */}
         <View style={styles.searchContainer}>
-          <FontAwesome5 name="search" size={20} color="#F6B304" style={styles.searchIcon} />
+          <Icon name="search" size={20} color="#F6B304" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search articles by name..."
@@ -125,8 +146,8 @@ const HomePage = (props) => {
         {/* Articles */}
         <View style={styles.articlesContainer}>
           {filteredArticles.map((article, index) => (
-            <TouchableOpacity 
-              key={index} 
+            <TouchableOpacity
+              key={index}
               onPress={() => handleTest(article.id)}
               activeOpacity={0.7} // Adjust the opacity as desired
             >
@@ -135,45 +156,81 @@ const HomePage = (props) => {
                 <View style={styles.flexx}>
                   <Text style={styles.sectionTitle}>{article.title}</Text>
                   <TouchableOpacity onPress={() => handleLike(index)}>
-                    <FontAwesome5
-                      name={likedArticles[index] ? "heart" : "heart"}
-                      size={20}
-                      color={likedArticles[index] ? "#F6B304" : "#092F03"}
-                    />
+                    <Animated.View
+                      style={{
+                        transform: [
+                          {
+                            scale: animationValue.interpolate({
+                              inputRange: [0, 0.5, 1],
+                              outputRange: [1, 1.2, 1],
+                            }),
+                          },
+                        ],
+                      }}
+                    >
+                      <Icon
+                        name={likedArticles[index] ? "heart" : "heart-o"}
+                        size={20}
+                        color={likedArticles[index] ? "#F6B304" : "#092F03"}
+                      />
+                    </Animated.View>
                   </TouchableOpacity>
                 </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
-        
+
         {/* Advanced FAQ Section */}
         <TouchableOpacity onPress={toggleFaq} style={styles.faqHeader}>
           <Text style={styles.faqHeaderText}>FAQ</Text>
-          <MaterialIcons name={faqExpanded ? "keyboard-arrow-up" : "keyboard-arrow-down"} size={20} color="#F6B304" />
+          <Icon
+            name={faqExpanded ? "chevron-up" : "chevron-down"}
+            size={20}
+            color="#F6B304"
+          />
         </TouchableOpacity>
         <Animated.View style={[styles.faqContainer, { height: faqHeight }]}>
           {/* Add your FAQ content here */}
           <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>Q: How can I improve milk production?</Text>
-            <Text style={styles.faqAnswer}>A: Ensure cows have proper nutrition and a comfortable environment.</Text>
+            <View style={styles.faqBubble}>
+              <Text style={styles.faqQuestion}>
+                Q: How can I improve milk production?
+              </Text>
+              <Text style={styles.faqAnswer}>
+                A: Ensure cows have proper nutrition and a comfortable environment.
+              </Text>
+            </View>
           </View>
           <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>Q: What are the common diseases in dairy cows?</Text>
-            <Text style={styles.faqAnswer}>A: Common diseases include mastitis, lameness, and metabolic disorders.</Text>
+            <View style={styles.faqBubble}>
+              <Text style={styles.faqQuestion}>
+                Q: What are the common diseases in dairy cows?
+              </Text>
+              <Text style={styles.faqAnswer}>
+                A: Common diseases include mastitis, lameness, and metabolic disorders.
+              </Text>
+            </View>
           </View>
           <View style={styles.faqItem}>
-            <Text style={styles.faqQuestion}>Q: How often should cows be milked?</Text>
-            <Text style={styles.faqAnswer}>A: Cows should typically be milked two to three times per day.</Text>
+            <View style={styles.faqBubble}>
+              <Text style={styles.faqQuestion}>
+                Q: How often should cows be milked?
+              </Text>
+              <Text style={styles.faqAnswer}>
+                A: Cows should typically be milked two to three times per day.
+              </Text>
+            </View>
           </View>
           {/* Add more FAQs as needed */}
         </Animated.View>
-        
+
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2024 Your Dairy App. All Rights Reserved.</Text>
+          <Text style={styles.footerText}>
+            © 2024 Your Dairy App. All Rights Reserved.
+          </Text>
         </View>
-        
       </ScrollView>
     </View>
   );
@@ -182,9 +239,11 @@ const HomePage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 4,
     backgroundColor: "#FFFFFF",
-    paddingTop: 40,
-    paddingHorizontal: 20,
+    position: "relative",
+    marginTop: 105, // Adjusted to provide space for the headerContainer
+    marginBottom: 70, // Adjusted to provide more space for the tabBarContainer
   },
   sliderContainer: {
     alignItems: "center",
@@ -200,7 +259,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "cover",
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -211,10 +270,11 @@ const styles = StyleSheet.create({
   },
   introText: {
     fontSize: 16,
+    marginHorizontal: 20,
     marginBottom: 20,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    color: '#092F03',
+    textAlign: "center",
+    fontStyle: "italic",
+    color: "#092F03",
   },
   sectionTitle: {
     fontSize: 18,
@@ -223,12 +283,12 @@ const styles = StyleSheet.create({
     color: "#092F03",
   },
   card: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#D8F7D4",
     borderRadius: 10,
     marginTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -253,7 +313,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#D8F7D4",
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -276,7 +336,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#D8F7D4",
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -288,7 +348,7 @@ const styles = StyleSheet.create({
     color: "#092F03",
   },
   faqContainer: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#D8F7D4",
     borderRadius: 10,
     paddingHorizontal: 10,
     overflow: "hidden",
@@ -297,10 +357,16 @@ const styles = StyleSheet.create({
   faqItem: {
     marginBottom: 20,
   },
+  faqBubble: {
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#D8F7D4",
+  },
   faqQuestion: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#F6B304",
+    color: "#092F03",
     marginBottom: 5,
   },
   faqAnswer: {

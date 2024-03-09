@@ -32,7 +32,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.100.41:6464/milk');
+      const response = await axios.get('http://192.168.137.55:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -40,42 +40,43 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!date || !price || !quantity) {
-      setError('Please fill in all fields.');
-      return;
-    }
+const handleSubmit = async () => {
+  if (!date || !price || !quantity) {
+    setError('Please fill in all fields.');
+    return;
+  }
 
-    try {
-      await axios.post('http://192.168.100.41:6464/milk/add', {
-        day: date,
-        price: parseFloat(price),
-        quantity: parseInt(quantity),
-      });
-      
-      // Create a new row with the submitted data
-      const newRow = {
-        day: date,
-        price: parseFloat(price),
-        quantity: parseInt(quantity),
-      };
+  try {
+    await axios.post('http://192.168.100.41:6464/milk/add', {
+      day: date,
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
+    });
+    
+    // Create a new row with the submitted data
+    const newRow = {
+      day: date,
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
+    };
 
-      // Update tableData by appending the new row
-      setTableData([...tableData, newRow]);
+    // Update tableData by appending the new row
+    setTableData([...tableData, newRow]);
 
-      // Clear input fields and error message
-      setDate('');
-      setPrice('');
-      setQuantity('');
-      setError(null);
+    // Clear input fields and error message
+    setDate('');
+    setPrice('');
+    setQuantity('');
+    setError(null);
 
-      // Fetch updated data
-      fetchData();
-    } catch (error) {
-      console.error('Error posting data:', error);
-      setError('Error posting data: ' + error.message);
-    }
-  };
+    // Fetch updated data
+    fetchData();
+  } catch (error) {
+    console.error('Error posting data:', error);
+    setError('Error posting data: ' + error.message);
+  }
+};
+
 
   const calculateProfit = () => {
     if (!price || !quantity) {
@@ -100,9 +101,9 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const renderProfitCards = () => {
     return [
-      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'flask' },
-      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'flask' },
-      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'flask' }
+      { title: 'Daily Profit', value: dailyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Monthly Profit', value: monthlyProfit.toFixed(2), icon: 'money-bill-wave' },
+      { title: 'Yearly Profit', value: yearlyProfit.toFixed(2), icon: 'money-bill-wave' }
     ].map((item, index) => (
       <Card key={index} style={styles.card}>
         <Card.Content>
@@ -113,8 +114,6 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       </Card>
     ));
   };
-  ;
-
 
   const renderItem = ({ item, index }) => {
     console.log('Rendering item:', item); // Log the item being rendered
