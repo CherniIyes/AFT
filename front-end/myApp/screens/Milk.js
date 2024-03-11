@@ -32,7 +32,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.137.55:6464/milk');
+      const response = await axios.get('192.168.13.177:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -40,42 +40,42 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     }
   };
 
-const handleSubmit = async () => {
-  if (!date || !price || !quantity) {
-    setError('Please fill in all fields.');
-    return;
-  }
+  const handleSubmit = async () => {
+    if (!date || !price || !quantity) {
+      setError('Please fill in all fields.');
+      return;
+    }
 
-  try {
-    await axios.post('http://192.168.100.41:6464/milk/add', {
-      day: date,
-      price: parseFloat(price),
-      quantity: parseInt(quantity),
-    });
-    
-    // Create a new row with the submitted data
-    const newRow = {
-      day: date,
-      price: parseFloat(price),
-      quantity: parseInt(quantity),
-    };
+    try {
+      await axios.post('192.168.13.177:6464/milk/add', {
+        day: date,
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
+      });
 
-    // Update tableData by appending the new row
-    setTableData([...tableData, newRow]);
+      // Create a new row with the submitted data
+      const newRow = {
+        day: date,
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
+      };
 
-    // Clear input fields and error message
-    setDate('');
-    setPrice('');
-    setQuantity('');
-    setError(null);
+      // Update tableData by appending the new row
+      setTableData([...tableData, newRow]);
 
-    // Fetch updated data
-    fetchData();
-  } catch (error) {
-    console.error('Error posting data:', error);
-    setError('Error posting data: ' + error.message);
-  }
-};
+      // Clear input fields and error message
+      setDate('');
+      setPrice('');
+      setQuantity('');
+      setError(null);
+
+      // Fetch updated data
+      fetchData();
+    } catch (error) {
+      console.error('Error posting data:', error);
+      setError('Error posting data: ' + error.message);
+    }
+  };
 
 
   const calculateProfit = () => {

@@ -47,9 +47,9 @@ const App = () => {
 const MainScreen = ({ navigation }) => {
   return (
     <>
-      {/* <Nav navigation={navigation} /> */}
+      <Nav navigation={navigation} />
       <Navig />
-      {/* <Tab navigation={navigation} /> */}
+      <Tab navigation={navigation} />
     </>
   );
 };

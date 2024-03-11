@@ -3,8 +3,8 @@ import axios from 'axios';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList, Pressable, Modal, Button, } from 'react-native';
 import { PDFDocument, rgb, StandardFonts } from 'react-native-pdf-lib';
 // import * as RNFS from 'react-native-fs';
-// import { saveAs } from 'file-saver';
-// import RNFS from 'react-native-fs';
+import { saveAs } from 'file-saver';
+import RNFS from 'react-native-fs';
 
 
 
@@ -18,13 +18,13 @@ const Wallet = () => {
       useEffect(() => {
             const fetchData = async () => {
                   try {
-                        const aftResponse = await axios.get('http://192.168.100.54:6464/sales/getAll');
+                        const aftResponse = await axios.get('http://192.168.13.177:6464/sales/getAll');
                         setAllAftData(aftResponse.data);
 
-                        const expensesResponse = await axios.get('http://192.168.100.54:6464/exp/getall');
+                        const expensesResponse = await axios.get('http://192.168.13.177:6464/exp/getall');
                         setExpensesData(expensesResponse.data);
 
-                        const tableResponse = await axios.get('http://192.168.100.54:6464/milk');
+                        const tableResponse = await axios.get('http://192.168.13.177:6464/milk');
                         setTableData(tableResponse.data);
                   } catch (error) {
                         console.error('Error fetching data:', error.message);
@@ -51,10 +51,10 @@ const Wallet = () => {
             const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true });
 
             // For native platforms (iOS/Android)
-            // const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+            const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
 
             try {
-                  // await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
+                  await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
 
                   // Download the PDF file
                   console.log('PDF saved successfully at:', pdfPath);
@@ -135,9 +135,9 @@ const Wallet = () => {
                               />
                         </View>
                   )}
-                  {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
+                  <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
                         <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
-                  </TouchableOpacity> */}
+                  </TouchableOpacity>
             </View>
       );
 };

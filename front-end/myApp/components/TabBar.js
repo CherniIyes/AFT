@@ -28,7 +28,7 @@ export default function TabBar({ navigation }) {
       return (
             <View style={styles.tabBarContainer}>
                   <View style={styles.tabBarbuttonContainer}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); setView('HomePage') }} style={styles.tabBarbutton}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('HomePage');  }} style={styles.tabBarbutton}>
                               <AntDesign name="home" size={wp('6%')} color="black" />
                               <Text style={styles.tabBarbuttonText}> Home</Text>
                         </TouchableOpacity>

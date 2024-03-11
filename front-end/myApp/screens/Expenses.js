@@ -87,7 +87,7 @@ const Expenses = () => {
                   //       hay: input5,
                   //       date: selectedDate,
                   // });
-                  const response = await axios.post("http://192.168.1.4:6464/exp/add", {
+                  const response = await axios.post("192.168.13.177:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -109,7 +109,7 @@ const Expenses = () => {
 
       const fetchExpensesData = async () => {
             try {
-                  const response = await axios.get("http://192.168.1.4:6464/exp/getall");
+                  const response = await axios.get("http://192.168.13.177:6464/exp/getall");
                   // const response = await axios.get("http://192.168.100.52:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
