@@ -12,84 +12,72 @@ const AndroidSmall2 = ({ navigation }) => {
         contentFit="cover"
         source={require("../assets/2f1e07294fe18a2961d5443aebf74531-1.png")}
       />
-      <View style={[styles.samllgreen, styles.androidLayout]} />
-      <View style={[styles.smallgreen2, styles.androidLayout]} />
+      {/* <View style={[styles.samllgreen, styles.androidLayout]} /> */}
+      {/* <View style={[styles.smallgreen2, styles.androidLayout]} /> */}
       <View style={[styles.androidSmall2Inner, styles.androidLayout]} />
       <Text style={styles.startYourJourney}>{`Start Your Journey With A Simple Click`}</Text>
       <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={() => navigation.navigate('CreatAcc')}>
-          <View
-            style={{
-              ...styles.buttonsig,
-              borderColor: "#107c2e",
-              backgroundColor: "unset",
-            }}
-          >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </View>
+
+
+        <TouchableOpacity style={{
+          left: 58,
+          top: 201,
+          margin: 5,
+          borderColor: '#107c2e',
+          backgroundColor: 'transparent',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderWidth: 1,
+          borderRadius: Border.br_5xl,
+          width: 129,
+          height: 40,
+        }} onPress={() => navigation.navigate('CreatAcc')}>
+
+          <Text style={{ color: '#107c2e', }}>Sign Up</Text>
+
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <View
-            style={{
-              ...styles.buttonlog,
-              borderColor: "unset",
-              backgroundColor: "#092f03",
-            }}
-          >
-            <Text style={styles.buttonText}>Login</Text>
-          </View>
+
+
+        <TouchableOpacity style={{
+          left: 200,
+          bottom: -157,
+          borderWidth: 1,
+          borderRadius: Border.br_5xl,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#092f03',
+          width: 129,
+          height: 40,
+        }} onPress={() => navigation.navigate('Login')}>
+
+          <Text style={{ color: '#f7b304' }}>Login</Text>
+
         </TouchableOpacity>
+
+
+
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonsig: {
-    width: 106,
-    height: 31,
-    position: "relative",
-    left: 70,
-    top: 201,
-    borderWidth: 1,
-    borderRadius: Border.br_5xl,
-    alignItems: "center",
-    justifyContent: "center",
 
-    margin: 5,
-  },
-
-  buttonlog: {
-    width: 106,
-    height: 31,
-    position: "relative",
-    left: 190,
-    bottom: -160,
-    borderWidth: 1,
-    borderRadius: Border.br_5xl,
-    alignItems: "center",
-    justifyContent: "center",
-
-    margin: 5,
-  },
   buttonText: {
     color: Color.colorBlack,
     fontSize: FontSize.size_sm,
     fontFamily: FontFamily.interRegular,
   },
-  instanceParent: {
 
-    // flexDirection: "row",
-    // justifyContent: "space-between",  // Adjust this based on your design
-    top: 450,
+  instanceParent: {
+    top: 500,
     left: 16,
-    width: 200,
+    width: 319,
     height: 81,
     position: "relative",
-    overflow: "hidden",
-    flexDirection: 'row',
-    flexWrap: 'wrap',
   },
+
+
   androidLayout: {
     transform: [
       {
@@ -102,6 +90,27 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xl,
     position: "absolute",
   },
+  startYourJourney: {
+    top: 620,
+    left: 80,
+    fontSize: 19,
+    // fontSize: FontSize.size_4xl,
+    fontFamily: FontFamily.interRegular,
+    color: Color.colorBlack,
+    textAlign: "left",
+    width: 291,
+    height: 47,
+    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    textShadowRadius: 4,
+    position: "absolute",
+  },
+
+
+
   cowicon: {
     top: 0,
     left: 0,
@@ -130,30 +139,7 @@ const styles = StyleSheet.create({
     top: 820,
     left: 300,
   },
-  startYourJourney: {
-    top: 620,
-    left: 78,
-    fontSize: FontSize.size_4xl,
-    fontFamily: FontFamily.interRegular,
-    color: Color.colorBlack,
-    textAlign: "left",
-    width: 291,
-    height: 47,
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
-    textShadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    textShadowRadius: 4,
-    position: "absolute",
-  },
-  instanceParent: {
-    top: 490,
-    left: 16,
-    width: 319,
-    height: 81,
-    position: "relative",
-  },
+
   androidSmall2: {
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorWhite,

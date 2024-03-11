@@ -3,17 +3,17 @@ import {
   TextInput,
   StyleSheet,
   View,
-  Image,
   Text,
   TouchableOpacity,
   Platform,
   FlatList,
   Pressable,
   Modal,
-  ScrollView,
+  Button,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
+import { Color } from '../GlobalStyles';
 
 const SalesList = () => {
   const [allAftData, setAllAftData] = useState([]);
@@ -38,7 +38,7 @@ const SalesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.100.70:5464/sales/getAll');
+        const response = await axios.get('http://192.168.100.61:5464/sales/getAll');
         setAllAftData(response.data);
         setFilteredAftData(response.data);
       } catch (error) {
@@ -50,14 +50,14 @@ const SalesList = () => {
     fetchData();
   }, []);
 
-  const handleDateIconPress = () => {
+  const handleDateIconPress = async () => {
     setShowDatePicker(true);
   };
 
-  const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === 'ios');
-    if (selectedDate) {
-      setSelectedDate(selectedDate);
+  const handleDateChange = (event, newDate) => {
+    setShowDatePicker(false);
+    if (newDate) {
+      setSelectedDate(newDate);
     }
   };
 
@@ -87,7 +87,7 @@ const SalesList = () => {
         productdetails: updatedProductDetails,
       };
 
-      await axios.put(`http://192.168.100.70:5464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.100.61:5464/sales/Update/${selectedItem.id}`, updatedItem);
 
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -103,8 +103,8 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.100.70:5464/sales/delete/${item.id}`);
-  
+      await axios.delete(`http://192.168.100.61:5464/sales/delete/${item.id}`);
+
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
     } catch (error) {
@@ -115,7 +115,7 @@ const SalesList = () => {
 
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.100.70:5464/sales/Add', {
+      const response = await axios.post('http://192.168.100.61:5464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
         date: selectedDate.toLocaleDateString(),
@@ -153,22 +153,35 @@ const SalesList = () => {
   }
 
   return (
-   <View style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.salesList}>
         <Text style={styles.salesListTitle}>Sales List</Text>
 
-        <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-          <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
-        </TouchableOpacity>
+        <View style={styles.inputsContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Product"
+            value={newProduct}
+            onChangeText={(text) => setNewProduct(text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Price"
+            value={newPrice}
+            onChangeText={(text) => setNewPrice(text)}
+            keyboardType="numeric"
+          />
+          <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+            <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
+          </TouchableOpacity>
+        </View>
 
         {showDatePicker && (
           <DateTimePicker
             value={selectedDate}
             mode="date"
-            display="spinner"
+            display="default"
             onChange={handleDateChange}
-            textColor="#000"
-            style={{ backgroundColor: '#fff' }}
           />
         )}
 
@@ -219,24 +232,22 @@ const SalesList = () => {
                 placeholderTextColor="#A0A0A0"
                 value={newPrice}
                 onChangeText={(text) => setNewPrice(text)}
+                keyboardType="numeric"
               />
               {Platform.OS === 'ios' && (
                 <DateTimePicker
                   value={selectedDate}
                   mode="date"
-                  display="spinner"
+                  display="default"
                   onChange={(event, newDate) => setSelectedDate(newDate)}
-                  textColor="#000"
-                  style={{ backgroundColor: '#fff' }}
                 />
               )}
               {Platform.OS === 'android' && (
                 <DateTimePicker
                   value={selectedDate}
                   mode="date"
+                  display="default"
                   onChange={(event, newDate) => setSelectedDate(newDate)}
-                  textColor="#000"
-                  style={{ backgroundColor: '#fff' }}
                 />
               )}
               <TextInput
@@ -273,24 +284,22 @@ const SalesList = () => {
                 placeholderTextColor="#A0A0A0"
                 value={updatedPrice}
                 onChangeText={(text) => setUpdatedPrice(text)}
+                keyboardType="numeric"
               />
               {Platform.OS === 'ios' && (
                 <DateTimePicker
                   value={updatedDate}
                   mode="date"
-                  display="spinner"
+                  display="default"
                   onChange={(event, newDate) => setUpdatedDate(newDate)}
-                  textColor="#000"
-                  style={{ backgroundColor: '#fff' }}
                 />
               )}
               {Platform.OS === 'android' && (
                 <DateTimePicker
                   value={updatedDate}
                   mode="date"
+                  display="default"
                   onChange={(event, newDate) => setUpdatedDate(newDate)}
-                  textColor="#000"
-                  style={{ backgroundColor: '#fff' }}
                 />
               )}
               <TextInput
@@ -315,90 +324,37 @@ const SalesList = () => {
           <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
         </View>
       </View>
-     </View> 
+    </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 4,
-    backgroundColor: '#FFFFFF',
-    position: 'relative',
-    marginTop: 105,  // Adjusted to provide space for the headerContainer
-    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+    padding: 16,
+    backgroundColor: '#fff',
   },
-  
   salesListTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333333',
   },
-  
-  productName: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#333333',
-  },
   dateIcon: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    marginBottom: 16,
   },
-  itemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  buttonContainer: {
+  inputsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  updateButton: {
-    backgroundColor: '#4CAF50', // Green color, you can change this
-    padding: 10,
-    borderRadius: 5,
-    marginRight: 10, // Adjust spacing as needed
-  },
-  deleteButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 5,
-  },
-  addButton: {
-    backgroundColor: 'darkolivegreen',
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-    margin: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
+    marginBottom: 10,
   },
   input: {
+    flex: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
+    borderColor: Color.primary,
     borderRadius: 5,
+    padding: 8,
+    marginHorizontal: 5,
+    marginBottom: 10,
   },
   rectangleView: {
     borderRadius: 7,
@@ -413,23 +369,66 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 5,
   },
-  errorText: {
-    color: 'red',
-    fontSize: 18,
-    textAlign: 'center',
+  itemContainer: {
+    marginBottom: 16,
+    padding: 16,
+    borderWidth: 1,
+    
+    borderRadius: 8,
   },
-  dateText: {
-    fontWeight: 'bold',
-    marginBottom: 5,
+  date: {
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  rectangleView: {
+    backgroundColor: Color.colorDarkolivegreen,
+    padding: 8,
+    borderRadius: 4,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 8,
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: '#fff',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: '#007BFF',
+    padding: 16,
+    borderRadius: 50,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
   },
   totalContainer: {
-    marginTop: 20,
-    alignItems: 'center',
+    marginTop: 16,
+    alignItems: 'flex-end',
   },
   totalText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
+  },
+  productName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333333',
   },
 });
 

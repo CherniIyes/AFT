@@ -175,7 +175,7 @@ const AndroidSmall3 = ({ navigation }) => {
 const styles = StyleSheet.create({
 
   androidLayout: {
-    // borderRadius: Border.br_5xl,
+    borderRadius: Border.br_5xl,
     position: "absolute",
   },
   signUpFlexBox: {
@@ -220,9 +220,9 @@ const styles = StyleSheet.create({
   },
   androidSmall5Item: {
     top: 598,
-    left: 216,
+    left: 250,
     backgroundColor: Color.colorDarkslategray_200,
-    width: 208,
+    width: 850,
     height: 101,
     transform: [
       {

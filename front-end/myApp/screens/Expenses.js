@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList } from "react-native";
+import { TextInput, StyleSheet, View, Text,Button, TouchableOpacity, Platform, FlatList } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 
@@ -79,31 +79,31 @@ const Expenses = () => {
                   <View style={styles.inputsContainer}>
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 1"
+                              placeholder="HandWork"
                               value={input1}
                               onChangeText={(text) => setInput1(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 2"
+                              placeholder="Fodder"
                               value={input2}
                               onChangeText={(text) => setInput2(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 3"
+                              placeholder="Bills"
                               value={input3}
                               onChangeText={(text) => setInput3(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 4"
+                              placeholder="Medical Expenses"
                               value={input4}
                               onChangeText={(text) => setInput4(text)}
                         />
                         <TextInput
                               style={styles.input}
-                              placeholder="Input 5"
+                              placeholder="Hay"
                               value={input5}
                               onChangeText={(text) => setInput5(text)}
                         />
@@ -111,9 +111,10 @@ const Expenses = () => {
                               <Text>{selectedDate || "📅"}</Text>
                         </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
+                  {/* <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
                         <Text>Submit</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
+                  <Button title="Submit" onPress={handleButtonPress} style={styles.button} color="#107c2e" />
                   {showDatePicker && (
                         <DateTimePicker
                               value={date}
@@ -159,8 +160,8 @@ const styles = StyleSheet.create({
             padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
-            marginTop: 105,  // Adjusted to provide space for the headerContainer
-            marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+            marginTop: 105,  
+            marginBottom: 23,  
       },
       tableContainer: {
             marginTop: 20,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
             padding: 9,
       },
       button: {
-            backgroundColor: "blue",
+            backgroundColor: "#107c2e",
             padding: 10,
             alignItems: "center",
             borderRadius: 5,
