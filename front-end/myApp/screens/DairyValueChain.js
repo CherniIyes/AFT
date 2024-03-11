@@ -17,7 +17,7 @@ const DairyValueChain = () => {
   const [showTable, setShowTable] = useState(false); 
 
   const fetchAllCows = () => {
-    fetch('http://192.168.1.191:6464/cows/getAll')
+    fetch('http://192.168.43.138:6464/cows/getAll')
       .then(response => response.json())
       .then(data => {
         console.log('All cows data:', data);
@@ -73,7 +73,7 @@ const DairyValueChain = () => {
       calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
     };
 
-    fetch('http://192.168.1.191:6464/cows/add', {
+    fetch('http://192.168.43.138:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

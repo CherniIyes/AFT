@@ -24,7 +24,7 @@ const Expenses = () => {
                   //       hay: input5,
                   //       date: selectedDate,
                   // });
-                  const response = await axios.post("http://192.168.100.52:6464/exp/add", {
+                  const response = await axios.post("http://192.168.43.138:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,

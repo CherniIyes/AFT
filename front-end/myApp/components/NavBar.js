@@ -26,19 +26,19 @@ export default function NavBar({ navigation }) {
             <View style={styles.headerContainer} >
                   <View style={styles.ContainerInBetween}>
                         <View style={styles.buttonContainer}>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Milk'); setView('Milk'); }} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Milk');}} style={styles.filsa}>
                                     <FontAwesome6 name="cow" size={wp('6%')} color="black" />
                                     <Text>Dairy Production</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); setView('Sales'); }} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); ; }} style={styles.filsa}>
                                     <MaterialIcons name="point-of-sale" size={wp('6%')} color="black" />
                                     <Text>Sales</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); setView('DairyValueChain') }} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain');  }} style={styles.filsa}>
                                     <MaterialCommunityIcons name="cow" size={wp('6%')} color="black" />
                                     <Text>Dairy Value Chain</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); setView('Expenses') }} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Expenses');  }} style={styles.filsa}>
                                     <MaterialCommunityIcons name="point-of-sale" size={wp('6%')} color="black" />
                                     <Text>Expenses</Text>
                               </TouchableOpacity>
