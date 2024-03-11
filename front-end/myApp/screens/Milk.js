@@ -40,11 +40,11 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     }
   };
 
-const handleSubmit = async () => {
-  if (!date || !price || !quantity) {
-    setError('Please fill in all fields.');
-    return;
-  }
+  const handleSubmit = async () => {
+    if (!date || !price || !quantity) {
+      setError('Please fill in all fields.');
+      return;
+    }
 
   try {
     await axios.post('http://192.168.43.138:6464/milk/add', {
@@ -60,22 +60,22 @@ const handleSubmit = async () => {
       quantity: parseInt(quantity),
     };
 
-    // Update tableData by appending the new row
-    setTableData([...tableData, newRow]);
+      // Update tableData by appending the new row
+      setTableData([...tableData, newRow]);
 
-    // Clear input fields and error message
-    setDate('');
-    setPrice('');
-    setQuantity('');
-    setError(null);
+      // Clear input fields and error message
+      setDate('');
+      setPrice('');
+      setQuantity('');
+      setError(null);
 
-    // Fetch updated data
-    fetchData();
-  } catch (error) {
-    console.error('Error posting data:', error);
-    setError('Error posting data: ' + error.message);
-  }
-};
+      // Fetch updated data
+      fetchData();
+    } catch (error) {
+      console.error('Error posting data:', error);
+      setError('Error posting data: ' + error.message);
+    }
+  };
 
 
   const calculateProfit = () => {

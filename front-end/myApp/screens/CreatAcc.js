@@ -24,7 +24,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      const registerResponse = await axios.post('http://192.168.100.52:6464/user/register', {
+      const registerResponse = await axios.post('192.168.13.177:6464/user/register', {
         username,
         email,
         password
@@ -66,13 +66,13 @@ const CreateAccountScreen = ({ navigation }) => {
   return (
     <View style={styles.androidSmall5}>
 
-        <Image
-          style={[styles.BigGreen, styles.androidLayout]}
-          contentFit="cover"
-          source={require("../assets/rectangle-2.png")}
-        />
+      <Image
+        style={[styles.BigGreen, styles.androidLayout]}
+        contentFit="cover"
+        source={require("../assets/rectangle-2.png")}
+      />
 
-        <View style={[styles.blueSquaree, styles.androidLayout]} />
+      <View style={[styles.blueSquaree, styles.androidLayout]} />
 
       <View style={styles.midddle}>
         <Text style={[styles.createAnAccount, styles.signUpFlexBox]}>
@@ -144,7 +144,7 @@ const CreateAccountScreen = ({ navigation }) => {
           source={require("../assets/eleyeclose.png")}
         />
 
-        
+
         <View style={styles.rectangleView} />
 
         <Text style={[styles.signUp, styles.signUpTypo]}>
@@ -154,7 +154,7 @@ const CreateAccountScreen = ({ navigation }) => {
         </Text>
 
 
-        
+
         <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
           <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
           <Text style={[styles.loginUp, styles.signUpTypo]}>
@@ -319,8 +319,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-  }, 
-  
+  },
+
   midddle: {
     // width: responsiveWidth(49),
     left: responsiveWidth(8),

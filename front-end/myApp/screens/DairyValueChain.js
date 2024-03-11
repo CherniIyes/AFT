@@ -12,7 +12,7 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
- 
+
   const [allCows, setAllCows] = useState([]);
   const [showTable, setShowTable] = useState(false); 
 
@@ -328,8 +328,8 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: 'center',
-    
-    
+
+
   },
 });
 

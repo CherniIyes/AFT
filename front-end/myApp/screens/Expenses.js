@@ -13,6 +13,69 @@ const Expenses = () => {
       const [showDatePicker, setShowDatePicker] = useState(false);
       const [selectedDate, setSelectedDate] = useState("");
       const [expensesData, setExpensesData] = useState([]);
+      const [selectedYear, setSelectedYear] = useState("");
+      const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
+
+
+      const handleFilterDateChange = (event, newDate) => {
+            if (Platform.OS === "android") {
+                  setShowFilterDatePicker(false);
+            }
+            if (newDate) {
+                  setDate(newDate);
+                  const formattedDate = newDate.toLocaleDateString();
+                  setSelectedDate(formattedDate);
+
+                  // Extract the year from the selected date
+                  const year = newDate.getFullYear();
+                  setSelectedYear(year.toString());
+            }
+      };
+
+      const handleFilterDateIconPress = () => {
+            setShowFilterDatePicker(true);
+      };
+
+
+
+
+
+      // <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
+      //       <Text>{selectedDate || "Date"}</Text>
+      // </TouchableOpacity>
+      // {
+      //       showFilterDatePicker && (
+      //             <DateTimePicker
+      //                   value={date}
+      //                   mode="date"
+      //                   display="spinner"
+      //                   onChange={handleFilterDateChange}
+      //             />
+      //       )
+      // }
+
+
+
+
+
+
+
+
+      const handleDateIconPress = () => {
+            setShowDatePicker(true);
+      };
+
+      const handleDateChange = (event, newDate) => {
+            if (Platform.OS === "android") {
+                  setShowDatePicker(false);
+            }
+            if (newDate) {
+                  setDate(newDate);
+                  const formattedDate = newDate.toLocaleDateString();
+                  setSelectedDate(formattedDate);
+            }
+      };
+
 
       const handleButtonPress = async () => {
             try {
@@ -25,6 +88,7 @@ const Expenses = () => {
                   //       date: selectedDate,
                   // });
                   const response = await axios.post("http://192.168.43.138:6464/exp/add", {
+                  const response = await axios.post("192.168.13.177:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -43,25 +107,11 @@ const Expenses = () => {
             }
       };
 
-      const handleDateIconPress = () => {
-            setShowDatePicker(true);
-      };
-
-      const handleDateChange = (event, newDate) => {
-            if (Platform.OS === "android") {
-                  setShowDatePicker(false);
-            }
-            if (newDate) {
-                  setDate(newDate);
-                  const formattedDate = newDate.toLocaleDateString();
-                  setSelectedDate(formattedDate);
-            }
-      };
 
       const fetchExpensesData = async () => {
             try {
-                  // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
-                  const response = await axios.get("http://192.168.100.52:6464/exp/getall");
+                  const response = await axios.get("http://192.168.13.177:6464/exp/getall");
+                  // const response = await axios.get("http://192.168.100.52:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);
@@ -125,17 +175,29 @@ const Expenses = () => {
                   )}
                   {expensesData.length > 0 && (
                         <View style={styles.tableContainer}>
-                              <Text style={styles.tableHeader}>Expenses Data:</Text>
+                              <Text style={styles.tableHeader}>Expenses:</Text>
                               <View style={styles.tableRowHeader}>
                                     <Text style={styles.tableCellHeader}>Handwork</Text>
                                     <Text style={styles.tableCellHeader}>Fodder</Text>
                                     <Text style={styles.tableCellHeader}>Bills</Text>
                                     <Text style={styles.tableCellHeader}>Medical Expenses</Text>
                                     <Text style={styles.tableCellHeader}>Hay</Text>
-                                    <Text style={styles.tableCellHeader}>Date</Text>
+                                    <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
+                                          <Text>{selectedDate || "Date"}</Text>
+                                    </TouchableOpacity>
+                                    {
+                                          showFilterDatePicker && (
+                                                <DateTimePicker
+                                                      value={date}
+                                                      mode="date"
+                                                      display="spinner"
+                                                      onChange={handleFilterDateChange}
+                                                />
+                                          )
+                                    }
                               </View>
                               <FlatList
-                                    data={expensesData}
+                                    data={expensesData.filter((item) => item.date.includes(selectedYear))}
                                     keyExtractor={(item) => item.id.toString()}
                                     renderItem={({ item }) => (
                                           <View style={styles.tableRow}>

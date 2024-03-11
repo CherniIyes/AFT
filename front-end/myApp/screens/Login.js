@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
-import { useDispatch } from 'react-redux';
-import { login } from '../redux/action';
+// import { useDispatch } from 'react-redux';
+// import { login } from '../redux/action';
 // import { Provider } from 'react-redux';
 // import store from '../redux/store';
 import axios from 'axios';
@@ -10,13 +10,13 @@ import Profile from "./Profile.js"
 import HomePage from "./HomePage.js";
 
 const LoginScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [user, setUser] = useState('');
-  
+
   const handleEmailChange = (text) => {
     setEmail(text);
   };
@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      const loginResponse = await axios.post('http://192.168.137.55:6464/user/login', {
+      const loginResponse = await axios.post('192.168.13.177:6464/user/login', {
         email,
         password,
       });
@@ -44,15 +44,13 @@ const LoginScreen = ({ navigation }) => {
       }
 
       const userData = loginResponse.data;
-      dispatch(login(userData));
+      // dispatch(login(userData));
 
-      // localStorage.setItem('user',JSON.stringify(loginResponse.data));
-      // setUser(loginResponse.data);
+
       setUser(email);
 
       console.log('user:', email);
-      <Profile user={user}/>,
-      <HomePage user={user}/>
+
 
       setEmail('');
       setPassword('');
@@ -72,55 +70,56 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     // <Provider store={store}>
-      <View style={styles.androidSmall1}>
-        <Image
-          style={styles.androidSmall1Child}
-          contentFit="cover"
-          source={require("../assets/rectangle-2.png")}
+    <View style={styles.androidSmall1}>
+      <Image
+        style={styles.androidSmall1Child}
+        contentFit="cover"
+        source={require("../assets/rectangle-2.png")}
+      />
+      <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
+      <View style={[styles.lineView, styles.lineViewLayout]} />
+      <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
+      <View style={[styles.vectorParent, styles.vectorFlexBox]}>
+        <TextInput
+          style={styles.email}
+          placeholder="Email"
+          onChangeText={handleEmailChange}
+          value={email}
         />
-        <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
-        <View style={[styles.lineView, styles.lineViewLayout]} />
-        <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
-        <View style={[styles.vectorParent, styles.vectorFlexBox]}>
-          <TextInput
-            style={styles.email}
-            placeholder="Email"
-            onChangeText={handleEmailChange}
-            value={email}
-          />
-        </View>
-        <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
-          <TextInput
-            style={styles.email}
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={handlePasswordChange}
-            value={password}
-          />
-
-        </View>
-        <View style={styles.rectangleView} />
-        <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
-          <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.dontHaveAnContainer}>
-          <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
-          <Text style={[styles.signUp, styles.loginTypo]}>
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CreatAcc')}
-            >
-              <Text style={styles.sign}>Sign Up</Text>
-            </TouchableOpacity>
-          </Text>
-        </Text>
-        <Text style={styles.logIn}>{`Log In `}</Text>
       </View>
+      <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
+        <TextInput
+          style={styles.email}
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={handlePasswordChange}
+          value={password}
+        />
+
+      </View>
+      <View style={styles.rectangleView} />
+      <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
+        <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.dontHaveAnContainer}>
+        <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
+        <Text style={[styles.signUp, styles.loginTypo]}>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CreatAcc')}
+          >
+            <Text style={styles.sign}>Sign Up</Text>
+          </TouchableOpacity>
+        </Text>
+      </Text>
+      <Text style={styles.logIn}>{`Log In `}</Text>
+    </View>
     // </Provider>
 
   );
 };
+
 
 const styles = StyleSheet.create({
   androidLayout: {

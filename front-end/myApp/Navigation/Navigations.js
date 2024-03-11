@@ -30,11 +30,13 @@ export default function Navigation() {
                         <Stack.Screen name="Boarding1" component={Boarding1} />
                         <Stack.Screen name="CreatAcc" component={CreatAcc} />
                         <Stack.Screen name="Wallet" component={Wallet} />
-                        <Stack.Screen name="Expenses" component={Expenses} />
+                        <Stack.Screen name="HomePage" component={HomePage} />
                         <Stack.Screen name="Login" component={Login} />
+                        <Stack.Screen name="Wallet" component={Wallet} />
+                        <Stack.Screen name="Expenses" component={Expenses} />
+                        <Stack.Screen name="CreatAcc" component={CreatAcc} />
                         <Stack.Screen name="Boarding2" component={Boarding2} />
                         <Stack.Screen name="DairyValueChain" component={DairyValueChain} />
-                        <Stack.Screen name="HomePage" component={HomePage} />
                         <Stack.Screen name="Article1" component={Article1} />
                         <Stack.Screen name="Article2" component={Article2} />
                         <Stack.Screen name="Milk" component={Milk} />
