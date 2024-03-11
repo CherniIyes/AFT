@@ -32,7 +32,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.137.55:6464/milk');
+      const response = await axios.get('http://192.168.43.138:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -47,7 +47,7 @@ const handleSubmit = async () => {
   }
 
   try {
-    await axios.post('http://192.168.100.41:6464/milk/add', {
+    await axios.post('http://192.168.43.138:6464/milk/add', {
       day: date,
       price: parseFloat(price),
       quantity: parseInt(quantity),

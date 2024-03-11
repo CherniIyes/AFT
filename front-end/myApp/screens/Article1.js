@@ -1,4 +1,3 @@
-// Article1.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 
@@ -6,7 +5,7 @@ function Article1() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.191:6464/articles')
+    fetch('http://192.168.43.138:6464/articles')
       .then((response) => response.json())
       .then((json) => {
         setData(json);
