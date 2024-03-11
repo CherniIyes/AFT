@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList, Pressable, Modal, Button, } from 'react-native';
 import { PDFDocument, rgb, StandardFonts } from 'react-native-pdf-lib';
-// import * as RNFS from 'react-native-fs';
-import { saveAs } from 'file-saver';
 import RNFS from 'react-native-fs';
-
-
-
 
 
 const Wallet = () => {
@@ -35,31 +30,29 @@ const Wallet = () => {
       }, []);
 
       const generatePDF = async () => {
-            const pdfDoc = await PDFDocument.create();
-
-            // Add content to the PDF
-            pdfDoc
-                  .createPage()
-                  .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
-                  .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
-                  .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
-                  .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
-                  .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
-                  .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
-
-            // Get the PDF as a base64 string
-            const pdfBytes = await pdfDoc.saveAsBase64({ dataUri: true });
-
-            // For native platforms (iOS/Android)
-            const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
-
             try {
-                  await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
+                  const pdfDoc = await PDFDocument.create();
 
-                  // Download the PDF file
+                  // Add content to the PDF
+                  pdfDoc
+                        .createPage()
+                        .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
+                        .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
+                        .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
+                        .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
+                        .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
+                        .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
+
+                  // Get the PDF as a base64 string
+                  const pdfBytes = await pdfDoc.save();
+
+                  // For native platforms (iOS/Android)
+                  const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+
+                  await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
                   console.log('PDF saved successfully at:', pdfPath);
             } catch (error) {
-                  console.error('Error saving PDF:', error.message);
+                  console.error('Error generating or saving PDF:', error.message);
             }
       };
       return (
