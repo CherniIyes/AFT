@@ -21,12 +21,15 @@ import Article2 from "../screens/Article2.js";
 import DairyValueChain from "../screens/DairyValueChain.js";
 import Profile from "../screens/Profile.js";
 import Wallet from "../screens/Wallet.js";
+import Test from "../screens/Test.js";
 
 
 export default function Navigation() {
       return (
                   <Stack.Navigator screenOptions={{ headerShown: false }}>
                         <Stack.Screen name="Boarding1" component={Boarding1} />
+                        <Stack.Screen name="CreatAcc" component={CreatAcc} />
+                        <Stack.Screen name="Wallet" component={Wallet} />
                         <Stack.Screen name="HomePage" component={HomePage} />
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Wallet" component={Wallet} />
@@ -40,6 +43,7 @@ export default function Navigation() {
                         <Stack.Screen name="logOrSign" component={loginOrSign} />
                         <Stack.Screen name="Sales" component={Sales} />
                         <Stack.Screen name="profile" component={Profile} />
+                        <Stack.Screen name="Test" component={Test} />
                   </Stack.Navigator>
       )
 }

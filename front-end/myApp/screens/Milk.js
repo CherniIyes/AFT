@@ -32,7 +32,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('192.168.13.177:6464/milk');
+      const response = await axios.get('http://192.168.43.138:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -46,19 +46,19 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       return;
     }
 
-    try {
-      await axios.post('192.168.13.177:6464/milk/add', {
-        day: date,
-        price: parseFloat(price),
-        quantity: parseInt(quantity),
-      });
-
-      // Create a new row with the submitted data
-      const newRow = {
-        day: date,
-        price: parseFloat(price),
-        quantity: parseInt(quantity),
-      };
+  try {
+    await axios.post('http://192.168.43.138:6464/milk/add', {
+      day: date,
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
+    });
+    
+    // Create a new row with the submitted data
+    const newRow = {
+      day: date,
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
+    };
 
       // Update tableData by appending the new row
       setTableData([...tableData, newRow]);
