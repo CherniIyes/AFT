@@ -32,11 +32,15 @@ const App = () => {
   }
 
   return (
+    // <Provider store={store}>
+
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={MainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    // </Provider>
+
   );
 };
 
