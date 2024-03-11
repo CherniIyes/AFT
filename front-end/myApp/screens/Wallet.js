@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList, Pressable, Modal, Button, } from 'react-native';
 import { PDFDocument, rgb, StandardFonts } from 'react-native-pdf-lib';
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 
 
 const Wallet = () => {
@@ -13,7 +13,7 @@ const Wallet = () => {
       useEffect(() => {
             const fetchData = async () => {
                   try {
-                        const aftResponse = await axios.get('http://192.168.13.177:6464/sales/getAll');
+                        const aftResponse = await axios.get('http://192.168.13.177:6464/sales/getAll')
                         setAllAftData(aftResponse.data);
 
                         const expensesResponse = await axios.get('http://192.168.13.177:6464/exp/getall');

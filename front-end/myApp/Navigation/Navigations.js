@@ -28,8 +28,8 @@ export default function Navigation() {
       return (
                   <Stack.Navigator screenOptions={{ headerShown: false }}>
                         <Stack.Screen name="Boarding1" component={Boarding1} />
-                        <Stack.Screen name="CreatAcc" component={CreatAcc} />
-                        <Stack.Screen name="Wallet" component={Wallet} />
+                        {/* <Stack.Screen name="CreatAcc" component={CreatAcc} /> */}
+                        {/* <Stack.Screen name="Wallet" component={Wallet} /> */}
                         <Stack.Screen name="HomePage" component={HomePage} />
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Wallet" component={Wallet} />
