@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView, RefreshControl } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { color } from 'react-native-elements/dist/helpers';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const ProfitCalculatorScreen = () => {
+const ProfitCalculatorScreen = ({ navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+      tabBarVisible: true,
+    });
+  }, [navigation]);
+
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -16,16 +22,20 @@ const ProfitCalculatorScreen = () => {
   const [yearlyProfit, setYearlyProfit] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
-const [reload,setReload]=useState(true)
+  const [refreshing, setRefreshing] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   useEffect(() => {
     fetchData();
-  }, [reload]);
+  }, []);
+
   const fetchData = async () => {
     try {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
       // If you want to use a different endpoint, you should change the URL in the line above.
       // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.100.51:6464/milk');
+      const response = await axios.get('http://192.168.1.13:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -46,7 +56,7 @@ const [reload,setReload]=useState(true)
       //   price: parseFloat(price),
       //   quantity: parseInt(quantity),
       // }); 
-      const response = await axios.post('http://192.168.100.51:6464/milk/add', {
+      const response = await axios.post('http://192.168.1.13:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
@@ -69,17 +79,26 @@ const [reload,setReload]=useState(true)
   };
 
 
-
   const calculateProfit = () => {
+    if (!price || !quantity) {
+      setError('Please enter price and quantity to calculate profit.');
+      return;
+    }
+
     const dailyProfit = parseFloat(price) * parseInt(quantity);
     setDailyProfit(dailyProfit);
-
-    const monthlyProfit = dailyProfit * 30; // Assuming 30 days in a month
+    const monthlyProfit = dailyProfit * 30;
     setMonthlyProfit(monthlyProfit);
-
-    const yearlyProfit = dailyProfit * 365; // Assuming 365 days in a year
+    const yearlyProfit = dailyProfit * 365;
     setYearlyProfit(yearlyProfit);
+    setError(null);
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  }, []);
 
   const renderProfitCards = () => {
     return [
@@ -98,8 +117,8 @@ const [reload,setReload]=useState(true)
   };
 
   const renderItem = ({ item, index }) => {
+    console.log('Rendering item:', item); // Log the item being rendered
     if (index === 0) {
-      // Render headers in the first row
       return (
         <View style={styles.tableRow}>
           <Text style={[styles.tableText, styles.firstRow]}>Date</Text>
@@ -108,7 +127,6 @@ const [reload,setReload]=useState(true)
         </View>
       );
     } else {
-      // Render data rows
       return (
         <View style={styles.tableRow}>
           <Text style={styles.tableText}>{item.day}</Text>
@@ -119,56 +137,77 @@ const [reload,setReload]=useState(true)
     }
   };
 
-  return (
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setSelectedDate(currentDate);
+    setDate(currentDate.toISOString().split('T')[0]); // Format the date
+  };
 
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
+  return (
     <GestureHandlerRootView style={styles.fullcontainer}>
-      <ScrollView>
-        <Text>Date:</Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <Text style={styles.sectionTitle}>Enter Milk Data</Text>
         <View style={styles.inputContainer}>
-          <Ionicons name="calendar-outline" size={24} color="black" style={styles.icon} />
+          <TouchableOpacity onPress={showDatepicker}>
+            <FontAwesome5 name="calendar-alt" size={24} color="#107c2e" style={styles.icon} />
+          </TouchableOpacity>
           <TextInput
             style={styles.input}
             value={date}
-            onChangeText={setDate}
+            onFocus={showDatepicker}
             keyboardType="default"
+            placeholder="Select Date"
           />
         </View>
-        <Text>Price per Litre:</Text>
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
         <View style={styles.inputContainer}>
-          <Ionicons name="cash-outline" size={24} color="black" style={styles.icon} />
+          <FontAwesome5 name="money-bill" size={24} color="#107c2e" style={styles.icon} />
           <TextInput
             style={styles.input}
             value={price}
             onChangeText={setPrice}
             keyboardType="numeric"
+            placeholder="Price per Litre"
           />
         </View>
-        <Text>Quantity (Litres):</Text>
         <View style={styles.inputContainer}>
-          <Ionicons name="cube-outline" size={24} color="black" style={styles.icon} />
+          <FontAwesome5 name="cubes" size={24} color="#107c2e" style={styles.icon} />
           <TextInput
             style={styles.input}
             value={quantity}
             onChangeText={setQuantity}
             keyboardType="numeric"
+            placeholder="Quantity (Litres)"
           />
         </View>
-
-        {/* <TouchableOpacity style={styles.button} onPress={calculateProfit}>
-          <Text style={styles.buttonText}>Calculate</Text>
-        </TouchableOpacity> */}
-        <Button title="Calculate" onPress={calculateProfit} style={styles.button} color="#107c2e" />
+        <TouchableOpacity style={styles.button} onPress={calculateProfit}>
+          <Text style={styles.buttonText}>Calculate Profit</Text>
+        </TouchableOpacity>
         <View style={styles.profitContainer}>
           {renderProfitCards()}
         </View>
-        {/* <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity> */}
-        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Submit Data</Text>
+        </TouchableOpacity>
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>
-            <Text style={styles.tableHeader}>Table Milk Data : </Text>
+            <Text style={styles.tableHeader}>Milk Data Table:</Text>
             <FlatList
               data={tableData}
               renderItem={renderItem}
@@ -184,16 +223,21 @@ const [reload,setReload]=useState(true)
 const styles = StyleSheet.create({
   fullcontainer: {
     flex: 1,
-    padding: 4,
+    padding: 16,
     backgroundColor: '#FFFFFF',
-    position: 'relative',
-    marginTop: 105,  // Adjusted to provide space for the headerContainer
-    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#107c2e',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
+    borderColor: '#ccc',
+    borderBottomWidth: 1,
   },
   icon: {
     marginRight: 10,
@@ -201,46 +245,49 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
+    paddingVertical: 8,
+    fontSize: 16,
   },
   button: {
     backgroundColor: '#107c2e',
-    padding: 8,
+    padding: 12,
     alignItems: 'center',
-    borderRadius: 5,
-    marginTop: 10,
+    borderRadius: 8,
+    marginTop: 16,
   },
   buttonText: {
     color: '#f7b304',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   profitContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-
   },
   card: {
     flex: 1,
     marginHorizontal: 5,
     elevation: 4,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#107c2e',
   },
   cardText: {
-    fontSize: 12,
+    fontSize: 16,
+    color: '#107c2e',
   },
   submitButton: {
     backgroundColor: '#107c2e',
-    padding: 8,
+    padding: 12,
     alignItems: 'center',
-    borderRadius: 5,
-    marginTop: 10,
+    borderRadius: 8,
+    marginTop: 16,
   },
   profitIcon: {
     alignSelf: 'center',
@@ -250,9 +297,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   tableHeader: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#107c2e',
   },
   tableRow: {
     flexDirection: 'row',
@@ -261,11 +309,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     paddingBottom: 10,
     marginBottom: 10,
-
   },
   tableText: {
     flex: 1,
     textAlign: 'center',
+    fontSize: 16,
+    color: '#107c2e',
   },
   firstRow: {
     fontWeight: 'bold',

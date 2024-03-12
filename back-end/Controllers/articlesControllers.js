@@ -22,7 +22,7 @@ exports.getArticleById = (req, res) => {
     if (!article) {
       return res.status(404).json({ error: 'Article not found' });
     }
-    res.json(article);
+    res.json(article[0]);
   });
 };
 

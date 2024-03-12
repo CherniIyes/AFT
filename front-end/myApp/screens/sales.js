@@ -38,7 +38,7 @@ const SalesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.100.61:5464/sales/getAll');
+        const response = await axios.get('http://192.168.1.13:6464/sales/getAll');
         setAllAftData(response.data);
         setFilteredAftData(response.data);
       } catch (error) {
@@ -87,7 +87,7 @@ const SalesList = () => {
         productdetails: updatedProductDetails,
       };
 
-      await axios.put(`http://192.168.100.61:5464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.1.13:6464/sales/Update/${selectedItem.id}`, updatedItem);
 
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -103,7 +103,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.100.61:5464/sales/delete/${item.id}`);
+      await axios.delete(`http://192.168.1.13:6464/sales/delete/${item.id}`);
 
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -115,7 +115,7 @@ const SalesList = () => {
 
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.100.61:5464/sales/Add', {
+      const response = await axios.post('http://192.168.1.13:6464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
         date: selectedDate.toLocaleDateString(),

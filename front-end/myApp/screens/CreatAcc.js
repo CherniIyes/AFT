@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
-import { Color, FontSize, FontFamily, Border } from '../GlobalStyles'
-const AndroidSmall3 = ({ navigation }) => {
-  const [username, setusername] = useState('');
+import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
+// import { useDispatch } from 'react-redux';
+import { signUp } from '../redux/action';
+import axios from 'axios';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+
+const CreateAccountScreen = ({ navigation }) => {
+  // const dispatch = useDispatch();
+
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [createUserWithEmailAndPassword, user, error] = useCreateUserWithEmailAndPassword(FIREBASE_AUTH);
 
   const handleSignUp = async () => {
     try {
@@ -22,36 +27,31 @@ const AndroidSmall3 = ({ navigation }) => {
       // Proceed to server registration
       console.log('Data being sent to server:', { username, email, password });
 
-      const registerResponse = await axios.post('http://192.168.100.51:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.1.13:6464/user/register', {
+      
         username,
         email,
         password
       });
 
-      console.log('Registration API response:', registerResponse);
-
-      // Check the response from the server and handle accordingly
       if (registerResponse.status === 201) {
-        // Clear form fields and show success message
         alert("Sign up successful");
         setEmail('');
         setPassword('');
-        setusername('');
+        setUsername('');
         navigation.navigate('Login');
       } else {
-        // Handle registration failure
         console.error("User registration failed:", registerResponse.data);
         alert("User creation failed. Please try again.");
       }
     } catch (error) {
-      // Handle errors
       console.error("Error during user creation:", error);
       alert("User creation failed. Please try again.");
     }
   };
 
   const handleNameChange = (text) => {
-    setusername(text);
+    setUsername(text);
   };
 
   const handleEmailChange = (text) => {
@@ -67,107 +67,113 @@ const AndroidSmall3 = ({ navigation }) => {
   };
 
 
-
   return (
     <View style={styles.androidSmall5}>
-      <Image
-        style={[styles.androidSmall5Child, styles.androidLayout]}
-        contentFit="cover"
-        source={require("../assets/rectangle-2.png")}
-      />
-      <View style={[styles.androidSmall5Item, styles.androidLayout]} />
-      <Text style={[styles.createAnAccount, styles.signUpFlexBox]}>
-        Create an account
-      </Text>
-      <View style={[styles.androidSmall5Inner, styles.androidChildLayout]} />
-      <View style={[styles.lineView, styles.androidChildLayout]} />
-      <View style={[styles.androidSmall5Child1, styles.androidChildLayout]} />
-      <View style={[styles.androidSmall5Child2, styles.androidChildLayout]} />
-      <View style={[styles.vectorParent, styles.vectorFlexBox]}>
-        <Image
-          style={styles.iconLayout}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <TextInput
-          style={styles.emailInput}
-          placeholder="Email"
-          onChangeText={handleEmailChange}
-          value={email}
-        />
-      </View>
-      <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
-        <Image
-          style={styles.vectorIcon1}
-          contentFit="cover"
-          source={require("../assets/vector3.png")}
-        />
-        <TextInput
-          style={styles.emailInput}
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          onChangeText={handleConfirmPasswordChange}
-          value={confirmPassword}
-        />
-      </View>
-      <View style={[styles.vectorContainer, styles.vectorFlexBox]}>
-        <Image
-          style={styles.vectorIcon1}
-          contentFit="cover"
-          source={require("../assets/vector3.png")}
-        />
-        <TextInput
-          style={styles.emailInput}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-          value={password}
-        />
-      </View>
-      <View style={styles.rectangleView} />
-      <View style={styles.androidSmall5Child3} />
-      <Text style={[styles.rememberMe, styles.rememberMeTypo]}>
-        Remember me
-      </Text>
-      <Text style={[styles.forgotPassword, styles.rememberMeTypo]}>
-        Forgot password?
-      </Text>
-      <Image
-        style={[styles.eleyeCloseIcon, styles.iconLayout]}
-        contentFit="cover"
-        source={require("../assets/eleyeclose.png")}
-      />
-      <Text style={[styles.signUp, styles.signUpTypo]}>
-        <TouchableOpacity onPress={handleSignUp}>
-          <Text style={styles.sign}>SIGN UP</Text>
-        </TouchableOpacity>
 
-      </Text>
-      <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
-        <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
-        <Text style={[styles.loginUp, styles.signUpTypo]}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={styles.login}>Login</Text>
-          </TouchableOpacity>
+        <Image
+          style={[styles.BigGreen, styles.androidLayout]}
+          contentFit="cover"
+          source={require("../assets/rectangle-2.png")}
+        />
 
-          <Text style={styles.text1}>{` `}</Text>
+        <View style={[styles.blueSquaree, styles.androidLayout]} />
+
+      <View style={styles.midddle}>
+        <Text style={[styles.createAnAccount, styles.signUpFlexBox]}>
+          Create an account
         </Text>
-      </Text>
-      <View style={[styles.frameView, styles.vectorFlexBox]}>
+        <View style={[styles.lineUnderEmail, styles.androidChildLayout]} />
+        <View style={[styles.lineUnderpass, styles.androidChildLayout]} />
+        <View style={[styles.lineUdnerName, styles.androidChildLayout]} />
+        <View style={[styles.lineUnderConPass, styles.androidChildLayout]} />
+
+        <View style={[styles.namee, styles.vectorFlexBox]}>
+          <Image
+            style={styles.vectorIcon3}
+            contentFit="cover"
+            source={require("../assets/vector4.png")}
+          />
+          <TextInput
+            style={styles.Input}
+            placeholder="Name"
+            onChangeText={handleNameChange}
+            value={username}
+          />
+        </View>
+
+        <View style={[styles.Emailcon, styles.vectorFlexBox]}>
+          <Image
+            style={styles.iconLayout}
+            contentFit="cover"
+            source={require("../assets/vector1.png")}
+          />
+          <TextInput
+            style={styles.Input}
+            placeholder="Email"
+            onChangeText={handleEmailChange}
+            value={email}
+          />
+        </View>
+        <View style={[styles.ConfPass, styles.vectorFlexBox]}>
+          <Image
+            style={styles.vectorIcon1}
+            contentFit="cover"
+            source={require("../assets/vector3.png")}
+          />
+          <TextInput
+            style={styles.Input}
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            onChangeText={handleConfirmPasswordChange}
+            value={confirmPassword}
+          />
+        </View>
+        <View style={[styles.passcon, styles.vectorFlexBox]}>
+          <Image
+            style={styles.vectorIcon1}
+            contentFit="cover"
+            source={require("../assets/vector3.png")}
+          />
+          <TextInput
+            style={styles.Input}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={handlePasswordChange}
+            value={password}
+          />
+        </View>
         <Image
-          style={styles.vectorIcon3}
+          style={[styles.eleyeCloseIcon, styles.iconLayout]}
           contentFit="cover"
-          source={require("../assets/vector4.png")}
+          source={require("../assets/eleyeclose.png")}
         />
-        <TextInput
-          style={styles.nameInput}
-          placeholder="Name"
-          onChangeText={handleNameChange}
-          value={username}
-        />
+
+        
+        <View style={styles.rectangleView} />
+
+        <Text style={[styles.signUp, styles.signUpTypo]}>
+          <TouchableOpacity onPress={handleSignUp}>
+            <Text style={styles.sign}>SIGN UP</Text>
+          </TouchableOpacity>
+        </Text>
+
+
+        
+        <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
+          <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
+          <Text style={[styles.loginUp, styles.signUpTypo]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+            >
+              <Text style={styles.login}>Login</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.text1}>{` `}</Text>
+          </Text>
+        </Text>
       </View>
+
+
     </View >
   );
 };
@@ -212,18 +218,18 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interBold,
     fontWeight: "700",
   },
-  androidSmall5Child: {
-    top: -119,
-    left: -145,
-    width: 438,
-    height: 503,
+  BigGreen: {
+    top: responsiveHeight(-15),
+    left: responsiveWidth(-35),
+    width: responsiveWidth(100),
+    height: responsiveHeight(50),
   },
-  androidSmall5Item: {
-    top: 598,
-    left: 250,
+  blueSquaree: {
+    top: responsiveHeight(98),
+    left: responsiveWidth(65),
     backgroundColor: Color.colorDarkslategray_200,
-    width: 850,
-    height: 101,
+    width: responsiveWidth(50),
+    height: responsiveHeight(13),
     transform: [
       {
         rotate: "-31.29deg",
@@ -231,108 +237,155 @@ const styles = StyleSheet.create({
     ],
   },
   createAnAccount: {
-    top: 264,
-    left: 62,
+    top: responsiveHeight(28),
+    left: responsiveWidth(13),
     fontSize: 22,
     fontWeight: "900",
     fontFamily: FontFamily.interBlack,
     color: Color.colorDarkslategray_100,
   },
-  androidSmall5Inner: {
-    top: 397,
-  },
-  lineView: {
-    top: 455,
-  },
-  androidSmall5Child1: {
-    top: 339,
-  },
-  androidSmall5Child2: {
-    top: 505,
-  },
+
   email: {
     fontSize: FontSize.size_mini,
     color: Color.colorDarkslategray_200,
     fontFamily: FontFamily.interRegular,
     textAlign: "left",
   },
-  vectorParent: {
-    top: 373,
-    width: 63,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    left: 70,
-  },
+
   vectorIcon1: {
     height: 14,
     width: 11,
   },
-  vectorGroup: {
-    top: 481,
-    width: 155,
+
+
+
+
+
+
+
+
+
+
+
+
+  namee: {
+    top: responsiveHeight(35),
+    left: responsiveWidth(13),
+    width: responsiveWidth(2),
+    alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    left: 70,
   },
-  vectorContainer: {
-    top: 431,
-    width: 95,
+  lineUdnerName: {
+    top: responsiveHeight(37.6),
+  },
+
+  Emailcon: {
+    top: responsiveHeight(40.3),
+    left: responsiveWidth(13),
+    width: responsiveWidth(2),
+    alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    left: 70,
   },
-  rectangleView: {
-    top: 554,
-    left: 60,
-    borderRadius: Border.br_7xs,
-    backgroundColor: Color.colorDarkolivegreen,
-    width: 240,
-    height: 32,
-    position: "absolute",
+  lineUnderEmail: {
+    top: responsiveHeight(43),
   },
-  androidSmall5Child3: {
-    top: 516,
-    borderRadius: Border.br_12xs,
-    backgroundColor: Color.colorLightgray,
-    height: 11,
-    width: 11,
-    left: 56,
-    position: "absolute",
+
+  passcon: {
+    top: responsiveHeight(45.5),
+    left: responsiveWidth(13),
+    width: responsiveWidth(2),
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
-  rememberMe: {
-    left: 75,
-    color: Color.colorBlack,
+  lineUnderpass: {
+    top: responsiveHeight(48.2),
   },
-  forgotPassword: {
-    left: 228,
-    color: Color.colorBlack,
+
+  ConfPass: {
+    top: responsiveHeight(50.8),
+    left: responsiveWidth(13),
+    width: responsiveWidth(2),
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
+  lineUnderConPass: {
+    top: responsiveHeight(53.5),
+  },
+
+
+  Input: {
+    width: responsiveWidth(49),
+    left: responsiveWidth(1),
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+  }, 
+  
+  midddle: {
+    // width: responsiveWidth(49),
+    left: responsiveWidth(8),
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   eleyeCloseIcon: {
     top: 483,
     left: 279,
     position: "absolute",
     overflow: "hidden",
   },
-  sign: {
-    color: Color.colorOrange_200,
-  },
   text: {
     color: Color.colorBlack,
   },
+
+
+
+  sign: {
+    color: Color.colorOrange_200,
+  },
   signUp: {
-    top: 560,
-    left: 144,
+    top: responsiveHeight(60.5),
+    left: responsiveWidth(32.7),
     fontSize: FontSize.size_base,
     textAlign: "left",
     position: "absolute",
   },
+
+  rectangleView: {
+    top: responsiveHeight(60),
+    left: responsiveWidth(24),
+    borderRadius: Border.br_7xs,
+    backgroundColor: Color.colorDarkolivegreen,
+    width: responsiveWidth(30),
+    height: 32,
+    position: "absolute",
+  },
+
+
   alreadyHaveAn: {
     fontWeight: "500",
     fontFamily: FontFamily.interMedium,
     color: Color.colorBlack,
   },
   login: {
+    top: responsiveHeight(0.45),
+
     color: Color.colorSeagreen,
   },
   text1: {
@@ -342,22 +395,15 @@ const styles = StyleSheet.create({
     textDecoration: "underline",
   },
   alreadyHaveAnContainer: {
-    top: 603,
-    left: 73,
+    top: responsiveHeight(64),
+    left: responsiveWidth(19),
     fontSize: FontSize.size_xs,
   },
   vectorIcon3: {
     width: 13,
     height: 13,
   },
-  frameView: {
-    top: 315,
-    left: 69,
-    width: 68,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-  },
+
   androidSmall5: {
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorWhite,
@@ -368,4 +414,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AndroidSmall3;
+export default CreateAccountScreen;

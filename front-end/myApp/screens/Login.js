@@ -3,8 +3,12 @@ import { Image, TextInput, StyleSheet, View, Text, Button, TouchableOpacity } fr
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import axios from 'axios';
+import Profile from "./Profile.js"
+import HomePage from "./HomePage.js";
 
-const AndroidSmall1 = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,6 +33,17 @@ const AndroidSmall1 = ({ navigation }) => {
     }
   };
 
+  const handleSignInWithAnotherService = async () => {
+    try {
+      // Implement the login with another service functionality here
+      // You may need to use a different authentication provider or API
+      console.log('Login with Another Service clicked');
+      alert('Login with Another Service functionality coming soon!');
+    } catch (error) {
+      console.error('Login with Another Service error:', error.message);
+    }
+  };
+
   const handleSignIn = async () => {
     try {
       if (!email || !password) {
@@ -38,12 +53,10 @@ const AndroidSmall1 = ({ navigation }) => {
 
       console.log('Password being sent:', password);
 
-      const loginResponse = await axios.post('http://192.168.100.51:5464/user/login', {
+      const loginResponse = await axios.post('http://192.168.1.13:6464/user/login', {
         email,
         password,
       });
-
-      console.log('Login API response:', loginResponse);
 
       if (!loginResponse || !loginResponse.data || loginResponse.data.error) {
         console.error("Login error:", loginResponse.data?.error);
@@ -51,14 +64,17 @@ const AndroidSmall1 = ({ navigation }) => {
         return;
       }
 
-      localStorage.setItem('user', JSON.stringify(loginResponse.data));
-      setUser(loginResponse.data);
-      console.log('user:', loginResponse.data);
+      const userData = loginResponse.data;
+      dispatch(login(userData));
+
+      setUser(email);
+
+      console.log('user:', email);
+
       setEmail('');
       setPassword('');
-
       navigation.navigate('HomePage');
-      alert("Sign in successful");
+      alert(`Sign in successful! Welcome, ${userData.username}`);
     } catch (error) {
       console.error("Error during sign-in:", error);
 
@@ -77,54 +93,21 @@ const AndroidSmall1 = ({ navigation }) => {
         contentFit="cover"
         source={require("../assets/rectangle-2.png")}
       />
-      {/* <View style={[styles.androidSmall1Item, styles.androidLayout]} /> */}
-      <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
-      <View style={[styles.lineView, styles.lineViewLayout]} />
-      <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
-      <View style={[styles.vectorParent, styles.vectorFlexBox]}>
-        {/* <Image
-          style={styles.iconLayout}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        /> */}
-        <TextInput
-          style={styles.email}
-          placeholder="Email"
-          onChangeText={handleEmailChange}
-          value={email}
-        />
-      </View>
-      <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
-        {/* <Image
-          style={styles.vectorIcon1}
-          contentFit="cover"
-          source={require("../assets/vector2.png")}
-        /> */}
-        <TextInput
-          style={styles.email}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={handlePasswordChange}
-          value={password}
-        />
-      </View>
       <View style={styles.rectangleView} />
-      {/* <View style={styles.androidSmall1Child2} /> */}
-      {/* <Text style={[styles.rememberMe, styles.rememberMeTypo]}>
-        Remember me
-      </Text>
-      <Text style={[styles.forgotPassword, styles.rememberMeTypo]}>
-        Forgot password?
-      </Text> */}
-      {/* <Image
-        style={[styles.eleyeCloseIcon, styles.iconLayout]}
-        contentFit="cover"
-        source={require("../assets/eleyeclose.png")}
-      /> */}
+
+      <TouchableOpacity style={styles.loginWithGoogle} onPress={handleSignInWithGoogle}>
+        <Text style={[styles.log, styles.loginTypo]}>LOGIN WITH GOOGLE</Text>
+      </TouchableOpacity>
+
+      {/* Add a new button for login with another service */}
+      <TouchableOpacity style={styles.loginWithAnotherService} onPress={handleSignInWithAnotherService}>
+        <Text style={[styles.log, styles.loginTypo]}>LOGIN WITH ANOTHER SERVICE</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
         <Text style={[styles.login, styles.loginTypo]}>LOGIN</Text>
       </TouchableOpacity>
-  
+
       <Text style={styles.dontHaveAnContainer}>
         <Text style={styles.dontHaveAn}>{`Don’t have an account ? `}</Text>
         <Text style={[styles.signUp, styles.loginTypo]}>
@@ -134,13 +117,11 @@ const AndroidSmall1 = ({ navigation }) => {
         </Text>
       </Text>
       <Text style={styles.logIn}>{`Log In `}</Text>
-  
-      <TouchableOpacity onPress={handleSignInWithGoogle}>
-        <Text style={[styles.log, styles.loginTypo]}>LOGIN WITH GOOGLE</Text>
-      </TouchableOpacity>
+
     </View>
   );
-  }
+}
+
 const styles = StyleSheet.create({
   androidLayout: {
     transform: [
@@ -153,12 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorDarkslategray_200,
     borderRadius: Border.br_5xl,
     position: "absolute",
-  },  
-  // loginfilsa: {
-    
-  //   position: "relative",
-  //   right:100,
-  // },
+  },
 
   lineViewLayout: {
     height: 1,
@@ -181,6 +157,80 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: FontFamily.interRegular,
     position: "absolute",
+  },
+  androidSmall1: {
+    borderRadius: Border.br_xl,
+    backgroundColor: Color.colorWhite,
+    flex: 1,
+    width: "100%",
+    height: 640,
+    overflow: "hidden",
+  },
+
+  androidSmall1Child: {
+    top: -119,
+    left: -145,
+    width: 438,
+    height: 503,
+    borderRadius: Border.br_5xl,
+    position: "absolute",
+  },
+
+  rectangleView: {
+    top: 463,
+    borderRadius: Border.br_7xs,
+    backgroundColor: Color.colorDarkolivegreen,
+    width: 200,
+    height: 32,
+    left: 100,
+    position: "absolute",
+  },
+
+  loginWithGoogle: {
+    top: 470,
+    left: 100,
+    fontSize: FontSize.size_base,
+    color: Color.colorOrange_200,
+    textAlign: "left",
+    position: "absolute",
+  },
+
+  loginWithAnotherService: {
+    top: 520,
+    left: 100,
+    fontSize: FontSize.size_base,
+    color: Color.colorYourColor,  // Set the color you desire
+    textAlign: "left",
+    position: "absolute",
+  },
+
+  login: {
+    top: 470,
+    left: 180,
+    fontSize: FontSize.size_base,
+    color: Color.colorOrange_200,
+    textAlign: "left",
+    position: "absolute",
+  },
+
+  dontHaveAnContainer: {
+    top: 513,
+    left: 120,
+    fontSize: FontSize.size_xs,
+    textAlign: "left",
+    position: "absolute",
+  },
+
+  logIn: {
+    top: 260,
+    fontSize: FontSize.size_4xl,
+    fontWeight: "900",
+    fontFamily: FontFamily.interBlack,
+    color: Color.colorDarkslategray_100,
+    textAlign: "left",
+    left: 80,
+    position: "absolute",
+    fontSize: 30,
   },
   iconLayout: {
     height: 10,
@@ -321,4 +371,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AndroidSmall1;
+export default LoginScreen;
