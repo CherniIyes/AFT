@@ -26,11 +26,11 @@ export default function NavBar({ navigation }) {
             <View style={styles.headerContainer} >
                   <View style={styles.ContainerInBetween}>
                         <View style={styles.buttonContainer}>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Milk');}} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Milk');  }} style={styles.filsa}>
                                     <FontAwesome6 name="cow" size={wp('6%')} color="black" />
                                     <Text>Dairy Production</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); ; }} style={styles.filsa}>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Sales');  }} style={styles.filsa}>
                                     <MaterialIcons name="point-of-sale" size={wp('6%')} color="black" />
                                     <Text>Sales</Text>
                               </TouchableOpacity>

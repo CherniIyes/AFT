@@ -34,17 +34,17 @@ const SalesList = () => {
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://192.168.13.177:6464/sales/getAll');
+      setAllAftData(response.data);
+      setFilteredAftData(response.data);
+    } catch (error) {
+      console.error('Error fetching sales data:', error);
+      setError('Network error. Please check your connection and try again.');
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://192.168.100.52:6464/sales/getAll');
-        setAllAftData(response.data);
-        setFilteredAftData(response.data);
-      } catch (error) {
-        console.error('Error fetching sales data:', error);
-        setError('Network error. Please check your connection and try again.');
-      }
-    };
 
     fetchData();
   }, []);
@@ -106,7 +106,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`http://192.168.100.52:6464/sales/delete/${item.id}`);
+      await axios.delete(`192.168.13.177:6464/sales/delete/${item.id}`);
 
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -117,7 +117,7 @@ const SalesList = () => {
   };
   const onAdd = async () => {
     try {
-      const response = await axios.post('http://192.168.100.52:6464/sales/Add', {
+      const response = await axios.post('192.168.13.177:6464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
         date: selectedDate,
