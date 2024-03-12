@@ -14,14 +14,14 @@ const DairyValueChain = () => {
   const [selectedDate, setSelectedDate] = useState("");
 
   const [allCows, setAllCows] = useState([]);
-  const [showTable, setShowTable] = useState(false); 
+  const [showTable, setShowTable] = useState(false);
 
   const fetchAllCows = () => {
     fetch('http://192.168.43.138:6464/cows/getAll')
       .then(response => response.json())
       .then(data => {
         console.log('All cows data:', data);
-        setAllCows(data); 
+        setAllCows(data);
       })
       .catch(error => {
         console.error('Error fetching all cows:', error);
@@ -29,7 +29,7 @@ const DairyValueChain = () => {
   };
 
   useEffect(() => {
-  
+
     fetchAllCows();
   }, []);
 
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 4,
+    padding: 16,
     backgroundColor: '#FFFFFF',
     paddingTop: '30%', // Adjusted paddingTop instead of marginTop
     minHeight: '100%',

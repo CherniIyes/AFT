@@ -4,12 +4,14 @@ import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 // import { useDispatch } from 'react-redux';
-import { signUp } from '../redux/action';
+// import { SIGN_UP } from '../Kazi/action';
 import axios from 'axios';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 const CreateAccountScreen = ({ navigation }) => {
   // const dispatch = useDispatch();
+  const setUser = useSetRecoilState(userState);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -24,7 +26,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      const registerResponse = await axios.post('192.168.13.177:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.1.6:6464/user/register', {
         username,
         email,
         password
@@ -35,6 +37,8 @@ const CreateAccountScreen = ({ navigation }) => {
         setEmail('');
         setPassword('');
         setUsername('');
+        const userData = registerResponse.data;
+        setUser(userData);
         navigation.navigate('Login');
       } else {
         console.error("User registration failed:", registerResponse.data);
@@ -52,6 +56,12 @@ const CreateAccountScreen = ({ navigation }) => {
 
   const handleEmailChange = (text) => {
     setEmail(text);
+  };
+
+  const handleEmailBlur = () => {
+    if (!email.includes('@gmail.com')) {
+      setEmail(email + '@gmail.com');
+    }
   };
 
   const handlePasswordChange = (text) => {
@@ -104,9 +114,10 @@ const CreateAccountScreen = ({ navigation }) => {
             source={require("../assets/vector1.png")}
           />
           <TextInput
-            style={styles.Input}
+            style={styles.email}
             placeholder="Email"
             onChangeText={handleEmailChange}
+            onBlur={handleEmailBlur}
             value={email}
           />
         </View>

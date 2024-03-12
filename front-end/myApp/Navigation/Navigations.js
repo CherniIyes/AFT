@@ -42,7 +42,7 @@ export default function Navigation() {
                         <Stack.Screen name="Milk" component={Milk} />
                         <Stack.Screen name="logOrSign" component={loginOrSign} />
                         <Stack.Screen name="Sales" component={Sales} />
-                        <Stack.Screen name="profile" component={Profile} />
+                        <Stack.Screen name="Profile" component={Profile} />
                         <Stack.Screen name="Test" component={Test} />
                   </Stack.Navigator>
       )
