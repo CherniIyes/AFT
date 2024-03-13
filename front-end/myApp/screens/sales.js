@@ -36,7 +36,7 @@ const SalesList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.13.177:6464/sales/getAll');
+      const response = await axios.get('http://192.168.1.6:6464/sales/getAll');
       setAllAftData(response.data);
       setFilteredAftData(response.data);
     } catch (error) {
