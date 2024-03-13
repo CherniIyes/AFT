@@ -4,12 +4,14 @@ import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 // import { useDispatch } from 'react-redux';
-import { signUp } from '../redux/action';
+// import { SIGN_UP } from '../Kazi/action';
 import axios from 'axios';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 const CreateAccountScreen = ({ navigation }) => {
   // const dispatch = useDispatch();
+  const setUser = useSetRecoilState(userState);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -24,11 +26,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      // Proceed to server registration
-      console.log('Data being sent to server:', { username, email, password });
-
       const registerResponse = await axios.post('http://192.168.1.13:6464/user/register', {
-      
         username,
         email,
         password
@@ -39,6 +37,8 @@ const CreateAccountScreen = ({ navigation }) => {
         setEmail('');
         setPassword('');
         setUsername('');
+        const userData = registerResponse.data;
+        setUser(userData);
         navigation.navigate('Login');
       } else {
         console.error("User registration failed:", registerResponse.data);
@@ -58,6 +58,12 @@ const CreateAccountScreen = ({ navigation }) => {
     setEmail(text);
   };
 
+  const handleEmailBlur = () => {
+    if (!email.includes('@gmail.com')) {
+      setEmail(email + '@gmail.com');
+    }
+  };
+
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
@@ -70,13 +76,13 @@ const CreateAccountScreen = ({ navigation }) => {
   return (
     <View style={styles.androidSmall5}>
 
-        <Image
-          style={[styles.BigGreen, styles.androidLayout]}
-          contentFit="cover"
-          source={require("../assets/rectangle-2.png")}
-        />
+      <Image
+        style={[styles.BigGreen, styles.androidLayout]}
+        contentFit="cover"
+        source={require("../assets/rectangle-2.png")}
+      />
 
-        <View style={[styles.blueSquaree, styles.androidLayout]} />
+      <View style={[styles.blueSquaree, styles.androidLayout]} />
 
       <View style={styles.midddle}>
         <Text style={[styles.createAnAccount, styles.signUpFlexBox]}>
@@ -108,9 +114,10 @@ const CreateAccountScreen = ({ navigation }) => {
             source={require("../assets/vector1.png")}
           />
           <TextInput
-            style={styles.Input}
+            style={styles.email}
             placeholder="Email"
             onChangeText={handleEmailChange}
+            onBlur={handleEmailBlur}
             value={email}
           />
         </View>
@@ -148,7 +155,7 @@ const CreateAccountScreen = ({ navigation }) => {
           source={require("../assets/eleyeclose.png")}
         />
 
-        
+
         <View style={styles.rectangleView} />
 
         <Text style={[styles.signUp, styles.signUpTypo]}>
@@ -158,7 +165,7 @@ const CreateAccountScreen = ({ navigation }) => {
         </Text>
 
 
-        
+
         <Text style={[styles.alreadyHaveAnContainer, styles.signUpFlexBox]}>
           <Text style={styles.alreadyHaveAn}>{`Already have an account ? `}</Text>
           <Text style={[styles.loginUp, styles.signUpTypo]}>
@@ -323,8 +330,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-  }, 
-  
+  },
+
   midddle: {
     // width: responsiveWidth(49),
     left: responsiveWidth(8),

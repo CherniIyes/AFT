@@ -1,4 +1,3 @@
-// Article1.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 

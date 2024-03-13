@@ -35,6 +35,16 @@ const SalesList = () => {
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://192.168.1.13:6464/sales/getAll');
+      setAllAftData(response.data);
+      setFilteredAftData(response.data);
+    } catch (error) {
+      console.error('Error fetching sales data:', error);
+      setError('Network error. Please check your connection and try again.');
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {

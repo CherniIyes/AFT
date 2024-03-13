@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { iew, Text, StyleSheet, TouchableOpacity, } from "react-native";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
-// import { createStore } from 'redux'
-// import { Provider } from 'react-redux';
-// import store from './redux/store.js';
+// import Provider from "react-redux"
+// import Store from "./Kazi/store.js"
+// import { createStore } from "redux";
+import { AppRegistry } from "react-native";
+import { RecoilRoot } from 'recoil';
 import Navig from "./Navigation/Navigations.js"
 import Nav from "./components/NavBar.js";
 import Tab from "./components/TabBar.js";
 const Stack = createStackNavigator();
+import { useRecoilValue } from 'recoil';
+import { userState } from './Recoil/Rstore.js';
+
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
@@ -32,24 +32,27 @@ const App = () => {
   }
 
   return (
-    // <Provider store={store}>
-
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={MainScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <Provider store={Store}>
+    <RecoilRoot>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={MainScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
     // </Provider>
 
   );
 };
 
 const MainScreen = ({ navigation }) => {
+  const user = useRecoilValue(userState);
+
   return (
     <>
-      <Nav navigation={navigation} />
+      {user && <Nav navigation={navigation} />}
       <Navig />
-      <Tab navigation={navigation} />
+      {user && <Tab navigation={navigation} />}
     </>
   );
 };

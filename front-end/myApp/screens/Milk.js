@@ -224,6 +224,8 @@ const styles = StyleSheet.create({
   fullcontainer: {
     flex: 1,
     padding: 16,
+    marginTop: 120,
+
     backgroundColor: '#FFFFFF',
   },
   sectionTitle: {

@@ -13,35 +13,53 @@ const Expenses = () => {
       const [showDatePicker, setShowDatePicker] = useState(false);
       const [selectedDate, setSelectedDate] = useState("");
       const [expensesData, setExpensesData] = useState([]);
+      const [selectedYear, setSelectedYear] = useState("");
+      const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
 
-      const handleButtonPress = async () => {
-            try {
-                  // const response = await axios.post("http://192.168.100.43:6464/exp/add", {
-                  //       handwork: input1,
-                  //       fodder: input2,
-                  //       bills: input3,
-                  //       medicalexpenses: input4,
-                  //       hay: input5,
-                  //       date: selectedDate,
-                  // });
-                  const response = await axios.post("http://192.168.1.13:6464/exp/add", {
-                        handwork: input1,
-                        fodder: input2,
-                        bills: input3,
-                        medicalexpenses: input4,
-                        hay: input5,
-                        date: selectedDate,
-                  });
 
-                  // Handle the response as needed
-                  console.log("Data added successfully:", response.data);
+      const handleFilterDateChange = (event, newDate) => {
+            if (Platform.OS === "android") {
+                  setShowFilterDatePicker(false);
+            }
+            if (newDate) {
+                  setDate(newDate);
+                  const formattedDate = newDate.toLocaleDateString();
+                  setSelectedDate(formattedDate);
 
-                  // Fetch and update the data after successful addition
-                  fetchExpensesData();
-            } catch (error) {
-                  console.error("Error adding data:", error);
+                  // Extract the year from the selected date
+                  const year = newDate.getFullYear();
+                  setSelectedYear(year.toString());
             }
       };
+
+      const handleFilterDateIconPress = () => {
+            setShowFilterDatePicker(true);
+      };
+
+
+
+
+
+      // <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
+      //       <Text>{selectedDate || "Date"}</Text>
+      // </TouchableOpacity>
+      // {
+      //       showFilterDatePicker && (
+      //             <DateTimePicker
+      //                   value={date}
+      //                   mode="date"
+      //                   display="spinner"
+      //                   onChange={handleFilterDateChange}
+      //             />
+      //       )
+      // }
+
+
+
+
+
+
+
 
       const handleDateIconPress = () => {
             setShowDatePicker(true);
@@ -58,6 +76,25 @@ const Expenses = () => {
             }
       };
 
+
+      const handleButtonPress = async () => {
+            try {
+                  const response = await axios.post("192.168.13.177:6464/exp/add", {
+                        handwork: input1,
+                        fodder: input2,
+                        bills: input3,
+                        medicalexpenses: input4,
+                        hay: input5,
+                        date: selectedDate,
+                  });
+                  console.log("Data added successfully:", response.data);
+                  fetchExpensesData();
+            } catch (error) {
+                  console.error("Error adding data:", error);
+            }
+      };
+
+
       const fetchExpensesData = async () => {
             try {
                   // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
@@ -69,13 +106,12 @@ const Expenses = () => {
       };
 
       useEffect(() => {
-            // Fetch data when the component mounts
             fetchExpensesData();
       }, [])
 
       return (
             <View style={styles.fullcontainer}>
-                  <Text>Expenses</Text>
+                  <Text style={styles.titre}>Expenses</Text>
                   <View style={styles.inputsContainer}>
                         <TextInput
                               style={styles.input}
@@ -125,17 +161,29 @@ const Expenses = () => {
                   )}
                   {expensesData.length > 0 && (
                         <View style={styles.tableContainer}>
-                              <Text style={styles.tableHeader}>Expenses Data:</Text>
+                              <Text style={styles.tableHeader}>Expenses:</Text>
                               <View style={styles.tableRowHeader}>
                                     <Text style={styles.tableCellHeader}>Handwork</Text>
                                     <Text style={styles.tableCellHeader}>Fodder</Text>
                                     <Text style={styles.tableCellHeader}>Bills</Text>
                                     <Text style={styles.tableCellHeader}>Medical Expenses</Text>
                                     <Text style={styles.tableCellHeader}>Hay</Text>
-                                    <Text style={styles.tableCellHeader}>Date</Text>
+                                    <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
+                                          <Text>{selectedDate || "Date"}</Text>
+                                    </TouchableOpacity>
+                                    {
+                                          showFilterDatePicker && (
+                                                <DateTimePicker
+                                                      value={date}
+                                                      mode="date"
+                                                      display="spinner"
+                                                      onChange={handleFilterDateChange}
+                                                />
+                                          )
+                                    }
                               </View>
                               <FlatList
-                                    data={expensesData}
+                                    data={expensesData.filter((item) => item.date.includes(selectedYear))}
                                     keyExtractor={(item) => item.id.toString()}
                                     renderItem={({ item }) => (
                                           <View style={styles.tableRow}>
@@ -160,11 +208,18 @@ const styles = StyleSheet.create({
             padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
-            marginTop: 105,
+            marginTop: 120,
             marginBottom: 23,
+            padding: 16,
+
       },
       tableContainer: {
             marginTop: 20,
+      }, titre: {
+            fontSize: 24,
+            marginBottom: 20,
+            color: '#107c2e',
+            fontWeight: 'bold',
       },
       tableHeader: {
             fontSize: 18,

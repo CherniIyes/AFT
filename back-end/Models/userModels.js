@@ -44,36 +44,36 @@ const register = async (user, callback) => {
 
 const login = async (email, password, callback) => {
       try {
-          getUser(email, (err, user) => {
-              if (err) {
-                  return callback(err, false);
-              }
-  
-              if (!user || user.length === 0) {
-                  // User not found
-                  return callback(null, false);
-              }
-  
-              // Compare the entered password with the hashed password from the database
-              bcrypt.compare(password, user[0].password, (compareErr, passwordMatch) => {
-                  if (compareErr) {
-                      return callback(compareErr, false);
+            getUser(email, (err, user) => {
+                  if (err) {
+                        return callback(err, false);
                   }
-  
-                  if (passwordMatch) {
-                      // Passwords match, login successful
-                      return callback(null, user);
-                  } else {
-                      // Passwords do not match
-                      return callback(null, false);
+
+                  if (!user || user.length === 0) {
+                        // User not found
+                        return callback(null, false);
                   }
-              });
-          });
+
+                  // Compare the entered password with the hashed password from the database
+                  bcrypt.compare(password, user[0].password, (compareErr, passwordMatch) => {
+                        if (compareErr) {
+                              return callback(compareErr, false);
+                        }
+
+                        if (passwordMatch) {
+                              // Passwords match, login successful
+                              return callback(null, user);
+                        } else {
+                              // Passwords do not match
+                              return callback(null, false);
+                        }
+                  });
+            });
       } catch (error) {
-          return callback(error, false);
+            return callback(error, false);
       }
-  };
-  
+};
+
 
 
 module.exports = { getUser, getAll, login, register };
