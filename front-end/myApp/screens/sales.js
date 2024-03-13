@@ -9,9 +9,11 @@ import {
   FlatList,
   Pressable,
   Modal,
+  Button,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
+import { Color } from '../GlobalStyles';
 
 const SalesList = () => {
   const [allAftData, setAllAftData] = useState([]);
@@ -21,14 +23,13 @@ const SalesList = () => {
 
   const [updatedProduct, setUpdatedProduct] = useState('');
   const [updatedPrice, setUpdatedPrice] = useState('');
-  const [updatedDate, setUpdatedDate] = useState('');
+  const [updatedDate, setUpdatedDate] = useState(new Date());
   const [updatedProductDetails, setUpdatedProductDetails] = useState('');
 
   const [newProduct, setNewProduct] = useState('');
   const [newPrice, setNewPrice] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [newProductDetails, setNewProductDetails] = useState('');
-  const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [isAddModalVisible, setAddModalVisible] = useState(false);
@@ -45,22 +46,28 @@ const SalesList = () => {
     }
   };
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://192.168.1.13:6464/sales/getAll');
+        setAllAftData(response.data);
+        setFilteredAftData(response.data);
+      } catch (error) {
+        console.error('Error fetching sales data:', error);
+        setError('Network error. Please check your connection and try again.');
+      }
+    };
 
     fetchData();
   }, []);
 
-  const handleDateIconPress = () => {
+  const handleDateIconPress = async () => {
     setShowDatePicker(true);
   };
 
   const handleDateChange = (event, newDate) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
+    setShowDatePicker(false);
     if (newDate) {
-      setDate(newDate);
-      const formattedDate = newDate.toLocaleDateString();
-      setSelectedDate(formattedDate);
+      setSelectedDate(newDate);
     }
   };
 
@@ -76,7 +83,7 @@ const SalesList = () => {
     setSelectedItem(item);
     setUpdatedProduct(item.product);
     setUpdatedPrice(item.price.toString());
-    setUpdatedDate(item.date);
+    setUpdatedDate(new Date(item.date));
     setUpdatedProductDetails(item.productdetails);
     setUpdateModalVisible(true);
   };
@@ -86,11 +93,11 @@ const SalesList = () => {
       const updatedItem = {
         product: updatedProduct,
         price: parseFloat(updatedPrice),
-        date: updatedDate,
+        date: updatedDate.toLocaleDateString(),
         productdetails: updatedProductDetails,
       };
 
-      await axios.put(`http://192.168.100.52:6464/sales/Update/${selectedItem.id}`, updatedItem);
+      await axios.put(`http://192.168.1.13:6464/sales/Update/${selectedItem.id}`, updatedItem);
 
       // Update the state dynamically
       setFilteredAftData((prevData) =>
@@ -106,7 +113,7 @@ const SalesList = () => {
 
   const onDelete = async (item) => {
     try {
-      await axios.delete(`192.168.13.177:6464/sales/delete/${item.id}`);
+      await axios.delete(`http://192.168.1.13:6464/sales/delete/${item.id}`);
 
       // Update the state dynamically by excluding the deleted item
       setFilteredAftData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
@@ -115,12 +122,13 @@ const SalesList = () => {
       setError('Error deleting item. Please try again.');
     }
   };
+
   const onAdd = async () => {
     try {
-      const response = await axios.post('192.168.13.177:6464/sales/Add', {
+      const response = await axios.post('http://192.168.1.13:6464/sales/Add', {
         product: newProduct,
         price: parseFloat(newPrice),
-        date: selectedDate,
+        date: selectedDate.toLocaleDateString(),
         productdetails: newProductDetails,
       });
 
@@ -134,14 +142,12 @@ const SalesList = () => {
       // Clear input fields after successful addition
       setNewProduct('');
       setNewPrice('');
-      setSelectedDate('');
+      setSelectedDate(new Date());
       setNewProductDetails('');
     } catch (error) {
       console.error('Error adding product:', error);
     }
   };
-
-
 
   const calculateTotal = () => {
     const totalPrice = filteredAftData.reduce((acc, item) => acc + item.price, 0);
@@ -158,149 +164,184 @@ const SalesList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.salesListTitle}>Sales List</Text>
+      <View style={styles.salesList}>
+        <Text style={styles.salesListTitle}>Sales List</Text>
 
-      <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
-        <Text>{selectedDate || '📅'}</Text>
-      </TouchableOpacity>
+        <View style={styles.inputsContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Product"
+            value={newProduct}
+            onChangeText={(text) => setNewProduct(text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Price"
+            value={newPrice}
+            onChangeText={(text) => setNewPrice(text)}
+            keyboardType="numeric"
+          />
+          <TouchableOpacity style={styles.dateIcon} onPress={handleDateIconPress}>
+            <Text>{selectedDate.toLocaleDateString() || '📅'}</Text>
+          </TouchableOpacity>
+        </View>
 
-      {showDatePicker && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="spinner"
-          onChange={handleDateChange}
-          textColor="#000"
-          style={{ backgroundColor: '#fff' }}
-        />
-      )}
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
 
-      <FlatList
-        data={filteredAftData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Pressable onPress={() => onViewDetails(item)}>
-              <View>
-                <Text>{item.product}</Text>
-                <Text style={styles.date}>{item.date}</Text>
-                <Text>Price: {item.price}DT</Text>
-                <Text>{item.productdetails}</Text>
-              </View>
-            </Pressable>
-            <View style={styles.buttonContainer}>
-              <Pressable style={styles.updateButton} onPress={() => onOpenUpdateModal(item)}>
-                <Text style={styles.buttonText}>Update</Text>
+        <FlatList
+          data={filteredAftData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <Pressable onPress={() => onViewDetails(item)}>
+                <View>
+                  <Text style={styles.productName}>{item.product}</Text>
+                  <Text style={styles.date}>{item.date}</Text>
+                  <Text>Price: {item.price}DT</Text>
+                  <Text>{item.productdetails}</Text>
+                </View>
               </Pressable>
-              <Pressable style={styles.deleteButton} onPress={() => onDelete(item)}>
-                <Text style={styles.buttonText}>Delete</Text>
+              <View style={styles.buttonContainer}>
+                <Pressable style={styles.rectangleView} onPress={() => onOpenUpdateModal(item)}>
+                  <Text style={styles.login}>Update</Text>
+                </Pressable>
+                <Pressable style={styles.deleteButton} onPress={() => onDelete(item)}>
+                  <Text style={styles.buttonText}>Delete</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        />
+
+        {/* Add Button */}
+        <Pressable style={styles.addButton} onPress={onOpenAddModal}>
+          <Text style={styles.login}>+</Text>
+        </Pressable>
+
+        {/* Add Modal */}
+        <Modal visible={isAddModalVisible} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Product"
+                placeholderTextColor="#A0A0A0"
+                value={newProduct}
+                onChangeText={(text) => setNewProduct(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Price"
+                placeholderTextColor="#A0A0A0"
+                value={newPrice}
+                onChangeText={(text) => setNewPrice(text)}
+                keyboardType="numeric"
+              />
+              {Platform.OS === 'ios' && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  display="default"
+                  onChange={(event, newDate) => setSelectedDate(newDate)}
+                />
+              )}
+              {Platform.OS === 'android' && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  display="default"
+                  onChange={(event, newDate) => setSelectedDate(newDate)}
+                />
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Product Details"
+                placeholderTextColor="#A0A0A0"
+                value={newProductDetails}
+                onChangeText={(text) => setNewProductDetails(text)}
+              />
+              <Pressable style={styles.rectangleView} onPress={onAdd}>
+                <Text style={styles.login}>Add Product</Text>
+              </Pressable>
+              <Pressable style={styles.rectangleView} onPress={() => setAddModalVisible(false)}>
+                <Text style={styles.login}>Cancel</Text>
               </Pressable>
             </View>
           </View>
-        )}
-      />
+        </Modal>
 
-      {/* Add Button */}
-      <Pressable style={styles.addButton} onPress={onOpenAddModal}>
-        <Text style={styles.buttonText}>+</Text>
-      </Pressable>
-
-      {/* Add Modal */}
-      <Modal visible={isAddModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.input}
-              placeholder="Product"
-              value={newProduct}
-              onChangeText={(text) => setNewProduct(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              value={newPrice}
-              onChangeText={(text) => setNewPrice(text)}
-            />
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="spinner"
-              onChange={(newDate) => setNewDate(newDate)}
-              textColor="#000"
-              style={{ backgroundColor: '#fff' }}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Product Details"
-              value={newProductDetails}
-              onChangeText={(text) => setNewProductDetails(text)}
-            />
-            <Pressable style={styles.rectangleView} onPress={onAdd}>
-              <Text style={styles.login}>Add Product</Text>
-            </Pressable>
-            <Pressable style={styles.rectangleView} onPress={() => setAddModalVisible(false)}>
-              <Text style={styles.login}>Cancel</Text>
-            </Pressable>
+        {/* Update Modal */}
+        <Modal visible={isUpdateModalVisible} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Product"
+                placeholderTextColor="#A0A0A0"
+                value={updatedProduct}
+                onChangeText={(text) => setUpdatedProduct(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Price"
+                placeholderTextColor="#A0A0A0"
+                value={updatedPrice}
+                onChangeText={(text) => setUpdatedPrice(text)}
+                keyboardType="numeric"
+              />
+              {Platform.OS === 'ios' && (
+                <DateTimePicker
+                  value={updatedDate}
+                  mode="date"
+                  display="default"
+                  onChange={(event, newDate) => setUpdatedDate(newDate)}
+                />
+              )}
+              {Platform.OS === 'android' && (
+                <DateTimePicker
+                  value={updatedDate}
+                  mode="date"
+                  display="default"
+                  onChange={(event, newDate) => setUpdatedDate(newDate)}
+                />
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Product Details"
+                placeholderTextColor="#A0A0A0"
+                value={updatedProductDetails}
+                onChangeText={(text) => setUpdatedProductDetails(text)}
+              />
+              <Pressable style={styles.rectangleView} onPress={onUpdate}>
+                <Text style={styles.login}>Update</Text>
+              </Pressable>
+              <Pressable style={styles.rectangleView} onPress={() => setUpdateModalVisible(false)}>
+                <Text style={styles.login}>Cancel</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      {/* Update Modal */}
-      <Modal visible={isUpdateModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.input}
-              placeholder="Product"
-              value={updatedProduct}
-              onChangeText={(text) => setUpdatedProduct(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              value={updatedPrice}
-              onChangeText={(text) => setUpdatedPrice(text)}
-            />
-            <DateTimePicker
-              value={new Date(updatedDate)}
-              mode="date"
-              display="spinner"
-              onChange={(event, newDate) => setUpdatedDate(newDate)}
-              textColor="#000"
-              style={{ backgroundColor: '#fff' }}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Product Details"
-              value={updatedProductDetails}
-              onChangeText={(text) => setUpdatedProductDetails(text)}
-            />
-            <Pressable style={styles.rectangleView} onPress={onUpdate}>
-              <Text style={styles.login}>Update</Text>
-            </Pressable>
-            <Pressable style={styles.rectangleView} onPress={() => setUpdateModalVisible(false)}>
-              <Text style={styles.login}>Cancel</Text>
-            </Pressable>
-          </View>
+        {/* Display Total */}
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
         </View>
-      </Modal>
-
-      {/* Display Total */}
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total Price: {calculateTotal()}DT</Text>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 4,
-    backgroundColor: '#FFFFFF',
-    position: 'relative',
-    marginTop: 105,  // Adjusted to provide space for the headerContainer
-    marginBottom: 23,  // Adjusted to provide space for the tabBarContainer
+    padding: 16,
+    backgroundColor: '#fff',
   },
   salesListTitle: {
     fontSize: 24,
@@ -309,66 +350,26 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   dateIcon: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    marginBottom: 16,
   },
-  itemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  buttonContainer: {
+  inputsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  updateButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-  },
-  deleteButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 5,
-  },
-  addButton: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-    margin: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
+    marginBottom: 10,
   },
   input: {
+    flex: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
+    borderColor: Color.primary,
     borderRadius: 5,
+    padding: 8,
+    marginHorizontal: 5,
+    marginBottom: 10,
   },
   rectangleView: {
     borderRadius: 7,
     backgroundColor: 'darkolivegreen',
-    width: 240,
+    width: 115,
     height: 32,
     marginTop: 10,
   },
@@ -378,23 +379,66 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 5,
   },
-  errorText: {
-    color: 'red',
-    fontSize: 18,
-    textAlign: 'center',
+  itemContainer: {
+    marginBottom: 16,
+    padding: 16,
+    borderWidth: 1,
+    
+    borderRadius: 8,
   },
-  dateText: {
-    fontWeight: 'bold',
-    marginBottom: 5,
+  date: {
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  rectangleView: {
+    backgroundColor: Color.colorDarkolivegreen,
+    padding: 8,
+    borderRadius: 4,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 8,
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: '#fff',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: '#007BFF',
+    padding: 16,
+    borderRadius: 50,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
   },
   totalContainer: {
-    marginTop: 20,
-    alignItems: 'center',
+    marginTop: 16,
+    alignItems: 'flex-end',
   },
   totalText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
+  },
+  productName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333333',
   },
 });
 

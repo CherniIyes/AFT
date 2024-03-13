@@ -5,7 +5,7 @@ function Article1() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.43.138:6464/articles')
+    fetch('http://192.168.1.13:6464/articles')
       .then((response) => response.json())
       .then((json) => {
         setData(json);
