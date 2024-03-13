@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Switch, StyleSheet, TouchableOpacity, Platform, ScrollView, FlatList } from 'react-native';
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+
 
 const DairyValueChain = () => {
   const [cowNumber, setCowNumber] = useState('');
@@ -12,12 +14,13 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-
+  
+ 
   const [allCows, setAllCows] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
   const fetchAllCows = () => {
-    fetch('http://192.168.43.138:6464/cows/getAll')
+    fetch('http://192.168.43.235:6464/cows/getAll')
       .then(response => response.json())
       .then(data => {
         console.log('All cows data:', data);
@@ -73,7 +76,7 @@ const DairyValueChain = () => {
       calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
     };
 
-    fetch('http://192.168.43.138:6464/cows/add', {
+    fetch('http://192.168.43.235:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +148,7 @@ const DairyValueChain = () => {
           <Text style={styles.switchText}>Artificial Insemination Triggered:</Text>
           <Switch value={aiTriggered} onValueChange={handleToggle} />
         </View>
-        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
+        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e"   />
         {calculatedDates && (
           <>
             <View style={styles.dateContainer}>
@@ -249,6 +252,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderColor: '#ccc',
+    width: responsiveWidth(95) ,
+    height: responsiveHeight(5) , 
+    
   },
   switchContainer: {
     flexDirection: 'row',
@@ -270,11 +276,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderColor: '#ccc',
+    width: responsiveWidth(95) ,
+    height: responsiveHeight(5)
   },
-  Button: {
-    backgroundColor: 'black',
+
+  button: {
+    backgroundColor: '#107c2e',
     padding: 10,
-    borderRadius: 5,
 
   },
   dateIcon: {
@@ -283,22 +291,24 @@ const styles = StyleSheet.create({
     padding: 9,
   },
   showAllButton: {
+    marginTop : 4,
     backgroundColor: '#107c2e',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 2,
     marginBottom: 10,
   },
   showAllButtonText: {
     color: '#fff',
     textAlign: 'center',
+    
   },
   tableContainer: {
-    borderWidth: 1,
+    borderWidth: 10,
     borderColor: '#ccc',
-    padding: 10,
+    padding: 1,
   },
   tableTitle: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
@@ -316,20 +326,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 1,
     padding: 3,
+    fontSize:10,
+    borderBottomWidth: 1
   },
   row: {
     flex: 1,
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 5,
     marginBottom: 5,
+   
   },
   cell: {
     flex: 1,
     textAlign: 'center',
-
-
+    borderRightWidth: 1, // Add border to the right of each cell
+    borderColor: '#ccc', // Color of the border
+    padding: 5, // Adjust padding as needed
+    fontSize:11
   },
 });
 
