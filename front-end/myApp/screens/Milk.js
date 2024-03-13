@@ -32,45 +32,46 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.43.138:6464/milk');
+      // const response = await axios.get('http://192.168.100.62:6464/milk');
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.get('http://192.168.100.43:6464/milk');
+      const response = await axios.get('http://192.168.1.13:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
-
   const handleSubmit = async () => {
-    if (!date || !price || !quantity) {
-      setError('Please fill in all fields.');
-      return;
-    }
+    try {
+      // The URL in the following line seems to have a typo, fix it.
+      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price), // Ensure price is converted to a number
+      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
+      // });
+      // If you want to use a different endpoint, you should change the URL in the line above.
+      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      //   day: date,
+      //   price: parseFloat(price),
+      //   quantity: parseInt(quantity),
+      // }); 
+      const response = await axios.post('http://192.168.1.13:6464/milk/add', {
+        day: date,
+        price: parseFloat(price),
+        quantity: parseInt(quantity),
+      });
+      if (response.status === 200) {
+        // Update frontend state with the new entry
+    setReload(!reload)
+        // Calculate total price
+        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+        setTotalPrice(totalPrice);
 
-  try {
-    await axios.post('http://192.168.43.138:6464/milk/add', {
-      day: date,
-      price: parseFloat(price),
-      quantity: parseInt(quantity),
-    });
-    
-    // Create a new row with the submitted data
-    const newRow = {
-      day: date,
-      price: parseFloat(price),
-      quantity: parseInt(quantity),
-    };
-
-      // Update tableData by appending the new row
-      setTableData([...tableData, newRow]);
-
-      // Clear input fields and error message
-      setDate('');
-      setPrice('');
-      setQuantity('');
-      setError(null);
-
-      // Fetch updated data
-      fetchData();
+        // Reset input fields
+        setPrice('');
+        setQuantity('');
+      }
     } catch (error) {
       console.error('Error posting data:', error);
       setError('Error posting data: ' + error.message);
