@@ -79,15 +79,6 @@ const Expenses = () => {
 
       const handleButtonPress = async () => {
             try {
-                  // const response = await axios.post("http://192.168.100.43:6464/exp/add", {
-                  //       handwork: input1,
-                  //       fodder: input2,
-                  //       bills: input3,
-                  //       medicalexpenses: input4,
-                  //       hay: input5,
-                  //       date: selectedDate,
-                  // });
-                  
                   const response = await axios.post("192.168.13.177:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
@@ -96,11 +87,7 @@ const Expenses = () => {
                         hay: input5,
                         date: selectedDate,
                   });
-
-                  // Handle the response as needed
                   console.log("Data added successfully:", response.data);
-
-                  // Fetch and update the data after successful addition
                   fetchExpensesData();
             } catch (error) {
                   console.error("Error adding data:", error);
@@ -111,7 +98,6 @@ const Expenses = () => {
       const fetchExpensesData = async () => {
             try {
                   const response = await axios.get("http://192.168.13.177:6464/exp/getall");
-                  // const response = await axios.get("http://192.168.100.52:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);
@@ -119,13 +105,12 @@ const Expenses = () => {
       };
 
       useEffect(() => {
-            // Fetch data when the component mounts
             fetchExpensesData();
       }, [])
 
       return (
             <View style={styles.fullcontainer}>
-                  <Text>Expenses</Text>
+                  <Text style={styles.titre}>Expenses</Text>
                   <View style={styles.inputsContainer}>
                         <TextInput
                               style={styles.input}
@@ -222,11 +207,18 @@ const styles = StyleSheet.create({
             padding: 4,
             backgroundColor: '#FFFFFF',
             position: 'relative',
-            marginTop: 105,
+            marginTop: 120,
             marginBottom: 23,
+            padding: 16,
+
       },
       tableContainer: {
             marginTop: 20,
+      }, titre: {
+            fontSize: 24,
+            marginBottom: 20,
+            color: '#107c2e',
+            fontWeight: 'bold',
       },
       tableHeader: {
             fontSize: 18,

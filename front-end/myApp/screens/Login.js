@@ -2,24 +2,34 @@ import React, { useState } from "react";
 import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 // import { useDispatch } from 'react-redux';
-// import { login } from '../redux/action';
+// import { login } from '../Kazi/action';
+// import store from '../Kazi/store';
 // import { Provider } from 'react-redux';
-// import store from '../redux/store';
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../Recoil/Rstore.js';
 import axios from 'axios';
 import Profile from "./Profile.js"
 import HomePage from "./HomePage.js";
 
 const LoginScreen = ({ navigation }) => {
   // const dispatch = useDispatch();
+  const setUser = useSetRecoilState(userState);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [user, setUser] = useState('');
+  // const [user, setUser] = useState('');
 
   const handleEmailChange = (text) => {
     setEmail(text);
   };
+
+  const handleEmailBlur = () => {
+    if (!email.includes('@gmail.com')) {
+      setEmail(email + '@gmail.com');
+    }
+  };
+
 
   const handlePasswordChange = (text) => {
     setPassword(text);
@@ -32,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      const loginResponse = await axios.post('192.168.13.177:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.1.6:6464/user/login', {
         email,
         password,
       });
@@ -42,14 +52,15 @@ const LoginScreen = ({ navigation }) => {
         alert("Invalid email or password. Please try again.");
         return;
       }
-
       const userData = loginResponse.data;
+
+      setUser(userData);
+
       // dispatch(login(userData));
-
-
-      setUser(email);
-
+      // setUser(email);
       console.log('user:', email);
+
+
 
 
       setEmail('');
@@ -84,6 +95,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.email}
           placeholder="Email"
           onChangeText={handleEmailChange}
+          onBlur={handleEmailBlur}
           value={email}
         />
       </View>

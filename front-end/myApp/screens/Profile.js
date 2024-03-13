@@ -1,20 +1,14 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-  Image,
-  ScrollView,
-} from "react-native";
-
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Image, ScrollView, } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from 'react-redux';
-
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 const ProfessionalProfile = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  // const dispatch = useDispatch();
+  // const user = useSelector((state) => state.user);
+  const user = useRecoilValue(userState);
+
   console.log("user", user);
 
   const profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNErRk-0VnxqOmNa71Rok-FLZKUt6Y38mJkA&usqp=CAU";
@@ -95,10 +89,13 @@ const ProfessionalProfile = () => {
 // Styles
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#f0f0f0",
-    marginTop: 20,
+    flex: 1,
+            padding: 4,
+            backgroundColor: '#FFFFFF',
+            position: 'relative',
+            marginTop: 120,
+            marginBottom: 23,
+            padding: 16,
   },
   header: {
     flexDirection: "row",
