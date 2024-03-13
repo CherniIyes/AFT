@@ -1,60 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextInput, StyleSheet, View, Text, TouchableOpacity, Platform, FlatList, Pressable, Modal, Button, } from 'react-native';
-import { PDFDocument, rgb, StandardFonts } from 'react-native-pdf-lib';
-//import RNFS from 'react-native-fs';
-
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
+import RNFS from 'react-native-fs';
 
 const Wallet = () => {
-      const [allAftData, setAllAftData] = useState([]);
-      const [expensesData, setExpensesData] = useState([]);
-      const [tableData, setTableData] = useState([]);
+  const [allAftData, setAllAftData] = useState([]);
+  const [expensesData, setExpensesData] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
-      useEffect(() => {
-            const fetchData = async () => {
-                  try {
-                        const aftResponse = await axios.get('http://192.168.1.13:6464/sales/getAll')
-                        setAllAftData(aftResponse.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const aftResponse = await axios.get('http://192.168.1.13:6464/sales/getAll');
+        setAllAftData(aftResponse.data);
 
-                        const expensesResponse = await axios.get('http://192.168.1.13:6464/exp/getall');
-                        setExpensesData(expensesResponse.data);
+        const expensesResponse = await axios.get('http://192.168.1.13:6464/exp/getall');
+        setExpensesData(expensesResponse.data);
 
-                        const tableResponse = await axios.get('http://192.168.1.13:6464/milk');
-                        setTableData(tableResponse.data);
-                  } catch (error) {
-                        console.error('Error fetching data:', error.message);
-                  }
-            };
+        const tableResponse = await axios.get('http://192.168.1.13:6464/milk');
+        setTableData(tableResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
 
-            fetchData();
-      }, []);
+    fetchData();
+  }, []);
 
-      const generatePDF = async () => {
-            try {
-                  const pdfDoc = await PDFDocument.create();
+  const generatePDF = async () => {
+    try {
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([400, 600]);
 
-                  // Add content to the PDF
-                  pdfDoc
-                        .createPage()
-                        .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
-                        .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
-                        .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
-                        .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
-                        .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
-                        .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
+      // Add Sales Data
+      page.drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
+        .drawText(JSON.stringify(allAftData), { x: 50, y: 730 });
 
-                  // Get the PDF as a base64 string
-                  const pdfBytes = await pdfDoc.save();
+      // Add Expenses Data
+      page.drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
+        .drawText(JSON.stringify(expensesData), { x: 50, y: 680 });
 
-                  // For native platforms (iOS/Android)
-                  const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+      // Add Milk Data
+      page.drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
+        .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
 
-                  await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
-                  console.log('PDF saved successfully at:', pdfPath);
-            } catch (error) {
-                  console.error('Error generating or saving PDF:', error.message);
-            }
-      };
+      const pdfBytes = await pdfDoc.save();
+      const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+      await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
+      console.log('PDF saved successfully at:', pdfPath);
+    } catch (error) {
+      console.error('Error generating or saving PDF:', error.message);
+    }
+  };
       return (
             <View style={styles.container}>
                   {expensesData.length > 0 && (
