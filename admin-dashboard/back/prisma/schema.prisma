@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model cows {
+  id                                Int                                     @id @default(autoincrement())
+  cow_number                        String?                                 @db.VarChar(50)
+  cow_race                          String?                                 @db.VarChar(50)
+  artificial_insemination_date      DateTime?                               @db.Date
+  artificial_insemination_triggered cows_artificial_insemination_triggered? @default(No)
+  return_in_heat_control_date       DateTime?                               @db.Date
+  pregnancy_detection_date          DateTime?                               @db.Date
+  drying_off_date                   DateTime?                               @db.Date
+  calving_and_delivery_date         DateTime?                               @db.Date
+}
+
+model expenses {
+  id              Int       @id @default(autoincrement())
+  handwork        Int?
+  fodder          Int?
+  bills           Int?
+  medicalexpenses Int?
+  hay             Int?
+  date            DateTime? @db.Date
+}
+
+model milk {
+  id       Int      @id @default(autoincrement())
+  date     DateTime @db.Date
+  price    Int
+  quantity Decimal  @db.Decimal(10, 0)
+}
+
+model sells {
+  id              Int    @id @default(autoincrement())
+  product         String @db.VarChar(45)
+  price           Int
+  image           String @db.VarChar(4000)
+  product_details String @map("product details") @db.VarChar(4000)
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  username String @db.VarChar(45)
+  email    String @db.VarChar(45)
+  password String @db.VarChar(450)
+}
+
+enum cows_artificial_insemination_triggered {
+  Yes
+  No
+}

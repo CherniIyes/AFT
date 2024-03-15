@@ -1,0 +1,28 @@
+.sideBarCon {
+      padding: 20px;
+      /* display: flex; */
+      align-items: center;
+      gap: 10px;
+}
+
+.sideBar_link {
+      color: var(--textSoft);
+      font-weight: bold;
+      font-size: 13px;
+      margin: 5px 0px;
+      height: 35px;
+      position: relative;
+      border-radius: 5px;
+}
+
+.sideBar_link:hover,
+.active {
+      /* background-color: rgb(2, 33, 53); */
+      background-color: #2e374a;
+}
+
+.sideBar_link_text {
+      position: relative;
+      top: 8px;
+      left: 15px;
+}

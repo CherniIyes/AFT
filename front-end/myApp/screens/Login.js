@@ -10,6 +10,8 @@ import { userState } from '../Recoil/Rstore.js';
 import axios from 'axios';
 import Profile from "./Profile.js"
 import HomePage from "./HomePage.js";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
 const LoginScreen = ({ navigation }) => {
   // const dispatch = useDispatch();
@@ -90,24 +92,40 @@ const LoginScreen = ({ navigation }) => {
       <View style={[styles.androidSmall1Inner, styles.androidLayout]} />
       <View style={[styles.lineView, styles.lineViewLayout]} />
       <View style={[styles.androidSmall1Child1, styles.lineViewLayout]} />
+
       <View style={[styles.vectorParent, styles.vectorFlexBox]}>
+        <View style={styles.emailsoura}>
+          <MaterialCommunityIcons name="email" size={16} color="black" />
+
+        </View>
+
         <TextInput
-          style={styles.email}
+          style={styles.emailInputText}
           placeholder="Email"
           onChangeText={handleEmailChange}
           onBlur={handleEmailBlur}
           value={email}
         />
       </View>
+
       <View style={[styles.vectorGroup, styles.vectorFlexBox]}>
+        <Image
+          style={styles.lockImage}
+          contentFit="cover"
+          source={require("../assets/vector3.png")}
+        />
         <TextInput
-          style={styles.email}
+          style={styles.emailInputText}
           placeholder="Password"
           secureTextEntry={true}
           onChangeText={handlePasswordChange}
           value={password}
         />
-
+        <Image
+          style={[styles.eleyeCloseIcon, styles.iconLayout]}
+          contentFit="cover"
+          source={require("../assets/eleyeclose.png")}
+        />
       </View>
       <View style={styles.rectangleView} />
       <TouchableOpacity style={styles.loginfilsa} onPress={handleSignIn}>
@@ -146,6 +164,8 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xl,
     position: "absolute",
   },
+
+
 
   lineViewLayout: {
     height: 1,
@@ -201,19 +221,22 @@ const styles = StyleSheet.create({
     top: 415,
     borderColor: "rgba(157, 134, 105, 0.32)",
   },
-  email: {
+
+  emailInputText: {
     fontSize: FontSize.size_mini,
     color: Color.colorDarkslategray_200,
     textAlign: "left",
     fontFamily: FontFamily.interRegular,
     width: 233,
     position: "relative",
-    right: 10,
+    right: 0,
   },
   vectorParent: {
     top: 321,
     width: 60,
     alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
   vectorIcon1: {
     height: 14,
@@ -222,6 +245,9 @@ const styles = StyleSheet.create({
   vectorGroup: {
     top: 389,
     width: 92,
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
   rectangleView: {
     top: 463,
@@ -250,8 +276,8 @@ const styles = StyleSheet.create({
     color: Color.colorBlack,
   },
   eleyeCloseIcon: {
-    top: 393,
-    left: 289,
+    top: responsiveHeight(1.2),
+    left: responsiveWidth(54),
     position: "absolute",
     overflow: "hidden",
   },

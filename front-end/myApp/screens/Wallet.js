@@ -9,7 +9,8 @@ import {
   FlatList,
 } from 'react-native';
 import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
-//import RNFS from 'react-native-fs';
+import RNFS from 'react-native-fs';
+
 
 const Wallet = () => {
   const [allAftData, setAllAftData] = useState([]);
