@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      const loginResponse = await axios.post('http://192.168.1.13:6464/user/login', {
+      const loginResponse = await axios.post('http://192.168.100.43:6464/user/login', {
         email,
         password,
       });

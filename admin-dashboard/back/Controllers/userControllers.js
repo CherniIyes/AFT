@@ -28,7 +28,7 @@ const deleteUser = (req, res) => {
         return res.status(400).send("id parameter is missing");
     }
 
-    User.deleteUser(emaidil, (err, result) => {
+    User.deleteUser(id, (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {

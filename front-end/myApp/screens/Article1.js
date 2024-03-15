@@ -5,7 +5,7 @@ function Article1() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.13:6464/articles')
+    fetch('http://192.168.100.43:6464/articles')
       .then((response) => response.json())
       .then((json) => {
         setData(json);
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
-    color : '#107c2e'
+    color: '#107c2e'
   },
   partName: {
     fontSize: 24,

@@ -9,7 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
 
 
 const Wallet = () => {
@@ -20,13 +20,13 @@ const Wallet = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const aftResponse = await axios.get('http://192.168.1.13:6464/sales/getAll');
+        const aftResponse = await axios.get('http://192.168.100.43:6464/sales/getAll');
         setAllAftData(aftResponse.data);
 
-        const expensesResponse = await axios.get('http://192.168.1.13:6464/exp/getall');
+        const expensesResponse = await axios.get('http://192.168.100.43:6464/exp/getall');
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get('http://192.168.1.13:6464/milk');
+        const tableResponse = await axios.get('http://192.168.100.43:6464/milk');
         setTableData(tableResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -36,32 +36,32 @@ const Wallet = () => {
     fetchData();
   }, []);
 
-  const generatePDF = async () => {
-    try {
-      const pdfDoc = await PDFDocument.create();
+  // const generatePDF = async () => {
+  //   try {
+  //     const pdfDoc = await PDFDocument.create();
 
-      // Add content to the PDF
-      pdfDoc
-        .createPage()
-        .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
-        .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
-        .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
-        .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
-        .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
-        .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
+  //     // Add content to the PDF
+  //     pdfDoc
+  //       .createPage()
+  //       .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
+  //       .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
+  //       .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
+  //       .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
+  //       .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
+  //       .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
 
-      // Get the PDF as a base64 string
-      const pdfBytes = await pdfDoc.save();
+  //     // Get the PDF as a base64 string
+  //     const pdfBytes = await pdfDoc.save();
 
-      // For native platforms (iOS/Android)
-      const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+  //     // For native platforms (iOS/Android)
+  //     const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
 
-      await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
-      console.log('PDF saved successfully at:', pdfPath);
-    } catch (error) {
-      console.error('Error generating or saving PDF:', error.message);
-    }
-  };
+  //     await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
+  //     console.log('PDF saved successfully at:', pdfPath);
+  //   } catch (error) {
+  //     console.error('Error generating or saving PDF:', error.message);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -136,7 +136,10 @@ const Wallet = () => {
           />
         </View>
       )}
-      <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
+      {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
+        <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
+      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.generateButton}>
         <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
       </TouchableOpacity>
     </View>
@@ -146,7 +149,12 @@ const Wallet = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 4,
+    backgroundColor: '#FFFFFF',
+    position: 'relative',
+    marginTop: 120,
+    marginBottom: 23,
+    padding: 16,
   },
   tableContainer: {
     marginVertical: 10,
