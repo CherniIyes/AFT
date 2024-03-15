@@ -3,6 +3,7 @@ import { Image, TextInput, StyleSheet, View, Text, TouchableOpacity } from "reac
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_AUTH } from '../FireBsae-Config/FirebaseConfig';
 import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import { useDispatch } from 'react-redux';
 // import { SIGN_UP } from '../Kazi/action';
 import axios from 'axios';
@@ -26,7 +27,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      const registerResponse = await axios.post('http://192.168.1.13:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.100.43:6464/user/register', {
         username,
         email,
         password
@@ -108,31 +109,13 @@ const CreateAccountScreen = ({ navigation }) => {
         </View>
 
         <View style={[styles.Emailcon, styles.vectorFlexBox]}>
-          <Image
-            style={styles.iconLayout}
-            contentFit="cover"
-            source={require("../assets/vector1.png")}
-          />
+          <MaterialCommunityIcons name="email" size={16} color="black" />
           <TextInput
             style={styles.email}
             placeholder="Email"
             onChangeText={handleEmailChange}
             onBlur={handleEmailBlur}
             value={email}
-          />
-        </View>
-        <View style={[styles.ConfPass, styles.vectorFlexBox]}>
-          <Image
-            style={styles.vectorIcon1}
-            contentFit="cover"
-            source={require("../assets/vector3.png")}
-          />
-          <TextInput
-            style={styles.Input}
-            placeholder="Confirm Password"
-            secureTextEntry={true}
-            onChangeText={handleConfirmPasswordChange}
-            value={confirmPassword}
           />
         </View>
         <View style={[styles.passcon, styles.vectorFlexBox]}>
@@ -148,12 +131,37 @@ const CreateAccountScreen = ({ navigation }) => {
             onChangeText={handlePasswordChange}
             value={password}
           />
+          <Image
+            style={[styles.eleyeCloseIcon, styles.iconLayout]}
+            contentFit="cover"
+            source={require("../assets/eleyeclose.png")}
+          />
         </View>
-        <Image
-          style={[styles.eleyeCloseIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/eleyeclose.png")}
-        />
+
+
+        <View style={[styles.ConfPass, styles.vectorFlexBox]}>
+          <Image
+            style={styles.vectorIcon1}
+            contentFit="cover"
+            source={require("../assets/vector3.png")}
+          />
+          <TextInput
+            style={styles.Input}
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            onChangeText={handleConfirmPasswordChange}
+            value={confirmPassword}
+          />
+          <Image
+            style={[styles.eleyeCloseIcon, styles.iconLayout]}
+            contentFit="cover"
+            source={require("../assets/eleyeclose.png")}
+          />
+        </View>
+
+
+
+
 
 
         <View style={styles.rectangleView} />
@@ -290,11 +298,12 @@ const styles = StyleSheet.create({
   Emailcon: {
     top: responsiveHeight(40.3),
     left: responsiveWidth(13),
-    width: responsiveWidth(2),
+    // width: responsiveWidth(2),
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
   },
+
   lineUnderEmail: {
     top: responsiveHeight(43),
   },
@@ -351,12 +360,12 @@ const styles = StyleSheet.create({
 
 
 
-  eleyeCloseIcon: {
-    top: 483,
-    left: 279,
-    position: "absolute",
-    overflow: "hidden",
-  },
+  // eleyeCloseIcon: {
+  //   top: 483,
+  //   left: 279,
+  //   position: "absolute",
+  //   overflow: "hidden",
+  // },
   text: {
     color: Color.colorBlack,
   },

@@ -1,0 +1,52 @@
+.addUser_full_container {
+      background-color: var(--bgSoft);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      position: relative;
+      left: 214px;
+}
+
+.form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+}
+
+.form input,
+.form textarea,
+.form select {
+      padding: 23px;
+      background-color: var(--bg);
+      color: var(--text);
+      border: 2px solid #2e374a;
+      border-radius: 5px;
+      margin-bottom: 0;
+      position: relative;
+      bottom: 1px;
+}
+
+.form input,
+.form select {
+      width: calc(33.33% - 10px);
+      /* Adjust width to fit three inputs */
+      margin-right: 10px;
+      /* Add margin between inputs */
+}
+
+.form textarea {
+      width: 100%;
+}
+
+
+.form button {
+      width: 100%;
+      padding: 28px;
+      background-color: teal;
+      color: var(--text);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      top: 15px;
+}

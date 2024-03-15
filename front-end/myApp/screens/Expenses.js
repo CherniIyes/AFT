@@ -15,6 +15,10 @@ const Expenses = () => {
       const [expensesData, setExpensesData] = useState([]);
       const [selectedYear, setSelectedYear] = useState("");
       const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
+      const [filterdate, setfilterDate] = useState(new Date());
+      const [selectedfilterdate, setfilterdate] = useState("");
+
+
 
 
       const handleFilterDateChange = (event, newDate) => {
@@ -22,9 +26,9 @@ const Expenses = () => {
                   setShowFilterDatePicker(false);
             }
             if (newDate) {
-                  setDate(newDate);
+                  setfilterDate(newDate);
                   const formattedDate = newDate.toLocaleDateString();
-                  setSelectedDate(formattedDate);
+                  setfilterdate(formattedDate);
 
                   // Extract the year from the selected date
                   const year = newDate.getFullYear();
@@ -35,31 +39,6 @@ const Expenses = () => {
       const handleFilterDateIconPress = () => {
             setShowFilterDatePicker(true);
       };
-
-
-
-
-
-      // <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
-      //       <Text>{selectedDate || "Date"}</Text>
-      // </TouchableOpacity>
-      // {
-      //       showFilterDatePicker && (
-      //             <DateTimePicker
-      //                   value={date}
-      //                   mode="date"
-      //                   display="spinner"
-      //                   onChange={handleFilterDateChange}
-      //             />
-      //       )
-      // }
-
-
-
-
-
-
-
 
       const handleDateIconPress = () => {
             setShowDatePicker(true);
@@ -79,7 +58,7 @@ const Expenses = () => {
 
       const handleButtonPress = async () => {
             try {
-                  const response = await axios.post("192.168.13.177:6464/exp/add", {
+                  const response = await axios.post("192.168.100.43:6464/exp/add", {
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -97,8 +76,7 @@ const Expenses = () => {
 
       const fetchExpensesData = async () => {
             try {
-                  // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
-                  const response = await axios.get("http://192.168.1.13:6464/exp/getall");
+                  const response = await axios.get("http://192.168.100.43:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);
@@ -169,12 +147,12 @@ const Expenses = () => {
                                     <Text style={styles.tableCellHeader}>Medical Expenses</Text>
                                     <Text style={styles.tableCellHeader}>Hay</Text>
                                     <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
-                                          <Text>{selectedDate || "Date"}</Text>
+                                          <Text>{selectedfilterdate || "Date"}</Text>
                                     </TouchableOpacity>
                                     {
                                           showFilterDatePicker && (
                                                 <DateTimePicker
-                                                      value={date}
+                                                      value={filterdate}
                                                       mode="date"
                                                       display="spinner"
                                                       onChange={handleFilterDateChange}

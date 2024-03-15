@@ -6,7 +6,7 @@ function Article2() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.13:6464/article2') // Assuming this endpoint is correct
+    fetch('http://192.168.100.43:6464/article2') // Assuming this endpoint is correct
       .then((response) => response.json())
       .then((json) => {
         setData(json);
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
-    marginTop :'30%'
+    marginTop: '30%'
   },
   articleContainer: {
     padding: 20,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
-    color : '#107c2e'
+    color: '#107c2e'
   },
   partName: {
     fontSize: 24,
