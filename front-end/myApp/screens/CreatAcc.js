@@ -12,7 +12,7 @@ import { useSetRecoilState } from 'recoil';
 import { userState } from '../Recoil/Rstore';
 const CreateAccountScreen = ({ navigation }) => {
   // const dispatch = useDispatch();
-  const setUser = useSetRecoilState(userState);
+  // const setUser = useSetRecoilState(userState);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -27,7 +27,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      const registerResponse = await axios.post('http://192.168.100.43:6464/user/register', {
+      const registerResponse = await axios.post('http://192.168.1.6:6464/user/register', {
         username,
         email,
         password
@@ -38,8 +38,8 @@ const CreateAccountScreen = ({ navigation }) => {
         setEmail('');
         setPassword('');
         setUsername('');
-        const userData = registerResponse.data;
-        setUser(userData);
+        // const userData = registerResponse.data;
+        // setUser(userData);
         navigation.navigate('Login');
       } else {
         console.error("User registration failed:", registerResponse.data);

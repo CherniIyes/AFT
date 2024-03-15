@@ -4,8 +4,10 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255; /* White background start */
-  --background-end-rgb: 255, 255, 255; /* White background end */
+  --background-start-rgb: 255, 255, 255;
+  /* White background start */
+  --background-end-rgb: 255, 255, 255;
+  /* White background end */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,6 +26,8 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
+  background-color: rgb(3, 29, 46);
+
 }
 
 @layer utilities {
