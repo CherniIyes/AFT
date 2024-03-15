@@ -61,7 +61,7 @@ const HomePage = (props) => {
   };
 
   const fetchArticles = () => {
-    axios.get("http://192.168.1.13:6464/articles/").then((response) => {
+    axios.get("http://192.168.111.59:6464/articles/").then((response) => {
       setArticles(response.data);
       setLikedArticles(new Array(response.data.length).fill(false));
     });

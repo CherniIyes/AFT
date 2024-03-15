@@ -35,7 +35,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
       // If you want to use a different endpoint, you should change the URL in the line above.
       // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.1.13:6464/milk');
+      const response = await axios.get('http://192.168.111.59:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -56,7 +56,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       //   price: parseFloat(price),
       //   quantity: parseInt(quantity),
       // }); 
-      const response = await axios.post('http://192.168.1.13:6464/milk/add', {
+      const response = await axios.post('http://192.168.111.59:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),

@@ -98,7 +98,7 @@ const Expenses = () => {
       const fetchExpensesData = async () => {
             try {
                   // const response = await axios.get("http://192.168.1.4:6464/exp/getall");
-                  const response = await axios.get("http://192.168.1.13:6464/exp/getall");
+                  const response = await axios.get("http://192.168.111.59:6464/exp/getall");
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);

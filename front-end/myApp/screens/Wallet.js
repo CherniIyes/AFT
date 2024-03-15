@@ -9,7 +9,8 @@ import {
   FlatList,
 } from 'react-native';
 import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
-//import RNFS from 'react-native-fs';
+import RNFS from 'react-native-fs';
+
 
 const Wallet = () => {
   const [allAftData, setAllAftData] = useState([]);
@@ -19,13 +20,13 @@ const Wallet = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const aftResponse = await axios.get('http://192.168.1.13:6464/sales/getAll');
+        const aftResponse = await axios.get('http://192.168.111.59:6464/sales/getAll');
         setAllAftData(aftResponse.data);
 
-        const expensesResponse = await axios.get('http://192.168.1.13:6464/exp/getall');
+        const expensesResponse = await axios.get('http://192.168.111.59:6464/exp/getall');
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get('http://192.168.1.13:6464/milk');
+        const tableResponse = await axios.get('http://192.168.111.59:6464/milk');
         setTableData(tableResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -53,7 +54,7 @@ const Wallet = () => {
       const pdfBytes = await pdfDoc.save();
 
       // For native platforms (iOS/Android)
-      const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+      const pdfPath = RNFS.RNFSFileTypeRegular.DocumentDirectoryPath + '/wallet_data.pdf';
 
       await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
       console.log('PDF saved successfully at:', pdfPath);
