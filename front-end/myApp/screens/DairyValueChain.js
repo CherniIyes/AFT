@@ -1,12 +1,13 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Switch, StyleSheet, TouchableOpacity, Platform, ScrollView, FlatList } from 'react-native';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 
 const DairyValueChain = () => {
+  const user = useRecoilValue(userState);
+
   const [cowNumber, setCowNumber] = useState('');
   const [cowRace, setCowRace] = useState('');
   const [aiDate, setAiDate] = useState('');
@@ -14,13 +15,13 @@ const DairyValueChain = () => {
   const [calculatedDates, setCalculatedDates] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  
- 
+
+
   const [allCows, setAllCows] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
   const fetchAllCows = () => {
-    fetch('http://192.168.100.43:6464/cows/getAll')
+    fetch(`http://192.168.1.4:6464/cows/getbyid/${user.id}`)
       .then(response => response.json())
       .then(data => {
         console.log('All cows data:', data);
@@ -73,10 +74,11 @@ const DairyValueChain = () => {
       return_in_heat_control_date: calculatedDates.returnInHeatControlDate.toISOString().split('T')[0],
       pregnancy_detection_date: calculatedDates.pregnancyDetectionDate.toISOString().split('T')[0],
       drying_off_date: calculatedDates.dryingOffDate.toISOString().split('T')[0],
-      calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0]
+      calving_and_delivery_date: calculatedDates.calvingAndDeliveryDate.toISOString().split('T')[0],
+      userId: user.id,
     };
 
-    fetch('http://192.168.100.43:6464/cows/add', {
+    fetch('http://192.168.1.4:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -126,6 +128,8 @@ const DairyValueChain = () => {
           placeholder="Cow Number"
           value={cowNumber}
           onChangeText={setCowNumber}
+          keyboardType="numeric"
+
         />
         <TextInput
           style={styles.input}
@@ -148,7 +152,7 @@ const DairyValueChain = () => {
           <Text style={styles.switchText}>Artificial Insemination Triggered:</Text>
           <Switch value={aiTriggered} onValueChange={handleToggle} />
         </View>
-        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e"   />
+        <Button title="Submit" onPress={handleSubmit} style={styles.button} color="#107c2e" />
         {calculatedDates && (
           <>
             <View style={styles.dateContainer}>
@@ -252,9 +256,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderColor: '#ccc',
-    width: responsiveWidth(95) ,
-    height: responsiveHeight(5) , 
-    
+    width: responsiveWidth(95),
+    height: responsiveHeight(5),
+
   },
   switchContainer: {
     flexDirection: 'row',
@@ -276,7 +280,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderColor: '#ccc',
-    width: responsiveWidth(95) ,
+    width: responsiveWidth(95),
     height: responsiveHeight(5)
   },
 
@@ -291,7 +295,7 @@ const styles = StyleSheet.create({
     padding: 9,
   },
   showAllButton: {
-    marginTop : 4,
+    marginTop: 4,
     backgroundColor: '#107c2e',
     padding: 10,
     borderRadius: 2,
@@ -300,7 +304,7 @@ const styles = StyleSheet.create({
   showAllButtonText: {
     color: '#fff',
     textAlign: 'center',
-    
+
   },
   tableContainer: {
     borderWidth: 10,
@@ -326,7 +330,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 1,
     padding: 3,
-    fontSize:10,
+    fontSize: 10,
     borderBottomWidth: 1
   },
   row: {
@@ -335,7 +339,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 5,
-   
+
   },
   cell: {
     flex: 1,
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1, // Add border to the right of each cell
     borderColor: '#ccc', // Color of the border
     padding: 5, // Adjust padding as needed
-    fontSize:11
+    fontSize: 11
   },
 });
 

@@ -6,23 +6,34 @@ exports.getAllMilk = (callback) => {
     db.query(query, callback);
 };
 
+
+
+
+
 // Get a single milk entry by ID
-exports.getMilkById = (id, callback) => {
-    const query = 'SELECT * FROM milk WHERE id = ?';
-    db.query(query, id, callback);
+exports.getMilkById = (userId, callback) => {
+    const sql = "SELECT *  FROM milk WHERE userId=?";
+    db.query(sql, [userId], (err, results) => {
+        callback(err, results);
+    });
 };
 
-// Add a new milk entry
-exports.addMilk = (milkData, callback) => {
-    const query = 'INSERT INTO milk SET ?';
-    db.query(query, milkData, callback);
-};
 
-// Update a milk entry
-exports.updateMilk = (id, milkData, callback) => {
-    const query = 'UPDATE milk SET ? WHERE id = ?';
-    db.query(query, [milkData, id], callback);
-};
+
+
+
+exports.addMilk = (data, callback) => {
+    const sql = "INSERT INTO milk SET ?";
+    connection.query(sql, [data], (err, results) => {
+        callback(err, results);
+    });
+},
+
+    // Update a milk entry
+    exports.updateMilk = (id, milkData, callback) => {
+        const query = 'UPDATE milk SET ? WHERE id = ?';
+        db.query(query, [milkData, id], callback);
+    };
 
 // Delete a milk entry
 exports.deleteMilk = (id, callback) => {

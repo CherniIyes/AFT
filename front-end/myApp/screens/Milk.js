@@ -4,16 +4,20 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 const ProfitCalculatorScreen = ({ navigation }) => {
+  const user = useRecoilValue(userState);
+
+
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
       tabBarVisible: true,
     });
   }, [navigation]);
-
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -30,51 +34,36 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     fetchData();
   }, []);
 
+
   const fetchData = async () => {
+    const user = useRecoilValue(userState);
     try {
-      // const response = await axios.get('http://192.168.100.62:6464/milk');
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.100.43:6464/milk');
-      setTableData(response.data);
+      const response = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
+      if (response.data.length === 0) {
+        // If no data returned, set tableData to an empty array
+        setTableData([]);
+      } else {
+        // If data returned, update tableData state
+        setTableData(response.data);
+      }
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
   const handleSubmit = async () => {
+
     try {
-      // The URL in the following line seems to have a typo, fix it.
-      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price), // Ensure price is converted to a number
-      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
-      // });
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price),
-      //   quantity: parseInt(quantity),
-      // }); 
-      const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      const response = await axios.post("http://192.168.1.4:6464/milk/add", {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
+        userId: user.id,
       });
-      if (response.status === 200) {
-        // Update frontend state with the new entry
-        setReload(!reload)
-        // Calculate total price
-        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-        setTotalPrice(totalPrice);
-
-        // Reset input fields
-        setPrice('');
-        setQuantity('');
-      }
+      console.log("Data added successfully:", response.data);
+      fetchExpensesData();
     } catch (error) {
-      console.error('Error posting data:', error);
-      setError('Error posting data: ' + error.message);
+      console.error("Error adding data:", error);
     }
   };
 
@@ -147,24 +136,30 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
-
+  const handleDateIconPress = () => {
+    setShowDatePicker(true);
+  };
   return (
     <GestureHandlerRootView style={styles.fullcontainer}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <Text style={styles.sectionTitle}>Enter Milk Data</Text>
+        <Text style={styles.sectionTitle}>Enter Your Dairy Production:</Text>
+
+
+
         <View style={styles.inputContainer}>
           <TouchableOpacity onPress={showDatepicker}>
             <FontAwesome5 name="calendar-alt" size={24} color="#107c2e" style={styles.icon} />
           </TouchableOpacity>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: '#000', opacity: 0.5 }]}
             value={date}
             onFocus={showDatepicker}
             keyboardType="default"
             placeholder="Select Date"
+            editable={false}
           />
         </View>
         {showDatePicker && (
@@ -175,6 +170,9 @@ const ProfitCalculatorScreen = ({ navigation }) => {
             onChange={handleDateChange}
           />
         )}
+
+
+
         <View style={styles.inputContainer}>
           <FontAwesome5 name="money-bill" size={24} color="#107c2e" style={styles.icon} />
           <TextInput
@@ -207,7 +205,6 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>
-            <Text style={styles.tableHeader}>Milk Data Table:</Text>
             <FlatList
               data={tableData}
               renderItem={renderItem}
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: 120,
-
+    marginBottom: 33,
     backgroundColor: '#FFFFFF',
   },
   sectionTitle: {

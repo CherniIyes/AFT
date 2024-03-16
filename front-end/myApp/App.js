@@ -50,9 +50,11 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <>
-      {user && <Nav navigation={navigation} />}
+      {/* {user && <Nav navigation={navigation} />} */}
+      <Nav navigation={navigation} />
       <Navig />
-      {user && <Tab navigation={navigation} />}
+      <Tab navigation={navigation} />
+      {/* {user && <Tab navigation={navigation} />} */}
     </>
   );
 };
