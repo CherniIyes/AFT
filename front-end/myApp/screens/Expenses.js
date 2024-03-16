@@ -3,8 +3,11 @@ import { TextInput, StyleSheet, View, Text, Button, TouchableOpacity, Platform, 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 import { Ionicons, MaterialIcons, AntDesign, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 
 const Expenses = () => {
+      const user = useRecoilValue(userState);
       const [input1, setInput1] = useState("");
       const [input2, setInput2] = useState("");
       const [input3, setInput3] = useState("");
@@ -13,8 +16,8 @@ const Expenses = () => {
       const [date, setDate] = useState(new Date());
       const [showDatePicker, setShowDatePicker] = useState(false);
       const [selectedYear, setSelectedYear] = useState("");
-      
-      
+
+
       const [expensesData, setExpensesData] = useState([]);
       const [selectedDate, setSelectedDate] = useState("");
       const [showFilterDatePicker, setShowFilterDatePicker] = useState(false);
@@ -65,6 +68,7 @@ const Expenses = () => {
       const handleButtonPress = async () => {
             try {
                   const response = await axios.post("http://192.168.1.4:6464/exp/add", {
+                        userId: user.id,
                         handwork: input1,
                         fodder: input2,
                         bills: input3,
@@ -82,7 +86,7 @@ const Expenses = () => {
 
       const fetchExpensesData = async () => {
             try {
-                  const response = await axios.get("http://192.168.1.4:6464/exp/getall");
+                  const response = await axios.get(`http://192.168.1.4:6464/exp/getone/${user.id}`);
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);

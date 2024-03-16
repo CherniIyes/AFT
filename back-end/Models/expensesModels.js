@@ -27,9 +27,9 @@ module.exports = {
             })
       },
 
-      getOne: (id, callback) => {
-            const sql = "SELECT *  FROM expenses WHERE id=?"
-            connection.query(sql, [id], (err, results) => {
+      getOne: (userId, callback) => {
+            const sql = "SELECT *  FROM expenses WHERE userId=?"
+            connection.query(sql, [userId], (err, results) => {
                   callback(err, results)
             })
       }

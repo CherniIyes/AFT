@@ -25,7 +25,7 @@ class Cow {
   }
 
   static getById(id, callback) {
-    db.query('SELECT * FROM cows WHERE id = ?', [id], (err, results) => {
+    db.query('SELECT * FROM cows WHERE userId = ?', [id], (err, results) => {
       if (err) {
         console.error(err);
         return callback(err, null);
@@ -50,7 +50,7 @@ class Cow {
       this.calving_and_delivery_date
     ];
 
-    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
+    db.query('INSERT INTO cows (cow_number, cow_race, artificial_insemination_date, artificial_insemination_triggered, return_in_heat_control_date, pregnancy_detection_date, drying_off_date, calving_and_delivery_date,userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?,userId)', values, (err, result) => {
       if (err) {
         console.error(err);
         return callback(err);

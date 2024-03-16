@@ -5,15 +5,19 @@ import axios from 'axios';
 import { Card } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
 import DateTimePicker from "@react-native-community/datetimepicker";
-
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 const ProfitCalculatorScreen = ({ navigation }) => {
+  const user = useRecoilValue(userState);
+
+
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
       tabBarVisible: true,
     });
   }, [navigation]);
-
   const [date, setDate] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -30,39 +34,36 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     fetchData();
   }, []);
 
+
   const fetchData = async () => {
+    const user = useRecoilValue(userState);
     try {
-      // const response = await axios.get('http://192.168.100.62:6464/milk');
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.1.4:6464/milk');
-      setTableData(response.data);
+      const response = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
+      if (response.data.length === 0) {
+        // If no data returned, set tableData to an empty array
+        setTableData([]);
+      } else {
+        // If data returned, update tableData state
+        setTableData(response.data);
+      }
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
     }
   };
   const handleSubmit = async () => {
+
     try {
-      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
+      const response = await axios.post("http://192.168.1.4:6464/milk/add", {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
+        userId: user.id,
       });
-      if (response.status === 200) {
-        // Update frontend state with the new entry
-        setReload(!reload)
-        // Calculate total price
-        const totalPrice = tableData.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-        setTotalPrice(totalPrice);
-
-        // Reset input fields
-        setPrice('');
-        setQuantity('');
-      }
+      console.log("Data added successfully:", response.data);
+      fetchExpensesData();
     } catch (error) {
-      console.error('Error posting data:', error);
-      setError('Error posting data: ' + error.message);
+      console.error("Error adding data:", error);
     }
   };
 
@@ -204,7 +205,6 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>
-            {/* <Text style={styles.tableHeader}>Milk Data Table:</Text> */}
             <FlatList
               data={tableData}
               renderItem={renderItem}
