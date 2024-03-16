@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
 import { FontAwesome5 } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const ProfitCalculatorScreen = ({ navigation }) => {
   React.useLayoutEffect(() => {
@@ -35,7 +35,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       // const response = await axios.get('http://192.168.100.62:6464/milk');
       // If you want to use a different endpoint, you should change the URL in the line above.
       // const response = await axios.get('http://192.168.100.43:6464/milk');
-      const response = await axios.get('http://192.168.100.43:6464/milk');
+      const response = await axios.get('http://192.168.1.4:6464/milk');
       setTableData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -44,19 +44,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   };
   const handleSubmit = async () => {
     try {
-      // The URL in the following line seems to have a typo, fix it.
-      // const response = await axios.post('http://192.168.100.62:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price), // Ensure price is converted to a number
-      //   quantity: parseInt(quantity), // Ensure quantity is converted to an integer
-      // });
-      // If you want to use a different endpoint, you should change the URL in the line above.
-      // const response = await axios.post('http://192.168.100.43:6464/milk/add', {
-      //   day: date,
-      //   price: parseFloat(price),
-      //   quantity: parseInt(quantity),
-      // }); 
-      const response = await axios.post('http://192.168.100.43:6464/milk/add', {
+      const response = await axios.post('http://192.168.1.4:6464/milk/add', {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),
@@ -147,24 +135,30 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
-
+  const handleDateIconPress = () => {
+    setShowDatePicker(true);
+  };
   return (
     <GestureHandlerRootView style={styles.fullcontainer}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <Text style={styles.sectionTitle}>Enter Milk Data</Text>
+        <Text style={styles.sectionTitle}>Enter Your Dairy Production:</Text>
+
+
+
         <View style={styles.inputContainer}>
           <TouchableOpacity onPress={showDatepicker}>
             <FontAwesome5 name="calendar-alt" size={24} color="#107c2e" style={styles.icon} />
           </TouchableOpacity>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: '#000', opacity: 0.5 }]}
             value={date}
             onFocus={showDatepicker}
             keyboardType="default"
             placeholder="Select Date"
+            editable={false}
           />
         </View>
         {showDatePicker && (
@@ -175,6 +169,9 @@ const ProfitCalculatorScreen = ({ navigation }) => {
             onChange={handleDateChange}
           />
         )}
+
+
+
         <View style={styles.inputContainer}>
           <FontAwesome5 name="money-bill" size={24} color="#107c2e" style={styles.icon} />
           <TextInput
@@ -207,7 +204,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>
-            <Text style={styles.tableHeader}>Milk Data Table:</Text>
+            {/* <Text style={styles.tableHeader}>Milk Data Table:</Text> */}
             <FlatList
               data={tableData}
               renderItem={renderItem}
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: 120,
-
+    marginBottom: 33,
     backgroundColor: '#FFFFFF',
   },
   sectionTitle: {
