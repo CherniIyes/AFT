@@ -46,9 +46,6 @@ const Expenses = () => {
             setShowFilterDatePicker(true);
       };
 
-
-
-
       const handleDateIconPress = () => {
             setShowDatePicker(true);
       };

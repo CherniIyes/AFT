@@ -10,9 +10,12 @@ import {
 } from 'react-native';
 import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
 // import RNFS from 'react-native-fs';
-
+import { useRecoilValue } from 'recoil';
+import { userState } from '../Recoil/Rstore';
 
 const Wallet = () => {
+  const user = useRecoilValue(userState);
+
   const [allAftData, setAllAftData] = useState([]);
   const [expensesData, setExpensesData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -20,13 +23,13 @@ const Wallet = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const aftResponse = await axios.get('http://192.168.100.43:6464/sales/getAll');
-        setAllAftData(aftResponse.data);
+        // const aftResponse = await axios.get('http://192.168.100.43:6464/sales/getAll');
+        // setAllAftData(aftResponse.data);
 
-        const expensesResponse = await axios.get('http://192.168.100.43:6464/exp/getall');
+        const expensesResponse = await axios.get(`http://192.168.1.4:6464/exp/getone/${user.id}`);
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get('http://192.168.100.43:6464/milk');
+        const tableResponse = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
         setTableData(tableResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -113,7 +116,7 @@ const Wallet = () => {
           />
         </View>
       )}
-      {allAftData.length > 0 && (
+      {/* {allAftData.length > 0 && (
         <View style={styles.tableContainer}>
           <Text style={styles.tableHeader}>Sales:</Text>
           <View style={styles.tableRowHeader}>
@@ -135,7 +138,7 @@ const Wallet = () => {
             )}
           />
         </View>
-      )}
+      )} */}
       {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
         <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
       </TouchableOpacity> */}

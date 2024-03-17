@@ -36,7 +36,6 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
 
   const fetchData = async () => {
-    const user = useRecoilValue(userState);
     try {
       const response = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
       if (response.data.length === 0) {
@@ -52,7 +51,14 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     }
   };
   const handleSubmit = async () => {
-
+    // Log the data object before making the POST request
+    console.log("Data to be sent:", {
+      day: date,
+      price: parseFloat(price),
+      quantity: parseInt(quantity),
+      userId: user.id,
+    });
+  
     try {
       const response = await axios.post("http://192.168.1.4:6464/milk/add", {
         day: date,
@@ -61,7 +67,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         userId: user.id,
       });
       console.log("Data added successfully:", response.data);
-      fetchExpensesData();
+      fetchData();
     } catch (error) {
       console.error("Error adding data:", error);
     }
