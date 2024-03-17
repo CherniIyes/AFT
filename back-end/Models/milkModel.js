@@ -12,9 +12,14 @@ exports.getAllMilk = (callback) => {
 
 // Get a single milk entry by ID
 exports.getMilkById = (userId, callback) => {
-    const sql = "SELECT *  FROM milk WHERE userId=?";
+    const sql = "SELECT * FROM milk WHERE userId=?";
     db.query(sql, [userId], (err, results) => {
-        callback(err, results);
+        if (err) {
+            console.error("Error fetching milk by userId:", err);
+            callback(err, null);
+            return;
+        }
+        callback(null, results);
     });
 };
 
@@ -24,7 +29,7 @@ exports.getMilkById = (userId, callback) => {
 
 exports.addMilk = (data, callback) => {
     const sql = "INSERT INTO milk SET ?";
-    connection.query(sql, [data], (err, results) => {
+    db.query(sql, [data], (err, results) => {
         callback(err, results);
     });
 },
