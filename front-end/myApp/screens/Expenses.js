@@ -187,7 +187,10 @@ const Expenses = () => {
                                     onChange={handleDateChange}
                               />
                         )}
-                        <Button title="Submit" onPress={handleButtonPress} style={styles.button} color="#107c2e" />
+                        {/* <Button title="Submit" onPress={handleButtonPress} style={styles.button} color="#107c2e" /> */}
+                        <TouchableOpacity style={styles.submitButton} onPress={handleButtonPress}>
+                              <Text style={styles.buttonText}>Submit</Text>
+                        </TouchableOpacity>
                         {expensesData.length > 0 && (
                               <View style={styles.tableContainer}>
                                     <View style={styles.tableRowHeader}>
@@ -198,7 +201,13 @@ const Expenses = () => {
                                           <Text style={styles.tableCellHeader}>Hay</Text>
 
                                           <TouchableOpacity style={styles.dateIcon} onPress={handleFilterDateIconPress}>
-                                                <Text>{selectedfilterdate || "Date"}</Text>
+                                                <Text style={{
+                                                      color: '#107c2e',
+                                                      flex: 1,
+                                                      textAlign: "center",
+                                                      fontWeight: "bold",
+                                                      fontSize: 13.1,
+                                                }}>{selectedfilterdate || "Date"}</Text>
                                           </TouchableOpacity>
                                           {
                                                 showFilterDatePicker && (
@@ -247,7 +256,18 @@ const styles = StyleSheet.create({
             padding: 16,
 
       },
-
+      submitButton: {
+            backgroundColor: '#107c2e',
+            padding: 12,
+            alignItems: 'center',
+            borderRadius: 8,
+            marginTop: 16,
+      },
+      buttonText: {
+            color: '#f7b304',
+            fontWeight: 'bold',
+            fontSize: 16,
+      },
       inputContainer: {
             flexDirection: 'row',
             alignItems: 'center',
@@ -288,7 +308,7 @@ const styles = StyleSheet.create({
             textAlign: "center",
             fontWeight: "bold",
             fontSize: 13.1,
-
+            color: '#107c2e'
       },
       tableRow: {
             flexDirection: "row",
@@ -299,7 +319,7 @@ const styles = StyleSheet.create({
       tableCell: {
             flex: 1,
             textAlign: "center",
-            fontSize: 12,
+            fontSize: 15,
       },
       container: {
             padding: 20,
@@ -315,30 +335,17 @@ const styles = StyleSheet.create({
       },
 
       dateIcon: {
-            fontSize: 10,
-            marginRight: 10,
-            // borderWidth: 0.5,
-            // padding: 9,
+            color: '#107c2e',
+            fontWeight: 'bold',
             alignItems: "center",
-            // borderRadius: 5,
-            // borderColor: '#ccc',
-            // borderBottomWidth: 1,
       },
-      // dateIcon: {
-      //       marginBottom: 12,
-      //       paddingHorizontal: 12,
-      //       paddingVertical: 10,
-      //       borderWidth: 1,
-      //       // borderRadius: 5,
-
-      //       alignItems: "center",
-      // },
       button: {
             backgroundColor: "#107c2e",
             padding: 10,
             alignItems: "center",
             borderRadius: 5,
             marginTop: 20,
+
       },
 });
 

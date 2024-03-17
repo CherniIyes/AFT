@@ -4,6 +4,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../Recoil/Rstore';
+import axios from 'axios';
 
 const DairyValueChain = () => {
   const user = useRecoilValue(userState);
@@ -20,16 +21,33 @@ const DairyValueChain = () => {
   const [allCows, setAllCows] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
-  const fetchAllCows = () => {
-    fetch(`http://192.168.1.4:6464/cows/getbyid/${user.id}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('All cows data:', data);
-        setAllCows(data);
-      })
-      .catch(error => {
-        console.error('Error fetching all cows:', error);
-      });
+  const fetchAllCows = async () => {
+    // fetch(`http://192.168.1.4:6464/cows/getbyid/${user.id}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log('All cows data:', data);
+    //     setAllCows(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching all cows:', error);
+    //   });
+
+
+    try {
+      const response = await axios.get(`http://192.168.1.4:6464/cows/getbyid/${user.id}`);
+      if (response.data.length === 0) {
+        // If no data returned, set tableData to an empty array
+        setAllCows([]);
+      } else {
+        // If data returned, update tableData state
+        setAllCows(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      setError('Error fetching data: ' + error.message);
+    }
+
+
   };
 
   useEffect(() => {
