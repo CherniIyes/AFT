@@ -38,13 +38,10 @@ const ProfitCalculatorScreen = ({ navigation }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
-      if (response.data.length === 0) {
-        // If no data returned, set tableData to an empty array
-        setTableData([]);
-      } else {
-        // If data returned, update tableData state
-        setTableData(response.data);
-      }
+
+      // If data returned, update tableData state
+      setTableData(response.data);
+
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Error fetching data: ' + error.message);
@@ -58,7 +55,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
       quantity: parseInt(quantity),
       userId: user.id,
     });
-  
+
     try {
       const response = await axios.post("http://192.168.1.4:6464/milk/add", {
         day: date,
@@ -67,6 +64,14 @@ const ProfitCalculatorScreen = ({ navigation }) => {
         userId: user.id,
       });
       console.log("Data added successfully:", response.data);
+      setTableData(prevTableData => [...prevTableData, response.data]);
+      setDate('');
+      setPrice('');
+      setQuantity('');
+      setDailyProfit(0);
+      setMonthlyProfit(0);
+      setYearlyProfit(0);
+      setError(null);
       fetchData();
     } catch (error) {
       console.error("Error adding data:", error);
@@ -206,15 +211,27 @@ const ProfitCalculatorScreen = ({ navigation }) => {
           {renderProfitCards()}
         </View>
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit Data</Text>
+          <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
         {error && <Text style={styles.errorText}>{error}</Text>}
         {tableData.length > 0 && (
           <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Milk:</Text>
+            <View style={styles.tableRowHeader}>
+              <Text style={styles.tableCellHeader}>Quantity</Text>
+              <Text style={styles.tableCellHeader}>Price</Text>
+              <Text style={styles.tableCellHeader}>Date</Text>
+            </View>
             <FlatList
               data={tableData}
-              renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableCell}>{item.quantity}</Text>
+                  <Text style={styles.tableCell}>{item.price}</Text>
+                  <Text style={styles.tableCell}>{item.day}</Text>
+                </View>
+              )}
             />
           </View>
         )}
@@ -230,6 +247,24 @@ const styles = StyleSheet.create({
     marginTop: 120,
     marginBottom: 33,
     backgroundColor: '#FFFFFF',
+  },
+  tableRowHeader: {
+    flexDirection: "row",
+    backgroundColor: "#f2f2f2",
+    padding: 10,
+  },
+  tableCellHeader: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 15,
+    color: '#107c2e',
+
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: 15,
   },
   sectionTitle: {
     fontSize: 24,

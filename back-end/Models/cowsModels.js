@@ -24,19 +24,24 @@ class Cow {
     });
   }
 
-  static getById(id, callback) {
-    db.query('SELECT * FROM cows WHERE userId = ?', [id], (err, results) => {
+  static getById(userId, callback) {
+
+    const sql = "SELECT * FROM cows WHERE userId=?";
+    db.query(sql, [userId], (err, results) => {
       if (err) {
-        console.error(err);
-        return callback(err, null);
+        console.error("Error fetching milk by userId:", err);
+        callback(err, null);
+        return;
       }
-      if (results.length === 0) {
-        return callback(null, null);
-      }
-      const cow = new Cow(results[0]);
-      callback(null, cow);
+      callback(null, results);
     });
   }
+
+
+
+
+
+  
 
   save(callback) {
     const values = [

@@ -2,6 +2,35 @@ const db = require('../database/index');
 const Cow = require('../Models/cowsModels');
 
 
+
+
+
+exports.getCowById = (req, res) => {
+ 
+  db.query('SELECT * FROM cows WHERE userId = ?', req.params.id, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
+
+
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
 exports.getAllCows = (req, res) => {
   db.query('SELECT * FROM cows', (err, results) => {
     if (err) {
@@ -30,19 +59,6 @@ exports.createCow = (req, res) => {
   });
 };
 
-exports.getCowById = (req, res) => {
-  const { id } = req.params;
-  db.query('SELECT * FROM cows WHERE userId = ?', [id], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Cow not found' });
-    }
-    res.json(results[0]);
-  });
-};
 
 exports.updateCow = (req, res) => {
   const { id } = req.params;
