@@ -26,10 +26,10 @@ const Wallet = () => {
         // const aftResponse = await axios.get('http://192.168.100.43:6464/sales/getAll');
         // setAllAftData(aftResponse.data);
 
-        const expensesResponse = await axios.get(`http://192.168.1.4:6464/exp/getone/${user.id}`);
+        const expensesResponse = await axios.get(`http://192.168.1.6:6464/exp/getone/${user.id}`);
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
+        const tableResponse = await axios.get(`http://192.168.1.6:6464/milk/getone/${user.id}`);
         setTableData(tableResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);

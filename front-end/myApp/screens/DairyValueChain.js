@@ -22,7 +22,7 @@ const DairyValueChain = () => {
   const [showTable, setShowTable] = useState(false);
 
   const fetchAllCows = async () => {
-    // fetch(`http://192.168.1.4:6464/cows/getbyid/${user.id}`)
+    // fetch(`http://192.168.1.6:6464/cows/getbyid/${user.id}`)
     //   .then(response => response.json())
     //   .then(data => {
     //     console.log('All cows data:', data);
@@ -34,7 +34,7 @@ const DairyValueChain = () => {
 
 
     try {
-      const response = await axios.get(`http://192.168.1.4:6464/cows/getbyid/${user.id}`);
+      const response = await axios.get(`http://192.168.1.6:6464/cows/getbyid/${user.id}`);
       if (response.data.length === 0) {
         // If no data returned, set tableData to an empty array
         setAllCows([]);
@@ -96,7 +96,7 @@ const DairyValueChain = () => {
       userId: user.id,
     };
 
-    fetch('http://192.168.1.4:6464/cows/add', {
+    fetch('http://192.168.1.6:6464/cows/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
