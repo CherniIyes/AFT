@@ -11,7 +11,7 @@ const Test = () => {
   const imageHeight = new Animated.Value(0);
 
   useEffect(() => {
-    axios.get(`http://192.168.1.4:6464/articles/${idd}`).then((fetchedArticles) => {
+    axios.get(`http://192.168.1.6:6464/articles/${idd}`).then((fetchedArticles) => {
       setArticle(fetchedArticles.data);
       setIsImageLoaded(true);
     });
