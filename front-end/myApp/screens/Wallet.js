@@ -12,6 +12,10 @@ import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
 // import RNFS from 'react-native-fs';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../Recoil/Rstore';
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
+import * as FileSystem from 'expo-file-system';
+
 
 const Wallet = () => {
   const user = useRecoilValue(userState);
@@ -23,13 +27,10 @@ const Wallet = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const aftResponse = await axios.get('http://192.168.100.43:6464/sales/getAll');
-        // setAllAftData(aftResponse.data);
-
-        const expensesResponse = await axios.get(`http://192.168.1.6:6464/exp/getone/${user.id}`);
+        const expensesResponse = await axios.get(`http://192.168.100.43:6464/exp/getone/${user.id}`);
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get(`http://192.168.1.6:6464/milk/getone/${user.id}`);
+        const tableResponse = await axios.get(`http://192.168.100.43:6464/milk/getone/${user.id}`);
         setTableData(tableResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -39,32 +40,109 @@ const Wallet = () => {
     fetchData();
   }, []);
 
-  // const generatePDF = async () => {
-  //   try {
-  //     const pdfDoc = await PDFDocument.create();
+  const generateAndSharePDF = async () => {
+    try {
+      // Generate HTML content
+      const pdfContent = generatePDFContent();
+      console.log('Generated PDF content:', pdfContent); // Log generated content
 
-  //     // Add content to the PDF
-  //     pdfDoc
-  //       .createPage()
-  //       .drawText('Sales Data', { x: 50, y: 750, font: StandardFonts.HelveticaBold })
-  //       .drawText(JSON.stringify(allAftData), { x: 50, y: 730 })
-  //       .drawText('Expenses Data', { x: 50, y: 700, font: StandardFonts.HelveticaBold })
-  //       .drawText(JSON.stringify(expensesData), { x: 50, y: 680 })
-  //       .drawText('Milk Data', { x: 50, y: 650, font: StandardFonts.HelveticaBold })
-  //       .drawText(JSON.stringify(tableData), { x: 50, y: 630 });
+      // Generate temporary HTML file path
+      const htmlFilePath = `${FileSystem.documentDirectory}temp.html`;
 
-  //     // Get the PDF as a base64 string
-  //     const pdfBytes = await pdfDoc.save();
+      // Write HTML content to a temporary HTML file
+      await FileSystem.writeAsStringAsync(htmlFilePath, pdfContent);
 
-  //     // For native platforms (iOS/Android)
-  //     const pdfPath = RNFS.DocumentDirectoryPath + '/wallet_data.pdf';
+      // Ensure directory exists or create it
+      const directory = `${FileSystem.documentDirectory}PDFs/`;
+      const directoryInfo = await FileSystem.getInfoAsync(directory);
+      if (!directoryInfo.exists) {
+        await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+      }
 
-  //     await RNFS.writeFile(pdfPath, pdfBytes, 'base64');
-  //     console.log('PDF saved successfully at:', pdfPath);
-  //   } catch (error) {
-  //     console.error('Error generating or saving PDF:', error.message);
-  //   }
-  // };
+      // Specify the output PDF file path
+      const pdfOutputPath = `${directory}generatedPDF.pdf`;
+
+      // Print HTML file to PDF with specified output path
+      await printToFileAsync({ html: htmlFilePath, uri: pdfOutputPath });
+
+      // Share the generated PDF file
+      await shareAsync(pdfOutputPath);
+    } catch (error) {
+      console.error('Error generating PDF:', error.message);
+    }
+  };
+
+  const generatePDFContent = () => {
+    // Generate content for the PDF using expensesData and tableData
+    let content = `
+      <html>
+        <head>
+          <title>Expenses and Milk Data</title>
+          <style>
+            /* Define your CSS styles here */
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid black;
+              padding: 8px;
+              text-align: center;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Expenses:</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Handwork</th>
+                <th>Fodder</th>
+                <th>Bills</th>
+                <th>Medical Expenses</th>
+                <th>Hay</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${expensesData.map(item => `
+                <tr>
+                  <td>${item.handwork}</td>
+                  <td>${item.fodder}</td>
+                  <td>${item.bills}</td>
+                  <td>${item.medicalexpenses}</td>
+                  <td>${item.hay}</td>
+                  <td>${item.date}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <h1>Milk Data:</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableData.map(item => `
+                <tr>
+                  <td>${item.quantity}</td>
+                  <td>${item.price}</td>
+                  <td>${item.day}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `;
+
+    return content;
+  };
 
   return (
     <View style={styles.container}>
@@ -142,8 +220,8 @@ const Wallet = () => {
       {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
         <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity style={styles.generateButton}>
-        <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
+      <TouchableOpacity onPress={generateAndSharePDF} style={styles.generateButton}>
+        <Text style={styles.generateButtonText}>Generate and Share PDF</Text>
       </TouchableOpacity>
     </View>
   );

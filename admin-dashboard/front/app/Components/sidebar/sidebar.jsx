@@ -16,11 +16,11 @@ const Sidebar = () => {
       };
       return (
             <div className="sideBarCon">
-                  <Link href="/dash">
+                  {/* <Link href="/dash">
                         <div className={`sideBar_link ${activeLink === '/dash' ? 'active' : ''}`} onClick={() => handleClick('/dash')}>
                               <p className='sideBar_link_text'>Dash</p>
                         </div>
-                  </Link>
+                  </Link> */}
 
                   <Link href="/dash/Screens/users">
                         <div className={`sideBar_link ${activeLink === '/dash/Screens/users' ? 'active' : ''}`} onClick={() => handleClick('/dash/Screens/users')}>

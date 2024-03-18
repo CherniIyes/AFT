@@ -34,7 +34,7 @@ const DairyValueChain = () => {
 
 
     try {
-      const response = await axios.get(`http://192.168.1.6:6464/cows/getbyid/${user.id}`);
+      const response = await axios.get(`http://192.168.100.43:6464/cows/getbyid/${user.id}`);
       if (response.data.length === 0) {
         // If no data returned, set tableData to an empty array
         setAllCows([]);

@@ -57,11 +57,11 @@ const HomePage = (props) => {
   };
 
   const handleTest = (idd) => {
-    navigation.navigate(`Test`, { idd });
+    navigation.navigate(`singleArticle`, { idd });
   };
 
   const fetchArticles = () => {
-    axios.get("http://192.168.1.6:6464/articles/").then((response) => {
+    axios.get("http://192.168.100.43:6464/articles/").then((response) => {
       setArticles(response.data);
       setLikedArticles(new Array(response.data.length).fill(false));
     });
@@ -90,7 +90,7 @@ const HomePage = (props) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.sliderContainer}>
+        {/* <View style={styles.sliderContainer}>
           <Slider
             value={sliderValue}
             style={{ width: "100%" }}
@@ -112,7 +112,7 @@ const HomePage = (props) => {
               zIndex: 1,
             }}
           />
-        </View>
+        </View> */}
 
         <View style={styles.imageContainer}>
           <Image
