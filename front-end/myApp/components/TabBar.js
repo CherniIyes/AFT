@@ -15,8 +15,6 @@ import Expenses from "../screens/Expenses.js";
 import Milk from "../screens/Milk.js";
 import Sales from "../screens/sales.js";
 import HomePage from "../screens/HomePage.js";
-import Article1 from "../screens/Article1.js";
-import Article2 from "../screens/Article2.js";
 import DairyValueChain from "../screens/DairyValueChain.js";
 import Profile from "../screens/Profile.js";
 
@@ -28,16 +26,16 @@ export default function TabBar({ navigation }) {
       return (
             <View style={styles.tabBarContainer}>
                   <View style={styles.tabBarbuttonContainer}>
-                        <TouchableOpacity onPress={() => { navigation.navigate('HomePage');  }} style={styles.tabBarbutton}>
-                              <AntDesign name="home" size={wp('6%')} color="black" />
+                        <TouchableOpacity onPress={() => { navigation.navigate('HomePage'); }} style={styles.tabBarbutton}>
+                              <AntDesign name="home" size={wp('6%')} color="white" />
                               <Text style={styles.tabBarbuttonText}> Home</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigation.navigate('Wallet')} style={styles.tabBarbutton}>
-                              <AntDesign name="wallet" size={wp('6%')} color="black" />
+                              <AntDesign name="wallet" size={wp('6%')} color="white" />
                               <Text style={styles.tabBarbuttonText}> Wallet</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.tabBarbutton}>
-                              <AntDesign name="profile" size={wp('6%')} color="black" />
+                              <AntDesign name="profile" size={wp('6%')} color="white" />
                               <Text style={styles.tabBarbuttonText}> Profile</Text>
                         </TouchableOpacity>
                   </View>
@@ -85,16 +83,16 @@ const styles = StyleSheet.create({
             alignItems: 'center',
       },
       tabBarContainer: {
+            backgroundColor: '#107c2e',
             flexDirection: 'column',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            backgroundColor: 'white',
             padding: wp('2%'),
             borderBottomWidth: 1,
             borderBottomColor: '#ddd',
             elevation: 2,
             position: 'absolute',
-            bottom: 0,
+            bottom: -1,
             right: 0,
             left: 0,
             zIndex: 2,
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             justifyContent: 'space-between',
             position: "relative",
-            top: hp('1%'),
+            top: hp('0.2%'),
       },
       tabBarbutton: {
             marginLeft: wp('2%'),
@@ -118,5 +116,7 @@ const styles = StyleSheet.create({
       },
       tabBarbuttonText: {
             right: wp('1%'),
+            color: "white",
+
       },
 });

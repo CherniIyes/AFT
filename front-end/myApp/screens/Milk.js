@@ -37,7 +37,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.6:6464/milk/getone/${user.id}`);
+      const response = await axios.get(`http://192.168.100.43:6464/milk/getone/${user.id}`);
 
       // If data returned, update tableData state
       setTableData(response.data);
@@ -57,7 +57,7 @@ const ProfitCalculatorScreen = ({ navigation }) => {
     });
 
     try {
-      const response = await axios.post("http://192.168.1.6:6464/milk/add", {
+      const response = await axios.post("http://192.168.100.43:6464/milk/add", {
         day: date,
         price: parseFloat(price),
         quantity: parseInt(quantity),

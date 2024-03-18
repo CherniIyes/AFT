@@ -1,101 +1,118 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Image, ScrollView, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  Image,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useSelector, useDispatch } from 'react-redux';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../Recoil/Rstore';
-const ProfessionalProfile = () => {
-  // const dispatch = useDispatch();
-  // const user = useSelector((state) => state.user);
+
+const FarmerProfile = () => {
   const user = useRecoilValue(userState);
-
-  console.log("user", user);
-
   const profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNErRk-0VnxqOmNa71Rok-FLZKUt6Y38mJkA&usqp=CAU";
 
+  const openWhatsApp = () => {
+    Linking.openURL(`whatsapp://send?phone=1234567890`); // Replace with actual WhatsApp number
+  };
+
+  const makeCall = () => {
+    Linking.openURL(`tel:1234567890`); // Replace with actual phone number
+  };
+
+  const sendEmail = () => {
+    Linking.openURL(`mailto:recipient@example.com`); // Replace with actual email address
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
-        <View style={styles.userInfo}>
-          <Text style={styles.name}>{user.username}</Text>
-          <Text style={styles.dob}></Text>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Background:</Text>
-        <Text style={styles.description}>
-          John Doe is a passionate and dedicated farmer with over a decade of hands-on experience in agricultural practices. Born and raised in a farming family, John developed a deep connection with the land and a profound understanding of sustainable farming methods from a young age.
-        </Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Contact:</Text>
-        <View style={styles.contactContainer}>
-          {/* <TouchableOpacity onPress={openEmail} style={styles.contactItem}>
-            <Ionicons name="mail" size={24} color="#F6B304" />
-            <Text style={styles.contactText}>Email</Text>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity onPress={makeCall} style={styles.contactItem}>
-            <Ionicons name="call" size={24} color="#F6B304" />
-            <Text style={styles.contactText}>Call</Text>
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity onPress={openLinkedIn} style={styles.contactItem}>
-            <Ionicons name="logo-linkedin" size={24} color="#F6B304" />
-            <Text style={styles.contactText}>LinkedIn</Text>
-          </TouchableOpacity> */}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills:</Text>
-        <View style={styles.skillsContainer}>
-          <View style={styles.skill}>
-            <Text style={styles.skillText}>Agriculture</Text>
-            <View style={styles.progressBar}>
-              <View style={[styles.progress, { width: '70%' }]} />
-            </View>
-          </View>
-          <View style={styles.skill}>
-            <Text style={styles.skillText}>Organic Farming</Text>
-            <View style={styles.progressBar}>
-              <View style={[styles.progress, { width: '90%' }]} />
-            </View>
+    <ScrollView contentContainerStyle={styles.scrollView}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
+          <View style={styles.userInfo}>
+            <Text style={styles.name}>{user.username}</Text>
           </View>
         </View>
-      </View>
 
-      {/* Additional Design Elements */}
-      <View style={styles.additionalSection}>
-        <Text style={styles.additionalTitle}>Education & Certifications:</Text>
-        <Text style={styles.additionalDescription}>
-          John Doe holds a Bachelor's degree in Agricultural Science from XYZ University. He also completed certifications in Organic Farming and Sustainable Agriculture from ABC Institute.
-        </Text>
-      </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Background:</Text>
+          <Text style={styles.description}>
+            {user.background}
+          </Text>
+        </View>
 
-      <View style={styles.additionalSection}>
-        <Text style={styles.additionalTitle}>Projects & Initiatives:</Text>
-        <Text style={styles.additionalDescription}>
-          Throughout his career, John has been actively involved in various projects aimed at promoting sustainable farming practices. Some of his notable initiatives include establishing community-supported agriculture programs, organizing workshops on composting and soil health, and leading reforestation efforts in rural areas.
-        </Text>
-      </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Contact:</Text>
+          <View style={styles.contactContainer}>
+            <TouchableOpacity onPress={sendEmail} style={styles.contactItem}>
+              <Ionicons name="mail" size={24} color="#4CAF50" />
+              <Text style={[styles.contactText, { color: '#4CAF50' }]}>Email</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={makeCall} style={styles.contactItem}>
+              <Ionicons name="call" size={24} color="#4CAF50" />
+              <Text style={[styles.contactText, { color: '#4CAF50' }]}>Call</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={openWhatsApp} style={styles.contactItem}>
+              <Ionicons name="logo-whatsapp" size={24} color="#4CAF50" />
+              <Text style={[styles.contactText, { color: '#4CAF50' }]}>WhatsApp</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Skills:</Text>
+          <View style={styles.skillsContainer}>
+            <View style={styles.skill}>
+              <Text style={styles.skillText}>Agriculture</Text>
+              <View style={styles.progressBar}>
+                <View style={[styles.progress, { width: '70%' }]} />
+              </View>
+            </View>
+            <View style={styles.skill}>
+              <Text style={styles.skillText}>Organic Farming</Text>
+              <View style={styles.progressBar}>
+                <View style={[styles.progress, { width: '90%' }]} />
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.additionalSection}>
+          <Text style={styles.additionalTitle}>Education & Certifications:</Text>
+          <Text style={styles.additionalDescription}>
+            {user.education}
+          </Text>
+        </View>
+
+        <View style={styles.additionalSection}>
+          <Text style={styles.additionalTitle}>Projects & Initiatives:</Text>
+          <Text style={styles.additionalDescription}>
+            {user.projects}
+          </Text>
+        </View>
+
+      </View>
     </ScrollView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
-            padding: 4,
-            backgroundColor: '#FFFFFF',
-            position: 'relative',
-            marginTop: 120,
-            marginBottom: 23,
-            padding: 16,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+    marginTop: 120,
+    marginBottom: 23,
+    borderRadius: 20,
+    elevation: 4,
   },
   header: {
     flexDirection: "row",
@@ -103,9 +120,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     marginRight: 20,
   },
   userInfo: {
@@ -115,10 +132,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 5,
-  },
-  dob: {
-    fontSize: 16,
-    color: "#666",
+    color: "#4CAF50",
   },
   section: {
     marginBottom: 20,
@@ -127,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#4CAF50",
   },
   description: {
     fontSize: 14,
@@ -143,7 +158,6 @@ const styles = StyleSheet.create({
   },
   contactText: {
     marginLeft: 5,
-    color: "#F6B304",
     textDecorationLine: "underline",
   },
   skillsContainer: {
@@ -166,18 +180,18 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
   },
-  // Additional Styles
   additionalSection: {
     marginBottom: 20,
     backgroundColor: "#DFF2BF",
     padding: 15,
     borderRadius: 10,
+    elevation: 2,
   },
   additionalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#006400", // Green color
+    color: "#006400",
   },
   additionalDescription: {
     fontSize: 14,
@@ -185,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfessionalProfile;
+export default FarmerProfile;

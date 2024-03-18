@@ -1,24 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
-
 import React, { useState } from "react";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome6 } from '@expo/vector-icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import Boarding1 from "../screens/Boarding1.js";
-import Login from "../screens/Login";
-import loginOrSign from "../screens/loginOrSign";
-import CreatAcc from "../screens/CreatAcc";
-import Boarding2 from "../screens/Boarding2";
-import Expenses from "../screens/Expenses.js";
-import Milk from "../screens/Milk.js";
-import Sales from "../screens/sales.js";
-import HomePage from "../screens/HomePage.js";
-import Article1 from "../screens/Article1.js";
-import Article2 from "../screens/Article2.js";
-import DairyValueChain from "../screens/DairyValueChain.js";
-import Profile from "../screens/Profile.js";
-
 const Stack = createStackNavigator();
 
 export default function NavBar({ navigation }) {
@@ -26,21 +11,21 @@ export default function NavBar({ navigation }) {
             <View style={styles.headerContainer} >
                   <View style={styles.ContainerInBetween}>
                         <View style={styles.buttonContainer}>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Milk');  }} style={styles.filsa}>
-                                    <FontAwesome6 name="cow" size={wp('6%')} color="black" />
-                                    <Text>Dairy Production</Text>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Milk'); }} style={styles.filsa}>
+                                    <FontAwesome6 name="cow" size={wp('6%')} color="white" />
+                                    <Text style={styles.filsaText}>Dairy Production</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Sales');  }} style={styles.filsa}>
-                                    <MaterialIcons name="point-of-sale" size={wp('6%')} color="black" />
-                                    <Text>Sales</Text>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Sales'); }} style={styles.filsa}>
+                                    <MaterialIcons name="point-of-sale" size={wp('6%')} color="white" />
+                                    <Text style={styles.filsaText}>Sales</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain');  }} style={styles.filsa}>
-                                    <MaterialCommunityIcons name="cow" size={wp('6%')} color="black" />
-                                    <Text>Dairy Value Chain</Text>
+                              <TouchableOpacity onPress={() => { navigation.navigate('DairyValueChain'); }} style={styles.filsa}>
+                                    <MaterialCommunityIcons name="cow" size={wp('6%')} color="white" />
+                                    <Text style={styles.filsaText}>Dairy Value Chain</Text>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { navigation.navigate('Expenses');  }} style={styles.filsa}>
-                                    <MaterialCommunityIcons name="point-of-sale" size={wp('6%')} color="black" />
-                                    <Text>Expenses</Text>
+                              <TouchableOpacity onPress={() => { navigation.navigate('Expenses'); }} style={styles.filsa}>
+                                    <MaterialCommunityIcons name="point-of-sale" size={wp('6%')} color="white" />
+                                    <Text style={styles.filsaText}>Expenses</Text>
                               </TouchableOpacity>
                         </View>
                   </View>
@@ -49,35 +34,39 @@ export default function NavBar({ navigation }) {
 
 }
 const styles = StyleSheet.create({
-      windowContainer: {
-            flex: 1,
-            backgroundColor: 'rgba(255, 255, 255, 0)',
-      },
+
       ContainerInBetween: {
             top: hp('8%'),
+
+      },
+      filsaText: {
+            color:"white",
+
       },
       headerContainer: {
+            backgroundColor: '#107c2e',
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            backgroundColor: 'white',
             padding: wp('0%'),
             borderBottomWidth: 1,
             borderBottomColor: '#ddd',
             elevation: 2,
-            height: hp('13%'),
+            height: hp('9%'),
             position: 'absolute',
-            top: 0,
+            top: 37,
             right: 0,
             left: 0,
             zIndex: 2,
       },
       buttonContainer: {
+            
             flexDirection: 'row',
             marginLeft: wp('2%'),
             justifyContent: 'space-between',
             position: "relative",
-            bottom: hp('2%'),
+            bottom: hp('5%'),
+
       },
       filsa: {
             marginLeft: wp('2%'),
@@ -102,6 +91,7 @@ const styles = StyleSheet.create({
             left: 0,
             zIndex: 2,
             height: hp('8%'),
+
       },
       tabBarbuttonContainer: {
             flexDirection: 'row',
@@ -110,6 +100,7 @@ const styles = StyleSheet.create({
             justifyContent: 'space-between',
             position: "relative",
             top: hp('1%'),
+
       },
       tabBarbutton: {
             marginLeft: wp('2%'),
@@ -118,8 +109,10 @@ const styles = StyleSheet.create({
             flexDirection: 'column',
             justifyContent: 'flex-end',
             alignItems: 'center',
+
       },
       tabBarbuttonText: {
             right: wp('1%'),
+
       },
 });

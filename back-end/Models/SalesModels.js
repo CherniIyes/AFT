@@ -8,15 +8,15 @@ module.exports = {
     });
   },
   Add: (data, callback) => {
-      const sql = "INSERT INTO sales SET ?";
-      console.log("Adding data:", data);
-      connection.query(sql, [data], (err, results) => {
-         if (err) {
-            console.error("Error in Add function:", err);
-         }
-         callback(err, results);
-      });
-   },
+    const sql = "INSERT INTO sales SET ?";
+    console.log("Adding data:", data);
+    connection.query(sql, [data], (err, results) => {
+      if (err) {
+        console.error("Error in Add function:", err);
+      }
+      callback(err, results);
+    });
+  },
   Update: (data, id, callback) => {
     const sql =
       "UPDATE sales SET `product`=?, `price`=?, `date`=?, `product details`=? WHERE id=?";
@@ -35,10 +35,15 @@ module.exports = {
     });
   },
 
-  getOne: (id, callback) => {
-    const sql = "SELECT * FROM sales WHERE id=?";
-    connection.query(sql, [id], (err, results) => {
-      callback(err, results);
+  getOne: (userId, callback) => {
+    const sql = "SELECT * FROM sales WHERE userId=?";
+    connection.query(sql, [userId], (err, results) => {
+      if (err) {
+        console.error("Error fetching data by userId:", err);
+        callback(err, null);
+        return;
+      }
+      callback(null, results);
     });
   },
 };
