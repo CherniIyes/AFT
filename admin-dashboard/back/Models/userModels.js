@@ -12,6 +12,19 @@ const getAll = (callback) => {
       });
 };
 
+
+
+const updateUserBanStatus = (userId, isBanned, callback) => {
+      const query = 'UPDATE user SET is_banned = ? WHERE id = ?';
+      connection.query(query, [isBanned, userId], (err, result) => {
+            if (err) {
+                  return callback(err, false);
+            }
+            return callback(null, true);
+      });
+};
+
+
 const getUser = (emailTerm, callback) => {
       const query = 'SELECT * FROM user WHERE email = ?';
       connection.query(query, [emailTerm], (err, result) => {
@@ -21,6 +34,10 @@ const getUser = (emailTerm, callback) => {
             return callback(null, result);
       });
 };
+
+
+
+
 
 const getTotalUsers = (callback) => {
       const query = 'SELECT COUNT(*) AS totalUsers FROM user';
@@ -96,4 +113,4 @@ const deleteUser = (id, callback) => {
       });
 };
 
-module.exports = { getUser, getAll, login, register, deleteUser, getTotalUsers };
+module.exports = { getUser, getAll, login, register, deleteUser, getTotalUsers, updateUserBanStatus };

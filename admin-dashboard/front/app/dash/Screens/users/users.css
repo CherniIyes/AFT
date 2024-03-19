@@ -43,9 +43,15 @@ td {
       text-align: left;
 }
 
+.buttons {
+      display: flex;
+      gap: 10px;
+      /* Adjust the gap between buttons as needed */
+}
 
-
-.deleteButton {
+.deleteButton,
+.unbanButton,
+.banButton {
       padding: 5px;
       background-color: #5d57c9;
       color: white;

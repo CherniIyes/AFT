@@ -37,6 +37,26 @@ const Users = () => {
             }
       };
 
+      const banUser = async (id) => {
+            try {
+                  await axios.put(`http://localhost:4646/user/ban/${id}`);
+                  // After successful ban, fetch updated data
+                  fetchData();
+            } catch (error) {
+                  console.error("Error banning user:", error);
+            }
+      };
+
+      const unbanUser = async (id) => {
+            try {
+                  await axios.put(`http://localhost:4646/user/unban/${id}`);
+                  // After successful unban, fetch updated data
+                  fetchData();
+            } catch (error) {
+                  console.error("Error unbanning user:", error);
+            }
+      };
+
       return (
             <div className="user-container">
                   <div className="container">
@@ -53,6 +73,7 @@ const Users = () => {
                                     <th>Email</th>
                                     <th>Username</th>
                                     <th>Action</th>
+                                    <th>Status</th>
                               </tr>
                         </thead>
                         <tbody>
@@ -61,11 +82,16 @@ const Users = () => {
                                           <td>{item.id}</td>
                                           <td>{item.email}</td>
                                           <td>{item.username}</td>
-                                          <td>
-                                                <div className="buttons">
-                                                      <button className="deleteButton" onClick={() => deleteUser(item.id)}>Delete User</button>
-                                                </div>
-                                          </td>
+                                          <td>{item.is_banned}</td>
+
+                                          <div className="buttons">
+                                                {item.is_banned === "true" ? (
+                                                      <button className="unbanButton" onClick={() => unbanUser(item.id)}>Unban User</button>
+                                                ) : (
+                                                      <button className="banButton" onClick={() => banUser(item.id)}>Ban User</button>
+                                                )}
+                                                <button className="deleteButton" onClick={() => deleteUser(item.id)}>Delete User</button>
+                                          </div>
                                     </tr>
                               ))}
                         </tbody>

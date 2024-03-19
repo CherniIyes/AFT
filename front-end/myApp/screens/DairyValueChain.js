@@ -162,7 +162,7 @@ const DairyValueChain = () => {
           <DateTimePicker
             value={new Date()}
             mode="date"
-            display="spinner"
+            display="default"
             onChange={handleDateChange}
           />
         )}
