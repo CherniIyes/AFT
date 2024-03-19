@@ -12,6 +12,45 @@ const getUsers = (req, res) => {
     });
 };
 
+
+const banUser = (req, res) => {
+    const userId = req.params.id;
+    const isBanned = "true"; // Set to true for banning, false for unbanning
+
+    User.updateUserBanStatus(userId, isBanned, (err, success) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (success) {
+            return res.status(200).send("User banned successfully");
+        } else {
+            return res.status(400).send("Failed to ban user");
+        }
+    });
+};
+
+const unbanUser = (req, res) => {
+    const userId = req.params.id;
+    const isBanned = "false"; // Set to true for banning, false for unbanning
+
+    User.updateUserBanStatus(userId, isBanned, (err, success) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (success) {
+            return res.status(200).send("User unbanned successfully");
+        } else {
+            return res.status(400).send("Failed to unban user");
+        }
+    });
+};
+
+
+
+
+
+
+
 const getTotalUsers = (req, res) => {
     User.getTotalUsers((err, totalUsers) => {
         if (err) {
@@ -96,4 +135,4 @@ const login = async (req, res) => {
 };
 
 
-module.exports = { getUsers, getUserByEmail, register, login, deleteUser, getTotalUsers };
+module.exports = { getUsers, getUserByEmail, register, login, deleteUser, getTotalUsers, banUser, unbanUser };
