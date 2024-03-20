@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
       },
       tabBarbuttonContainer: {
             flexDirection: 'row',
-            marginLeft: wp('2%'),
+            marginLeft: wp('3%'),
             alignItems: 'center',
             justifyContent: 'space-between',
             position: "relative",

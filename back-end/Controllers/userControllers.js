@@ -69,6 +69,14 @@ const login = async (req, res) => {
         }
     });
 };
+const update = (req, res) => {
+    User.update(req.params.id, req.body, (err, results) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).json(results);
+        }
+    });
+};
 
-
-module.exports = { getUsers, getUserByEmail, register, login };
+module.exports = { getUsers, getUserByEmail, register, login, update };

@@ -89,7 +89,7 @@ const Expenses = () => {
                   console.error("Error fetching data:", error);
             }
       };
-
+      
       useEffect(() => {
             fetchExpensesData();
       }, [])
@@ -244,6 +244,7 @@ const Expenses = () => {
 const styles = StyleSheet.create({
       ScrollView: {
             flex: 1,
+            backgroundColor: '#FFFFFF',
       },
       fullcontainer: {
             flex: 1,

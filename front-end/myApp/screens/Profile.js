@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,25 +7,54 @@ import {
   Linking,
   Image,
   ScrollView,
+  TextInput
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRecoilValue } from 'recoil';
 import { userState } from '../Recoil/Rstore';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const FarmerProfile = () => {
   const user = useRecoilValue(userState);
   const profileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNErRk-0VnxqOmNa71Rok-FLZKUt6Y38mJkA&usqp=CAU";
+  const [education, setEducation] = useState(user.education);
+  const [projects, setProjects] = useState(user.projects);
+
+  const navigation = useNavigation();
 
   const openWhatsApp = () => {
-    Linking.openURL(`whatsapp://send?phone=1234567890`); // Replace with actual WhatsApp number
+    Linking.openURL(`whatsapp://send?phone=29015899`); // Replace with actual WhatsApp number
   };
 
   const makeCall = () => {
-    Linking.openURL(`tel:1234567890`); // Replace with actual phone number
+    Linking.openURL(`tel:29015899`);
   };
 
   const sendEmail = () => {
-    Linking.openURL(`mailto:recipient@example.com`); // Replace with actual email address
+    Linking.openURL(`mailto:cherniiyes@gmail.com`);
+  };
+
+  const handleEducationUpdate = async () => {
+    try {
+      await axios.put(`http://192.168.1.4:6464/user/update/${user.id}`, {
+        education: education
+      });
+      console.log("Education updated successfully");
+    } catch (error) {
+      console.error("Error updating education:", error);
+    }
+  };
+
+  const handleProjectsUpdate = async () => {
+    try {
+      await axios.put(`http://192.168.1.4:6464/user/update/${user.id}`, {
+        projects: projects
+      });
+      console.log("Projects updated successfully");
+    } catch (error) {
+      console.error("Error updating projects:", error);
+    }
   };
 
   return (
@@ -36,13 +65,6 @@ const FarmerProfile = () => {
           <View style={styles.userInfo}>
             <Text style={styles.name}>{user.username}</Text>
           </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Background:</Text>
-          <Text style={styles.description}>
-            {user.background}
-          </Text>
         </View>
 
         <View style={styles.section}>
@@ -63,40 +85,28 @@ const FarmerProfile = () => {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Skills:</Text>
-          <View style={styles.skillsContainer}>
-            <View style={styles.skill}>
-              <Text style={styles.skillText}>Agriculture</Text>
-              <View style={styles.progressBar}>
-                <View style={[styles.progress, { width: '70%' }]} />
-              </View>
-            </View>
-            <View style={styles.skill}>
-              <Text style={styles.skillText}>Organic Farming</Text>
-              <View style={styles.progressBar}>
-                <View style={[styles.progress, { width: '90%' }]} />
-              </View>
-            </View>
-          </View>
+        <View style={styles.additionalSection}>
+          <Text style={styles.sectionTitle}>Education & Certifications:</Text>
+          <TextInput
+            style={styles.input}
+            value={education}
+            onChangeText={setEducation} // Update education state
+            onBlur={handleEducationUpdate} // Update education when TextInput loses focus
+          />
         </View>
 
         <View style={styles.additionalSection}>
-          <Text style={styles.additionalTitle}>Education & Certifications:</Text>
-          <Text style={styles.additionalDescription}>
-            {user.education}
-          </Text>
-        </View>
-
-        <View style={styles.additionalSection}>
-          <Text style={styles.additionalTitle}>Projects & Initiatives:</Text>
-          <Text style={styles.additionalDescription}>
-            {user.projects}
-          </Text>
+          <Text style={styles.sectionTitle}>Projects & Initiatives:</Text>
+          <TextInput
+            style={styles.input}
+            value={projects}
+            onChangeText={setProjects} // Update projects state
+            onBlur={handleProjectsUpdate} // Update projects when TextInput loses focus
+          />
         </View>
 
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 };
 
