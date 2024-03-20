@@ -74,6 +74,27 @@ const login = async (email, password, callback) => {
       }
 };
 
+const update = (id, newData, callback) => {
+      // Extract keys and values from newData object
+      const keys = Object.keys(newData);
+      const values = keys.map(key => newData[key]);
+
+      // Construct SET clause dynamically
+      const setClause = keys.map(key => `${key}=?`).join(", ");
+
+      // Construct SQL query
+      const sql = `UPDATE user SET ${setClause} WHERE id=?`;
+
+      // Execute SQL query
+      connection.query(
+            sql,
+            [...values, id], // Spread values array and append id
+            (err, results) => {
+                  callback(err, results);
+            }
+      );
+};
 
 
-module.exports = { getUser, getAll, login, register };
+
+module.exports = { getUser, getAll, login, register, update };

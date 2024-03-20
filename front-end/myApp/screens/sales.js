@@ -218,7 +218,8 @@ const Expenses = () => {
 const styles = StyleSheet.create({
   ScrollView: {
     flex: 1,
-  },
+    backgroundColor: '#FFFFFF',
+},
   fullcontainer: {
     flex: 1,
     padding: 4,
