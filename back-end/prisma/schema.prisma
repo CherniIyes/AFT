@@ -12,44 +12,61 @@ model cows {
   id                                Int                                     @id @default(autoincrement())
   cow_number                        String?                                 @db.VarChar(50)
   cow_race                          String?                                 @db.VarChar(50)
-  artificial_insemination_date      DateTime?                               @db.Date
   artificial_insemination_triggered cows_artificial_insemination_triggered? @default(No)
-  return_in_heat_control_date       DateTime?                               @db.Date
-  pregnancy_detection_date          DateTime?                               @db.Date
-  drying_off_date                   DateTime?                               @db.Date
-  calving_and_delivery_date         DateTime?                               @db.Date
+  artificial_insemination_date      String?                                 @db.VarChar(100)
+  return_in_heat_control_date       String?                                 @db.VarChar(100)
+  pregnancy_detection_date          String?                                 @db.VarChar(100)
+  drying_off_date                   String?                                 @db.VarChar(100)
+  calving_and_delivery_date         String?                                 @db.VarChar(100)
+  userId                            String?                                 @db.VarChar(45)
 }
 
 model expenses {
-  id              Int       @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   handwork        Int?
   fodder          Int?
   bills           Int?
   medicalexpenses Int?
   hay             Int?
-  date            DateTime? @db.Date
+  date            String? @db.VarChar(45)
+  userId          String  @db.VarChar(45)
 }
 
 model milk {
-  id       Int      @id @default(autoincrement())
-  date     DateTime @db.Date
-  price    Int
-  quantity Decimal  @db.Decimal(10, 0)
-}
-
-model sells {
-  id              Int    @id @default(autoincrement())
-  product         String @db.VarChar(45)
-  price           Int
-  image           String @db.VarChar(4000)
-  product_details String @map("product details") @db.VarChar(4000)
+  id       Int     @id @default(autoincrement())
+  day      String? @db.VarChar(45)
+  price    String? @db.VarChar(45)
+  quantity String? @db.VarChar(45)
+  userId   String  @db.VarChar(45)
 }
 
 model user {
-  id       Int    @id @default(autoincrement())
-  username String @db.VarChar(45)
-  email    String @db.VarChar(45)
-  password String @db.VarChar(450)
+  id         Int     @id @default(autoincrement())
+  username   String  @db.VarChar(45)
+  email      String  @db.VarChar(45)
+  password   String  @db.VarChar(1000)
+  education  String? @db.VarChar(5000)
+  projects   String? @db.VarChar(5000)
+  background String? @db.VarChar(5000)
+  is_banned  String? @default("false") @db.VarChar(45)
+}
+
+model article {
+  id      Int      @id @default(autoincrement())
+  content String   @db.VarChar(10000)
+  Author  String   @db.VarChar(450)
+  img     String   @db.VarChar(1000)
+  date    DateTime @db.Date
+  title   String   @db.VarChar(450)
+}
+
+model sales {
+  id              Int    @id @default(autoincrement())
+  product         String @db.VarChar(45)
+  product_details String @db.VarChar(45)
+  price           String @db.VarChar(45)
+  date            String @db.VarChar(450)
+  userId          String @db.VarChar(45)
 }
 
 enum cows_artificial_insemination_triggered {
