@@ -97,7 +97,7 @@ const Expenses = () => {
 
 
       <View style={styles.fullcontainer}>
-        <Text style={styles.titre}>Enter Your Expenses:</Text>
+        <Text style={styles.titre}>Enter Your Sales:</Text>
         <View style={styles.allinputsContainer}>
 
 
@@ -202,7 +202,7 @@ const Expenses = () => {
               renderItem={({ item }) => (
                 <View style={styles.tableRow}>
                   <Text style={styles.tableCell}>{item.product}</Text>
-                  <Text style={styles.tableCell}>{item.productdetails}</Text>
+                  <Text style={styles.tableCell}>{item.product_details}</Text>
                   <Text style={styles.tableCell}>{item.price}</Text>
                   <Text style={styles.tableCellDate}>{item.date}</Text>
                 </View>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   ScrollView: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-},
+  },
   fullcontainer: {
     flex: 1,
     padding: 4,

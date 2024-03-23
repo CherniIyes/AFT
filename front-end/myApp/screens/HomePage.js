@@ -61,7 +61,7 @@ const HomePage = (props) => {
   };
 
   const fetchArticles = () => {
-    axios.get("http://192.168.100.43:6464/articles/").then((response) => {
+    axios.get("http://192.168.1.4:6464/articles/").then((response) => {
       setArticles(response.data);
       setLikedArticles(new Array(response.data.length).fill(false));
     });
@@ -181,7 +181,6 @@ const HomePage = (props) => {
           ))}
         </View>
 
-        {/* Advanced FAQ Section */}
         <TouchableOpacity onPress={toggleFaq} style={styles.faqHeader}>
           <Text style={styles.faqHeaderText}>FAQ</Text>
           <Icon
@@ -191,7 +190,6 @@ const HomePage = (props) => {
           />
         </TouchableOpacity>
         <Animated.View style={[styles.faqContainer, { height: faqHeight }]}>
-          {/* Add your FAQ content here */}
           <View style={styles.faqItem}>
             <View style={styles.faqBubble}>
               <Text style={styles.faqQuestion}>
@@ -222,10 +220,8 @@ const HomePage = (props) => {
               </Text>
             </View>
           </View>
-          {/* Add more FAQs as needed */}
         </Animated.View>
 
-        {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             © 2024 Your Dairy App. All Rights Reserved.
@@ -242,8 +238,8 @@ const styles = StyleSheet.create({
     padding: 4,
     backgroundColor: "#FFFFFF",
     position: "relative",
-    marginTop: 105, // Adjusted to provide space for the headerContainer
-    marginBottom: 70, // Adjusted to provide more space for the tabBarContainer
+    marginTop: 120, 
+    marginBottom: 70, 
   },
   sliderContainer: {
     alignItems: "center",

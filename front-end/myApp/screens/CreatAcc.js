@@ -27,7 +27,7 @@ const CreateAccountScreen = ({ navigation }) => {
         return;
       }
 
-      const registerResponse = await axios.post('http:/192.168.100.43:6464/user/register', {
+      const registerResponse = await axios.post('http:/192.168.1.4:6464/user/register', {
         username,
         email,
         password
