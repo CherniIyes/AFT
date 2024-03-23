@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  ScrollView
 } from 'react-native';
 import { PDFDocument, StandardFonts } from 'react-native-pdf-lib';
 // import RNFS from 'react-native-fs';
@@ -27,11 +28,13 @@ const Wallet = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const expensesResponse = await axios.get(`http://192.168.100.43:6464/exp/getone/${user.id}`);
+        const expensesResponse = await axios.get(`http://192.168.1.4:6464/exp/getone/${user.id}`);
         setExpensesData(expensesResponse.data);
 
-        const tableResponse = await axios.get(`http://192.168.100.43:6464/milk/getone/${user.id}`);
+        const tableResponse = await axios.get(`http://192.168.1.4:6464/milk/getone/${user.id}`);
         setTableData(tableResponse.data);
+        const salesResponse = await axios.get(`http://192.168.1.4:6464/sales/getOne/${user.id}`);
+        setAllAftData(salesResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -145,96 +148,102 @@ const Wallet = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {expensesData.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableHeader}>Expenses:</Text>
-          <View style={styles.tableRowHeader}>
-            <Text style={styles.tableCellHeader}>Handwork</Text>
-            <Text style={styles.tableCellHeader}>Fodder</Text>
-            <Text style={styles.tableCellHeader}>Bills</Text>
-            <Text style={styles.tableCellHeader}>Medical Expenses</Text>
-            <Text style={styles.tableCellHeader}>Hay</Text>
-            <Text style={styles.tableCellHeader}>Date</Text>
+    <ScrollView style={styles.ScrollView}>
+      <View style={styles.container}>
+        {expensesData.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Expenses:</Text>
+            <View style={styles.tableRowHeader}>
+              <Text style={styles.tableCellHeader}>Handwork</Text>
+              <Text style={styles.tableCellHeader}>Fodder</Text>
+              <Text style={styles.tableCellHeader}>Bills</Text>
+              <Text style={styles.tableCellHeader}>Medical Expenses</Text>
+              <Text style={styles.tableCellHeader}>Hay</Text>
+              <Text style={styles.tableCellHeader}>Date</Text>
+            </View>
+            <FlatList
+              data={expensesData}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableCell}>{item.handwork}</Text>
+                  <Text style={styles.tableCell}>{item.fodder}</Text>
+                  <Text style={styles.tableCell}>{item.bills}</Text>
+                  <Text style={styles.tableCell}>{item.medicalexpenses}</Text>
+                  <Text style={styles.tableCell}>{item.hay}</Text>
+                  <Text style={styles.tableCell}>{item.date}</Text>
+                </View>
+              )}
+            />
           </View>
-          <FlatList
-            data={expensesData}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.tableRow}>
-                <Text style={styles.tableCell}>{item.handwork}</Text>
-                <Text style={styles.tableCell}>{item.fodder}</Text>
-                <Text style={styles.tableCell}>{item.bills}</Text>
-                <Text style={styles.tableCell}>{item.medicalexpenses}</Text>
-                <Text style={styles.tableCell}>{item.hay}</Text>
-                <Text style={styles.tableCell}>{item.date}</Text>
-              </View>
-            )}
-          />
-        </View>
-      )}
-      {tableData.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableHeader}>Milk:</Text>
-          <View style={styles.tableRowHeader}>
-            <Text style={styles.tableCellHeader}>Quantity</Text>
-            <Text style={styles.tableCellHeader}>Price</Text>
-            <Text style={styles.tableCellHeader}>Date</Text>
+        )}
+        {tableData.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Milk:</Text>
+            <View style={styles.tableRowHeader}>
+              <Text style={styles.tableCellHeader}>Quantity</Text>
+              <Text style={styles.tableCellHeader}>Price</Text>
+              <Text style={styles.tableCellHeader}>Date</Text>
+            </View>
+            <FlatList
+              data={tableData}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableCell}>{item.quantity}</Text>
+                  <Text style={styles.tableCell}>{item.price}</Text>
+                  <Text style={styles.tableCell}>{item.day}</Text>
+                </View>
+              )}
+            />
           </View>
-          <FlatList
-            data={tableData}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.tableRow}>
-                <Text style={styles.tableCell}>{item.quantity}</Text>
-                <Text style={styles.tableCell}>{item.price}</Text>
-                <Text style={styles.tableCell}>{item.day}</Text>
-              </View>
-            )}
-          />
-        </View>
-      )}
-      {/* {allAftData.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableHeader}>Sales:</Text>
-          <View style={styles.tableRowHeader}>
-            <Text style={styles.tableCellHeader}>Product</Text>
-            <Text style={styles.tableCellHeader}>Product Description</Text>
-            <Text style={styles.tableCellHeader}>Price</Text>
-            <Text style={styles.tableCellHeader}>Date</Text>
+        )}
+        {allAftData.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableHeader}>Sales:</Text>
+            <View style={styles.tableRowHeader}>
+              <Text style={styles.tableCellHeader}>Product</Text>
+              <Text style={styles.tableCellHeader}>Product Description</Text>
+              <Text style={styles.tableCellHeader}>Price</Text>
+              <Text style={styles.tableCellHeader}>Date</Text>
+            </View>
+            <FlatList
+              data={allAftData}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableCell}>{item.product}</Text>
+                  <Text style={styles.tableCell}>{item.product_details}</Text>
+                  <Text style={styles.tableCell}>{item.price}</Text>
+                  <Text style={styles.tableCell}>{item.date}</Text>
+                </View>
+              )}
+            />
           </View>
-          <FlatList
-            data={allAftData}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.tableRow}>
-                <Text style={styles.tableCell}>{item.product}</Text>
-                <Text style={styles.tableCell}>{item.product_details}</Text>
-                <Text style={styles.tableCell}>{item.price}</Text>
-                <Text style={styles.tableCell}>{item.date}</Text>
-              </View>
-            )}
-          />
-        </View>
-      )} */}
-      {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
+        )}
+        {/* <TouchableOpacity onPress={generatePDF} style={styles.generateButton}>
         <Text style={styles.generateButtonText}>Generate and Download PDF</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity onPress={generateAndSharePDF} style={styles.generateButton}>
-        <Text style={styles.generateButtonText}>Generate and Share PDF</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={generateAndSharePDF} style={styles.generateButton}>
+          <Text style={styles.generateButtonText}>Generate and Share PDF</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  ScrollView: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   container: {
     flex: 1,
     padding: 4,
     backgroundColor: '#FFFFFF',
     position: 'relative',
     marginTop: 120,
-    marginBottom: 23,
+    marginBottom: 63,
     padding: 16,
   },
   tableContainer: {

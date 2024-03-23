@@ -64,7 +64,7 @@ const Expenses = () => {
 
       const handleButtonPress = async () => {
             try {
-                  const response = await axios.post("http://192.168.100.43:6464/exp/add", {
+                  const response = await axios.post("http://192.168.1.4:6464/exp/add", {
                         userId: user.id,
                         handwork: input1,
                         fodder: input2,
@@ -83,13 +83,13 @@ const Expenses = () => {
 
       const fetchExpensesData = async () => {
             try {
-                  const response = await axios.get(`http://192.168.100.43:6464/exp/getone/${user.id}`);
+                  const response = await axios.get(`http://192.168.1.4:6464/exp/getone/${user.id}`);
                   setExpensesData(response.data);
             } catch (error) {
                   console.error("Error fetching data:", error);
             }
       };
-      
+
       useEffect(() => {
             fetchExpensesData();
       }, [])

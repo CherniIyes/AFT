@@ -8,8 +8,7 @@ import { Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 import { useSetRecoilState } from 'recoil';
 import { userState } from '../Recoil/Rstore.js';
 import axios from 'axios';
-import Profile from "./Profile.js"
-import HomePage from "./HomePage.js";
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
@@ -210,8 +209,8 @@ const styles = StyleSheet.create({
     left: -65,
   },
   androidSmall1Inner: {
-    top: 850,
-    left: 250,
+    top: 927,
+    left: 300,
   },
   lineView: {
     top: 347,
@@ -307,7 +306,7 @@ const styles = StyleSheet.create({
   },
   dontHaveAnContainer: {
     top: 513,
-    left: 120,
+    left: 105,
     fontSize: FontSize.size_xs,
     textAlign: "left",
     position: "absolute",
